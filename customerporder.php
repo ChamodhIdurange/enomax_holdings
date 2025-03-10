@@ -428,7 +428,7 @@ include "include/topnavbar.php";
                         <div class="form-group mb-1">
                             <label class="small font-weight-bold text-dark">Hold Qty*</label>
                             <input type="text" class="form-control form-control-sm" id="modaleditavailableqty" name="modaleditavailableqty"
-                                required>
+                                readonly>
                                
                         </div>
                     </div>

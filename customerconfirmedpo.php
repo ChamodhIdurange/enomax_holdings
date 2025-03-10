@@ -211,7 +211,7 @@ include "include/topnavbar.php";
                                     <input type="text" id="customercontact" name="customercontact"
                                         class="form-control form-control-sm" readonly required>
                                 </div>
-                                <div class="form-group mb-2 col-3">
+                                <div class="form-group mb-2 col-2">
                                     <label class="small font-weight-bold text-dark">Discount %</label>
                                     <input type="number" id="discountpresentage" name="discountpresentage"
                                         class="form-control form-control-sm" value="0">
@@ -241,7 +241,17 @@ include "include/topnavbar.php";
                                     <input type="text" id="fieldsize" name="fieldsize"
                                         class="form-control form-control-sm" value="" readonly>
                                 </div>
-                                <div class="form-row mb-1 col-3">
+                                <div class="form-row mb-1 col-4">
+                                    <div class="col">
+                                        <label class="small font-weight-bold text-dark">Hold Qty*</label>
+                                        <input type="text" id="holdqty" name="holdqty"
+                                            class="form-control form-control-sm" value="0" readonly>
+                                    </div>
+                                    <div class="col">
+                                        <label class="small font-weight-bold text-dark">Available Qty*</label>
+                                        <input type="text" id="availableqty" name="availableqty"
+                                            class="form-control form-control-sm" value="0" readonly>
+                                    </div>
                                     <div class="col">
                                         <label class="small font-weight-bold text-dark">Qty*</label>
                                         <input type="text" id="newqty" name="newqty"
@@ -389,7 +399,7 @@ include "include/topnavbar.php";
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-3">
                         <div class="form-group mb-1">
                             <label class="small font-weight-bold text-dark">Product*</label>
                             <select class="form-control form-control-sm select2" style="width: 100%;"
@@ -400,21 +410,37 @@ include "include/topnavbar.php";
                     </div>
                     <div class="col-3">
                         <div class="form-group mb-1">
-                            <label class="small font-weight-bold text-dark">Sale price*</label>
-                            <input type="text" class="form-control form-control-sm" id="modaleditsaleprice" name="modaleditsaleprice"
-                                required>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="form-group mb-1">
                             <label class="small font-weight-bold text-dark">Qty*</label>
                             <input type="text" class="form-control form-control-sm" id="modaleditqty" name="modaleditqty"
                                 required>
                                
                         </div>
                     </div>
+                    <div class="col-3">
+                        <div class="form-group mb-1">
+                            <label class="small font-weight-bold text-dark">Available Qty*</label>
+                            <input type="text" class="form-control form-control-sm" id="modaleditholdqty" name="modaleditholdqty"
+                                readonly>
+                               
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group mb-1">
+                            <label class="small font-weight-bold text-dark">Hold Qty*</label>
+                            <input type="text" class="form-control form-control-sm" id="modaleditavailableqty" name="modaleditavailableqty"
+                                readonly>
+                               
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
+                    <div class="col">
+                        <div class="form-group mb-1">
+                            <label class="small font-weight-bold text-dark">Sale price*</label>
+                            <input type="text" class="form-control form-control-sm" id="modaleditsaleprice" name="modaleditsaleprice"
+                                required>
+                        </div>
+                    </div>
                     <div class="col">
                         <div class="form-group mb-1">
                             <label class="small font-weight-bold text-dark">Discount (%)*</label>
@@ -1036,12 +1062,14 @@ include "include/topnavbar.php";
                     recordID: productID
                 },
                 url: 'getprocess/getproduct.php',
-                success: function (result) { //console.log(result);
+                success: function (result) { // alert(result);
                     var obj = JSON.parse(result);
 
                     $('#modaleditproductcode').val(obj.productcode);
                     $('#modaleditsaleprice').val(obj.saleprice);
                     $('#modaleditproductunitprice').val(obj.unitprice);
+                    $('#modaleditholdqty').val(obj.availableqty);
+                    $('#modaleditavailableqty').val(obj.holdqty);
                     $('#modaleditqty').val(0);
                 }
             });
@@ -1282,7 +1310,7 @@ include "include/topnavbar.php";
                 success: function (result) { //console.log(result);
                     var obj = JSON.parse(result);
                     $('#tableorderview > tbody').empty();
-
+                    
                     $('#divsubtotalview').html(obj.subtotal);
                     $('#divdiscountview').html(obj.disamount);
                     $('#divdiscountPOview').html(obj.po_amount);
@@ -1657,6 +1685,8 @@ include "include/topnavbar.php";
                     $('#saleprice').val(obj.saleprice);
                     $('#fieldsupplier').val(obj.suppliername);
                     $('#fieldsize').val(obj.commonname);
+                    $('#availableqty').val(obj.availableqty);
+                    $('#holdqty').val(obj.holdqty);
 
                     $('#newqty').focus();
                     $('#newqty').select();
