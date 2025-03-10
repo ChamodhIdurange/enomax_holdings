@@ -5,6 +5,8 @@ include "include/topnavbar.php";
 $accountsql="SELECT `idtbl_account`, `account`, `accountno` FROM `tbl_account` WHERE `status`=1 AND `tbl_account_type_idtbl_account_type` = 3";
 $resultaccount =$conn-> query($accountsql); 
 
+
+
 $banksql="SELECT `u`.`tbl_bank_idtbl_bank`, `ua`.`bankname` FROM `tbl_account` AS `u` LEFT JOIN `tbl_bank` AS `ua` ON (`ua`.`idtbl_bank` = `u`.`tbl_bank_idtbl_bank`) WHERE `u`.`status`=1 AND `u`.`tbl_account_type_idtbl_account_type` = 1 GROUP BY `u`.`tbl_account_type_idtbl_account_type`";
 $resultbank =$conn-> query($banksql); 
 
