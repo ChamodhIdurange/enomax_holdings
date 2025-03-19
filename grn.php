@@ -55,7 +55,7 @@ include "include/topnavbar.php";
                             </div>
                         </div>
                         <hr>
-                        <table class="table table-bordered table-striped table-sm nowrap" id="dataTable">
+                        <table class="table table-bordered table-striped table-sm nowrap"  id="dataTable">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -212,8 +212,31 @@ include "include/topnavbar.php";
         </div>
     </div>
 </div>
+
+<!-- Modal GRN print -->
+<div class="modal fade" id="modalgrnprint" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header p-2">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="viewgrnbody"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger btn-sm fa-pull-right" id="btnorderprint"><i
+                        class="fas fa-print"></i>&nbsp;Print Order</button>
+            </div>
+        </div>
+    </div>
+</div>
 <?php include "include/footerscripts.php"; ?>
 <script>
+    document.getElementById('btnorderprint').addEventListener("click", print);
+
     $(document).ready(function () {
         checkdayendprocess();
         $('.dpd1a').datepicker({
@@ -346,6 +369,15 @@ include "include/topnavbar.php";
                     "render": function (data, type, full) {
                         var button = '';
 
+                        button +=
+                            '<button class="btn btn-outline-primary btn-sm mr-1 btnprint" data-toggle="tooltip" data-placement="bottom" title="Print Order" id="' +
+                            full['idtbl_grn'] + '" ';
+
+                        if (full['confirmstatus'] == 0 || full['confirmstatus'] == 2) {
+                            button += 'disabled';
+                        }
+                        button += '><i class="fas fa-file-invoice-dollar"></i></button>';
+
                         button += '<button class="btn btn-outline-dark btn-sm mr-1 btnView ';
                         if (editcheck == 0) {
                             button += 'd-none';
@@ -392,6 +424,23 @@ include "include/topnavbar.php";
                 }
             ]
         });
+
+        $('#dataTable tbody').on('click', '.btnprint', function () {
+            var id = $(this).attr('id');
+            $.ajax({
+                type: "POST",
+                data: {
+                    grnId: id
+                },
+                url: 'getprocess/getgrnprint.php',
+                success: function (result) {
+                    $('#viewgrnbody').html(result);
+                    $('#modalgrnprint').modal('show');
+                }
+            });
+        });
+
+
         $('#btnordercreate').click(function () {
             $('#modalcreateorder').modal('show');
             $('#modalcreateorder').on('shown.bs.modal', function () {
@@ -488,6 +537,15 @@ include "include/topnavbar.php";
             $('<input type="Text" class="form-control form-control-sm optionnewqty">').val(val).appendTo($this);
             textremove('.optionnewqty', row);
         });
+    }
+
+    function print() {
+        printJS({
+            printable: 'viewgrnbody',
+            type: 'html',
+            style: '@page { size: A4 portrait; margin:0.25cm; }',
+            targetStyles: ['*']
+        })
     }
 
     function action(data) { //alert(data);

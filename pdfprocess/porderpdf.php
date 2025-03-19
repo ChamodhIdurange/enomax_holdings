@@ -30,7 +30,7 @@ $newtemp = 0;
 $sqlpoprinted="UPDATE `tbl_customer_order` SET `is_printed`='1' WHERE `idtbl_customer_order`='$recordID'";
 $conn->query($sqlpoprinted);
 
-$sqlporderinfo = "SELECT `i`.`invoiceno`, `o`.`discount`, `o`.`podiscount`, `o`.`confirm`, `o`.`dispatchissue`, `o`.`delivered`,`o`.`remark`, `o`.`idtbl_customer_order`, `o`.`date`, `o`.`total`, `l`.`idtbl_locations`, `l`.`locationname`, `c`.`name`, `c`.`address`, `c`.`phone`, `e`.`name` AS `saleref`, `e`.`phone`, `a`.`area`, `u`.`name` as `username`, `o`.`tbl_customer_idtbl_customer`, `o`.`cuspono` FROM `tbl_customer_order` AS `o` LEFT JOIN `tbl_invoice` AS `i` ON (`i`.`tbl_customer_order_idtbl_customer_order` = `o`.`idtbl_customer_order`) LEFT JOIN `tbl_customer_order_detail` AS `od` ON `o`.`idtbl_customer_order`=`od`.`tbl_customer_order_idtbl_customer_order` LEFT JOIN `tbl_customer` AS `c` ON (`c`.`idtbl_customer` = `o`.`tbl_customer_idtbl_customer`) LEFT JOIN `tbl_locations` AS `l` ON (`l`.`idtbl_locations` = `o`.`tbl_locations_idtbl_locations`) LEFT JOIN `tbl_employee` AS `e` ON `e`.`idtbl_employee`=`o`.`tbl_employee_idtbl_employee` LEFT JOIN `tbl_area` AS `a` ON `a`.`idtbl_area`=`o`.`tbl_area_idtbl_area` LEFT JOIN `tbl_user` AS `u` ON `u`.`idtbl_user`=`o`.`tbl_user_idtbl_user` WHERE `o`.`status`=1 AND `o`.`idtbl_customer_order`='$recordID'";
+$sqlporderinfo = "SELECT `o`.`cuspono`, `i`.`invoiceno`, `o`.`discount`, `o`.`podiscount`, `o`.`confirm`, `o`.`dispatchissue`, `o`.`delivered`,`o`.`remark`, `o`.`idtbl_customer_order`, `o`.`date`, `o`.`total`, `l`.`idtbl_locations`, `l`.`locationname`, `c`.`name`, `c`.`address`, `c`.`phone`, `e`.`name` AS `saleref`, `e`.`phone`, `a`.`area`, `u`.`name` as `username`, `o`.`tbl_customer_idtbl_customer`, `o`.`cuspono` FROM `tbl_customer_order` AS `o` LEFT JOIN `tbl_invoice` AS `i` ON (`i`.`tbl_customer_order_idtbl_customer_order` = `o`.`idtbl_customer_order`) LEFT JOIN `tbl_customer_order_detail` AS `od` ON `o`.`idtbl_customer_order`=`od`.`tbl_customer_order_idtbl_customer_order` LEFT JOIN `tbl_customer` AS `c` ON (`c`.`idtbl_customer` = `o`.`tbl_customer_idtbl_customer`) LEFT JOIN `tbl_locations` AS `l` ON (`l`.`idtbl_locations` = `o`.`tbl_locations_idtbl_locations`) LEFT JOIN `tbl_employee` AS `e` ON `e`.`idtbl_employee`=`o`.`tbl_employee_idtbl_employee` LEFT JOIN `tbl_area` AS `a` ON `a`.`idtbl_area`=`o`.`tbl_area_idtbl_area` LEFT JOIN `tbl_user` AS `u` ON `u`.`idtbl_user`=`o`.`tbl_user_idtbl_user` WHERE `o`.`status`=1 AND `o`.`idtbl_customer_order`='$recordID'";
 $resultporderinfo = $conn->query($sqlporderinfo);
 $rowporderinfo = $resultporderinfo->fetch_assoc();
 
@@ -43,6 +43,7 @@ $customeraddress = $rowporderinfo['address'];
 $poderId = $rowporderinfo['idtbl_customer_order'];
 $remark = $rowporderinfo['remark'];
 $invoiceno = $rowporderinfo['invoiceno'];
+$cuspono = $rowporderinfo['cuspono'];
 
 $confirm = $rowporderinfo['confirm']; 
 $dispatchissue = $rowporderinfo['dispatchissue']; 
@@ -189,7 +190,7 @@ $html = '
                 <td style="padding-left:100px;" width="8cm">
                     <table width="100%" height="100%" style="margin-top:-70;" border="0">
                         <tr>
-                            <th align="center" colspan="2">Purchase Order Details - '. $poderId .'</th>
+                            <th align="center" colspan="2">Purchase Order Details - '. $cuspono .'</th>
                         </tr>
                         <tr><td align="left" style="font-weight: bold;">Invoice No </td><td>' . $invoiceno . ' </td></tr>
                         <tr><td align="left" style="font-weight: bold;">LOCATION </td><td>' . $location . ' </td></tr>

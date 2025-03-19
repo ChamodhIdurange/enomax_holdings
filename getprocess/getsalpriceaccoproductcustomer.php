@@ -21,7 +21,6 @@ $result=$conn->query($sqlstock);
 $row=$result->fetch_assoc();
 $stockqty = $row['qty'];
 
-
 if($resultproduct-> num_rows > 0) {
     $obj=new stdClass();
     if($customerType == 1){

@@ -18,7 +18,6 @@ $sqlgrn = "SELECT * FROM (
         (`grnmain`.`idtbl_grn` = `grn`.`tbl_grn_idtbl_grn`) 
     WHERE 
         `grn`.`tbl_product_idtbl_product` = '$item'
-    
     UNION
     
     SELECT 
@@ -30,7 +29,7 @@ $sqlgrn = "SELECT * FROM (
         `tbl_stock` AS `stk` 
     WHERE 
         `stk`.`tbl_product_idtbl_product` = '$item'
-    
+    AND `stk`.`batchno` LIKE 'BTH%'
     UNION
 
     SELECT 
@@ -42,24 +41,22 @@ $sqlgrn = "SELECT * FROM (
         `tbl_stock_adjustment` AS `adj` 
     WHERE 
         `adj`.`tbl_product_idtbl_product` = '$item'
-    
     UNION
     
     SELECT 
-        `po`.`idtbl_porder_detail` AS `id`,
+        `po`.`idtbl_customer_order_detail` AS `id`,
         `po`.`qty` AS `quantity`,
-        `porder`.`orderdate` AS `date`,
+        `cusporder`.`date` AS `date`,
         'Purchase Order' AS `source`
     FROM 
-        `tbl_porder_detail` AS `po` 
+        `tbl_customer_order_detail` AS `po` 
     LEFT JOIN 
-        `tbl_porder` AS `porder` 
+        `tbl_customer_order` AS `cusporder` 
     ON 
-        (`porder`.`idtbl_porder` = `po`.`tbl_porder_idtbl_porder`) 
+        (`cusporder`.`idtbl_customer_order` = `po`.`tbl_customer_order_idtbl_customer_order`) 
     WHERE 
         `po`.`tbl_product_idtbl_product` = '$item'
-        AND `porder`.`completestatus` = '1'
-    
+        -- AND `cusporder`.`completestatus` = '1'
     UNION
     
     SELECT 
