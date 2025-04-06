@@ -2515,7 +2515,7 @@ include "include/topnavbar.php";
                     let request = checkIndividualStockBeforeDeliver(tableproductId, tableQty)
                         .then(result => {
                             let obj = JSON.parse(result); //alert(result)
-                            if (obj.availableqty < tableQty) {
+                            if (obj.stockqty < tableQty) {
                                 stockCheckPassed = false;
 
                                 $('#errordivaddnew').empty().html(

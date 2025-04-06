@@ -271,7 +271,7 @@ include "include/topnavbar.php";
                                 <div class="form-group mb-1 col-3">
                                     <label class="small font-weight-bold text-dark">Sale Price</label>
                                     <input type="text" id="saleprice" name="saleprice"
-                                        class="form-control form-control-sm" value="0" readonly>
+                                        class="form-control form-control-sm" value="0">
                                 </div>
                                 <div class="form-group mb-2 col-3">
                                     <label class="small font-weight-bold text-dark">PO Discount %</label>

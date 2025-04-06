@@ -1,10 +1,8 @@
 <?php
 include "include/header.php";
 
-$sqlreturncustomer = "SELECT `u`.`idtbl_return`, `u`.`returndate`, `u`.`total`, `ua`.`name`, `u`.`acceptance_status` FROM `tbl_return` as `u` LEFT JOIN `tbl_customer` AS `ua` ON (`ua`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer`)  WHERE `u`.`acceptance_status` IN (0,1)";
+$sqlreturncustomer = "SELECT `u`.`idtbl_return`, `u`.`returndate`, `u`.`total`, `ua`.`name`, `u`.`acceptance_status`, `u`.`damaged_reason` FROM `tbl_return` as `u` LEFT JOIN `tbl_customer` AS `ua` ON (`ua`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer`)  WHERE `u`.`acceptance_status` IN (0,1)";
 $resultreturncustomer = $conn->query($sqlreturncustomer);
-
-
 
 include "include/topnavbar.php";
 ?>
@@ -36,6 +34,7 @@ include "include/topnavbar.php";
                                                 <th>#</th>
                                                 <th>Customer name</th>
                                                 <th>Date</th>
+                                                <th>Remark</th>
                                                 <th>Total</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -47,6 +46,7 @@ include "include/topnavbar.php";
                                                 <td><?php echo $row['idtbl_return'] ?></td>
                                                 <td><?php echo $row['name'] ?></td>
                                                 <td><?php echo $row['returndate'] ?></td>
+                                                <td><?php echo $row['damaged_reason'] ?></td>
                                                 <td class="text-right">Rs.<?php echo number_format($row['total'], 2); ?>
                                                 </td>
                                                 <td>
@@ -171,7 +171,7 @@ include "include/topnavbar.php";
 <script>
     $(document).ready(function () {
         document.getElementById('btnorderprint').addEventListener("click", print);
-
+        $('#dataTable').DataTable({});
         $('#dataTable tbody').on('click', '.btnEdit', function () {
             var id = $(this).attr('id');
             var returndate = $(this).data('returndate');
