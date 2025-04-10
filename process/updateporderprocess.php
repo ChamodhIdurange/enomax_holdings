@@ -30,26 +30,25 @@ if ($conn->query($insertOrderQuery) === TRUE) {
         $detailsId = $detail['detailsId'];
 
         $newQty = str_replace(',', '', $detail['newQty']);
+        $newQty = trim($newQty); 
+        $newQty = is_numeric($newQty) ? (float)$newQty : 0; 
 
-        $newPrice = !empty($newQty) ? $unitPrice : null;
-        $newsalePrice = !empty($newQty) ? $saleprice : null;
+        $newPrice = ($newQty !== "" && $newQty !== null) ? $unitPrice : null;
+        $newsalePrice = ($newQty !== "" && $newQty !== null) ? $saleprice : null;
 
         $sqlupdateproduct = "UPDATE `tbl_product` SET `unitprice`='$unitPrice', `saleprice`='$saleprice', `retail`='$retail' WHERE `idtbl_product` = '$productId'";
-        
-        $conn->query($sqlupdateproduct) ;
+        $conn->query($sqlupdateproduct);
 
         if ($newPrice !== null) {
-            $totalPrice = $newQty * $unitPrice;
+            $totalPrice = $newQty * $unitPrice; 
 
             if($recordOption == 0){
                 $insertUpdateQuery = "INSERT INTO tbl_porder_detail (`qty`, `unitprice`, `saleprice`, `total`, `status`, `insertdatetime`, `tbl_user_idtbl_user`, `tbl_product_idtbl_product`, `tbl_porder_idtbl_porder`) VALUES ('$newQty', '$newPrice', '$newsalePrice', '$totalPrice', '1', '$updatedatetime', '$userID', '$productId', '$porderId')";
-            }else{
+            } else {
                 $insertUpdateQuery = "UPDATE `tbl_porder_detail` SET `qty`='$newQty', `unitprice`='$newPrice', `saleprice`='$newsalePrice', `total`='$totalPrice' WHERE `idtbl_porder_detail` = '$detailsId'";
             }
-            
 
             if ($conn->query($insertUpdateQuery) !== TRUE) {
-                // Handle error inserting order detail
                 echo json_encode([
                     'icon' => 'fas fa-exclamation-triangle',
                     'title' => '',
@@ -64,7 +63,7 @@ if ($conn->query($insertOrderQuery) === TRUE) {
     }
 
     echo json_encode([
-        'query' => $sqlupdateproduct,
+        'query' => $insertUpdateQuery,
         'icon' => 'fas fa-check-circle',
         'title' => '',
         'message' => 'Add Successfully',
@@ -83,6 +82,7 @@ if ($conn->query($insertOrderQuery) === TRUE) {
         'type' => 'danger'
     ]);
 }
+
 
 $conn->close();
 ?>

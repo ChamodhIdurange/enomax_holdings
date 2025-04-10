@@ -24,10 +24,12 @@ $table = 'tbl_customer_order';
 // Table's primary key
 $primaryKey = 'idtbl_customer_order';
 
-// Array of database columns which should be read and sent back to DataTables.
-// The `db` parameter represents the column name in the database, while the `dt`
-// parameter represents the DataTables column identifier. In this case simple
-// indexes
+
+
+$fromdate = isset($_POST['fromdate']) ? $_POST['fromdate'] : '';
+$todate = isset($_POST['todate']) ? $_POST['todate'] : '';
+
+
 $columns = array(
 	array( 'db' => '`u`.`idtbl_customer_order`', 'dt' => 'idtbl_customer_order', 'field' => 'idtbl_customer_order' ),
 	array( 'db' => '`u`.`date`', 'dt' => 'date', 'field' => 'date' ),
@@ -47,7 +49,10 @@ $columns = array(
 	array( 'db' => '`u`.`tbl_customer_idtbl_customer`',   'dt' => 'tbl_customer_idtbl_customer', 'field' => 'tbl_customer_idtbl_customer' ),
 	array( 'db' => '`u`.`tbl_employee_idtbl_employee`',   'dt' => 'tbl_employee_idtbl_employee', 'field' => 'tbl_employee_idtbl_employee' ),
     array( 'db' => '`ud`.`name`', 'dt' => 'repname', 'field' => 'repname', 'as' => 'repname' ),
-	array( 'db' => '`u`.`cuspono`',   'dt' => 'cuspono', 'field' => 'cuspono' )
+	array( 'db' => '`u`.`cuspono`',   'dt' => 'cuspono', 'field' => 'cuspono' ),
+	array( 'db' => '`od`.`deliverRemarks`',   'dt' => 'deliverRemarks', 'field' => 'deliverRemarks' ),
+	array( 'db' => '`od`.`deliverDate`',   'dt' => 'deliverDate', 'field' => 'deliverDate' ),
+	array( 'db' => '`od`.`tbl_vehicle_idtbl_vehicle`',   'dt' => 'tbl_vehicle_idtbl_vehicle', 'field' => 'tbl_vehicle_idtbl_vehicle' ),
 );
 
 // SQL server connection information
@@ -67,9 +72,14 @@ $sql_details = array(
 // require( 'ssp.class.php' );
 require('ssp.customized.class.php' );
 
-$joinQuery = "FROM `tbl_customer_order` AS `u` LEFT JOIN `tbl_area` AS `ub` ON (`ub`.`idtbl_area` = `u`.`tbl_area_idtbl_area`) LEFT JOIN `tbl_customer` AS `uc` ON (`uc`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer`) LEFT JOIN `tbl_employee` AS `ud` ON (`ud`.`idtbl_employee` = `u`.`tbl_employee_idtbl_employee`)";
+$joinQuery = "FROM `tbl_customer_order` AS `u` LEFT JOIN `tbl_area` AS `ub` ON (`ub`.`idtbl_area` = `u`.`tbl_area_idtbl_area`) LEFT JOIN `tbl_customer` AS `uc` ON (`uc`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer`) LEFT JOIN `tbl_employee` AS `ud` ON (`ud`.`idtbl_employee` = `u`.`tbl_employee_idtbl_employee`) LEFT JOIN `tbl_customer_order_delivery_data` AS `od` ON (`od`.`tbl_customer_order_idtbl_customer_order` = `u`.`idtbl_customer_order`)";
 
 $extraWhere = "`u`.`status` = 1 AND `u`.`confirm` = 1 AND `u`.`dispatchissue` = 1 AND  `u`.`delivered` = 1";
+
+if (!empty($fromdate)) {
+    $extraWhere .= " AND `u`.`date` BETWEEN '$fromdate' AND '$todate'";
+}
+
 echo json_encode(
 	SSP::simple( $_POST, $sql_details, $table, $primaryKey, $columns, $joinQuery, $extraWhere)
 );

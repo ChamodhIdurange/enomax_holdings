@@ -28,13 +28,13 @@ $newtemp = 0;
 
 
 
-$sqlporderinfo = "SELECT `o`.`idtbl_original_customer_order`, `o`.`remark`, `o`.`tbl_customer_order_idtblcustomer_order`, `o`.`date`, `o`.`total`, `l`.`idtbl_locations`, `l`.`locationname`, `c`.`name`, `c`.`address`, `c`.`phone`, `e`.`name` AS `saleref`, `e`.`phone`, `a`.`area`, `u`.`name` as `username`, `o`.`tbl_customer_idtbl_customer`, `o`.`cuspono` FROM `tbl_original_customer_order` AS `o` LEFT JOIN `tbl_original_customer_order_detail` AS `od` ON `o`.`idtbl_original_customer_order`=`od`.`tbl_original_customer_order_idtbl_original_customer_order` LEFT JOIN `tbl_customer` AS `c` ON (`c`.`idtbl_customer` = `o`.`tbl_customer_idtbl_customer`) LEFT JOIN `tbl_locations` AS `l` ON (`l`.`idtbl_locations` = `o`.`tbl_locations_idtbl_locations`) LEFT JOIN `tbl_employee` AS `e` ON `e`.`idtbl_employee`=`o`.`tbl_employee_idtbl_employee` LEFT JOIN `tbl_area` AS `a` ON `a`.`idtbl_area`=`o`.`tbl_area_idtbl_area` LEFT JOIN `tbl_user` AS `u` ON `u`.`idtbl_user`=`o`.`tbl_user_idtbl_user` WHERE `o`.`status`=1 AND `o`.`tbl_customer_order_idtblcustomer_order`='$recordID'";
+$sqlporderinfo = "SELECT `o`.`idtbl_original_customer_order`, `o`.`remark`, `o`.`tbl_customer_order_idtblcustomer_order`, `o`.`date`, `o`.`total`, `l`.`idtbl_locations`, `l`.`locationname`, `c`.`name`, `c`.`address`, `c`.`phone` AS 'customerphone', `e`.`name` AS `saleref`, `e`.`phone`, `a`.`area`, `u`.`name` as `username`, `o`.`tbl_customer_idtbl_customer`, `o`.`cuspono` FROM `tbl_original_customer_order` AS `o` LEFT JOIN `tbl_original_customer_order_detail` AS `od` ON `o`.`idtbl_original_customer_order`=`od`.`tbl_original_customer_order_idtbl_original_customer_order` LEFT JOIN `tbl_customer` AS `c` ON (`c`.`idtbl_customer` = `o`.`tbl_customer_idtbl_customer`) LEFT JOIN `tbl_locations` AS `l` ON (`l`.`idtbl_locations` = `o`.`tbl_locations_idtbl_locations`) LEFT JOIN `tbl_employee` AS `e` ON `e`.`idtbl_employee`=`o`.`tbl_employee_idtbl_employee` LEFT JOIN `tbl_area` AS `a` ON `a`.`idtbl_area`=`o`.`tbl_area_idtbl_area` LEFT JOIN `tbl_user` AS `u` ON `u`.`idtbl_user`=`o`.`tbl_user_idtbl_user` WHERE `o`.`status`=1 AND `o`.`tbl_customer_order_idtblcustomer_order`='$recordID'";
 $resultporderinfo = $conn->query($sqlporderinfo);
 $rowporderinfo = $resultporderinfo->fetch_assoc();
 
 $originalId = $rowporderinfo['idtbl_original_customer_order'];
 $customerID = $rowporderinfo['tbl_customer_idtbl_customer'];
-$customerPhone = $rowporderinfo['phone'];
+$customerPhone = $rowporderinfo['customerphone'];
 $porderDate = $rowporderinfo['date'];
 $customername = $rowporderinfo['name'];
 $location = $rowporderinfo['locationname'];
@@ -271,6 +271,28 @@ $html = '
                                     </td>
                                 </tr>
                             </table>
+                            <table width="100%">
+								<tr>
+									<td colspan="2">Received the above goods in good condition</td>
+									<td colspan="4">&nbsp;</td>
+								</tr>
+								<tr>
+									<td>Received By</td>
+									<td>..............</td>
+									<td>&nbsp;</td>
+									<td align="center">..............</td>
+									<td align="center">..............</td>
+									<td align="center">..............</td>
+								</tr>
+								<tr>
+									<td>Date &amp; Time</td>
+									<td>..............</td>
+									<td>&nbsp;</td>
+									<td align="center">Prepared By</td>
+									<td align="center">Authorized By</td>
+									<td align="center">Taken Out By</td>
+								</tr>
+							</table>
                         </div>
                     </footer>';
             }

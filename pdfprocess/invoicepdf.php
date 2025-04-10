@@ -285,7 +285,7 @@ $html = '
 							
 							<table width="100%">
 								<tr>
-									<td colspan="2">Received the above goods in good order</td>
+									<td colspan="2">Received the above goods in good condition</td>
 									<td colspan="4">&nbsp;</td>
 								</tr>
 								<tr>
