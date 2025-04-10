@@ -211,7 +211,7 @@ include "include/topnavbar.php";
                                     <input type="text" id="customercontact" name="customercontact"
                                         class="form-control form-control-sm" readonly required>
                                 </div>
-                                <div class="form-group mb-2 col-2">
+                                <div class="form-group mb-2 col-3">
                                     <label class="small font-weight-bold text-dark">Discount %</label>
                                     <input type="number" id="discountpresentage" name="discountpresentage"
                                         class="form-control form-control-sm" value="0">
@@ -242,7 +242,7 @@ include "include/topnavbar.php";
                                         class="form-control form-control-sm" value="" readonly>
                                 </div>
                                 <div class="form-row mb-1 col-4">
-                                    <div class="col">
+                                <div class="col">
                                         <label class="small font-weight-bold text-dark">Hold Qty*</label>
                                         <input type="text" id="holdqty" name="holdqty"
                                             class="form-control form-control-sm" value="0" readonly>
@@ -732,10 +732,6 @@ include "include/topnavbar.php";
 <script>
     var prodCount = 0;
     $(document).ready(function () {
-        var addcheck
-        var editcheck
-        var statuscheck
-        var deletecheck
 
         $("#productcommonname").select2({
             ajax: {
@@ -1040,7 +1036,7 @@ include "include/topnavbar.php";
                         //     button +=
                         //         '<button class="btn btn-outline-success btn-sm mr-1" data-toggle="tooltip" data-placement="bottom" title="Accepted Order"><i class="fas fa-check"></i></button>';
                         // }
-                        if (full['delivered'] != 1 && full['status'] == 1) {
+                        if (full['delivered'] != 1 && full['status'] == 1 && deletecheck == 1) {
                             button +=
                                 '<button class="btn btn-outline-danger btn-sm mr-1 btncancel" data-toggle="tooltip" data-placement="bottom" title="Cancel order" id="' +
                                 full['idtbl_customer_order'] +
@@ -1062,7 +1058,7 @@ include "include/topnavbar.php";
                     recordID: productID
                 },
                 url: 'getprocess/getproduct.php',
-                success: function (result) { // alert(result);
+                success: function (result) { //console.log(result);
                     var obj = JSON.parse(result);
 
                     $('#modaleditproductcode').val(obj.productcode);
@@ -1310,7 +1306,7 @@ include "include/topnavbar.php";
                 success: function (result) { //console.log(result);
                     var obj = JSON.parse(result);
                     $('#tableorderview > tbody').empty();
-                    
+
                     $('#divsubtotalview').html(obj.subtotal);
                     $('#divdiscountview').html(obj.disamount);
                     $('#divdiscountPOview').html(obj.po_amount);
@@ -1449,19 +1445,20 @@ include "include/topnavbar.php";
             });
         });
         $('#dataTable tbody').on('click', '.btnDispatch', function () {
-            var id = $(this).attr('id');
-            var confirmstatus = $(this).attr('name');
-            $('#hiddenpoid').val(id);
+            let $this = $(this);
+            let id = $this.attr('id');
+            let $hiddenPoId = $('#hiddenpoid').val(id);
+            let $modal = $('#modalorderview');
+            let $tbody = $('#tableorderview > tbody');
+
             $.ajax({
                 type: "POST",
-                data: {
-                    orderID: id
-                },
                 url: 'getprocess/getcusorderlistaccoorderid.php',
-                success: function (result) { //console.log(result);
-                    var obj = JSON.parse(result);
-                    $('#tableorderview > tbody').empty();
+                data: { orderID: id },
+                success: function (result) {
+                    let obj = $.parseJSON(result);
 
+                    // Update HTML Elements Efficiently
                     $('#divsubtotalview').html(obj.subtotal);
                     $('#divdiscountview').html(obj.disamount);
                     $('#divdiscountPOview').html(obj.po_amount);
@@ -1471,59 +1468,45 @@ include "include/topnavbar.php";
                     $('#dcuscontact').html(obj.cuscontact);
                     $('#viewmodaltitle').html('Order No: PO-' + id);
                     $('#editpodiscount').val(obj.podiscountpercentage);
+                    $('#btnUpdate').html('<i class="far fa-save"></i>&nbsp;Dispatch').prop('disabled', false);
+                    $('#acceptanceType').val(2);
 
-                    var objfirst = obj.tablelist;
-                    $.each(objfirst, function (i, item) {
-                        //alert(objfirst[i].id);
+                    // Optimize Table Row Creation
+                    let rows = obj.tablelist.map(item => {
+                        let statusClass = item.status == 3 ? ' style="background-color: #ffcccc;"' : '';
+                        let deleteButtonClass = item.status == 3 ? 'btn-outline-success' : 'btn-outline-danger';
 
-                        $('#tableorderview > tbody:last').append('<tr><td>' +
-                            objfirst[i].productname +
-                            '</td><td>' +
-                            objfirst[i].productcode +
-                            '</td><td class="d-none">' + objfirst[i].productid +
-                            '</td><td class="d-none">' + objfirst[i]
-                            .podetailid +
-                            '</td><td class="text-center editnewqty">' +
-                            objfirst[i].confirmqty +
-                            '</td><td class="text-center editlinediscountpernetage">' +
-                            objfirst[i].discountpresent +
-                            '</td><td class="text-center editlinediscount">' +
-                            objfirst[i].discount +
-                            '</td><td class="text-right total">' + objfirst[i]
-                            .total +
-                            '</td><td class="text-right colunitprice">' +
-                            objfirst[i]
-                            .unitprice +
-                            '</td><td class="text-right"><button class="btn btn-outline-danger btn-sm btnDeleteOrderProduct mr-1" data-placement="bottom" title="Invoice Print" id="' +
-                            objfirst[i]
-                            .podetailid +
-                            '"><i class="fas fa-trash"></i></button></td><td class="d-none">' +
-                            objfirst[i]
-                            .status +
-                            '</td><td class="d-none totwithoutdiscount">' +
-                            objfirst[i]
-                            .totwithoutdiscount +
-                            '</td><td class="d-none">0</td></tr>');
+                        return `<tr${statusClass}>
+                            <td>${item.productname}</td>
+                            <td>${item.productcode}</td>
+                            <td class="d-none">${item.productid}</td>
+                            <td class="d-none">${item.podetailid}</td>
+                            <td class="text-center editnewqty">${item.confirmqty}</td>
+                            <td class="text-center editlinediscountpernetage">${item.discountpresent}</td>
+                            <td class="text-center editlinediscount">${item.discount}</td>
+                            <td class="text-right total">${item.total}</td>
+                            <td class="text-right colunitprice">${item.unitprice}</td>
+                            <td class="text-right">
+                                <button class="btn btn-sm ${deleteButtonClass} btnDeleteOrderProduct mr-1" id="${item.podetailid}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                            <td class="d-none">${item.status}</td>
+                            <td class="d-none totwithoutdiscount">${item.totwithoutdiscount}</td>
+                            <td class="d-none">0</td>
+                        </tr>`;
+                    }).join('');
 
-                        var newRow = $('#tableorderview > tbody:last tr:last');
+                    // Update Table
+                    $tbody.html(rows);
 
-                        if (objfirst[i].status == 3) {
-                            newRow.css('background-color', '#ffcccc');
-                            newRow.find('.btnDeleteOrderProduct').removeClass()
-                                .addClass('btn btn-outline-success btn-sm');
-
-                        }
-                    });
-
-                    $('#btnUpdate').html('<i class="far fa-save"></i>&nbsp;Dispatch');
-                    $('#btnUpdate').prop('disabled', false);
-                    $('#acceptanceType').val(2)
-
-                    $('#modalorderview').modal('show');
+                    // Show Modal & Recalculate Totals
+                    $modal.modal('show');
                     tabletotal1();
                 }
             });
         });
+
 
         $('#dataTable tbody').on('click', '.btncancel', function () {
             var r = confirm("Are you sure, Cancel this order ? ");
@@ -2110,58 +2093,44 @@ include "include/topnavbar.php";
 
 
         function tabletotal1() {
-            var sum = 0;
-            var totallinediscount = 0;
-            var count = 0;
-            $(".totwithoutdiscount").each(function () {
-                var row = $(this).closest('tr');
-                var status = row.find('td:nth-child(11)').text();
+            let sum = 0, totallinediscount = 0, count = 0;
+            let podiscountPercent = parseFloat($('#editpodiscount').val()) || 0;
 
-                if (status == 3) {
-                    return;
-                }
-                var cleansum = $(this).text().split(",").join("")
-                sum += parseFloat(cleansum);
-            });
+            let totRows = document.querySelectorAll(".totwithoutdiscount");
+            let discRows = document.querySelectorAll(".editlinediscount");
 
-            $(".totwithoutdiscount").each(function () {
-                var row = $(this).closest('tr');
-                var status = row.find('td:nth-child(11)').text();
-                if (status != 3) {
+            // Convert NodeLists to arrays and process them together
+            let allRows = [...totRows, ...discRows];
+
+            allRows.forEach(cell => {
+                let row = cell.closest('tr');
+                let status = row.cells[10]?.textContent.trim(); // Directly access 11th <td> (index 10)
+
+                if (status === "3") return; // Skip rows where status == 3
+
+                let value = parseFloat(cell.textContent.replace(/,/g, "")) || 0;
+
+                if (cell.classList.contains("totwithoutdiscount")) {
+                    sum += value;
                     count++;
+                } else if (cell.classList.contains("editlinediscount")) {
+                    totallinediscount += value;
                 }
             });
 
-            $(".editlinediscount").each(function () {
-                var row = $(this).closest('tr');
-                var status = row.find('td:nth-child(11)').text();
+            let poDiscount = ((sum - totallinediscount) * podiscountPercent) / 100;
+            let netTot = sum - (totallinediscount + poDiscount);
 
-                if (status == 3) {
-                    return;
-                }
-                var cleantotallinediscount = $(this).text().split(",").join("")
-                totallinediscount += parseFloat(cleantotallinediscount);
-            });
+            // Batch update UI to prevent layout thrashing
+            let updates = {
+                "#divitemcountview": count,
+                "#divsubtotalview": addCommas(sum.toFixed(2)),
+                "#divtotalview": addCommas(netTot.toFixed(2)),
+                "#divdiscountview": addCommas(totallinediscount.toFixed(2)),
+                "#divdiscountPOview": addCommas(poDiscount.toFixed(2))
+            };
 
-            var showsum = addCommas(parseFloat(sum).toFixed(2));
-            var showlinediscount = addCommas(parseFloat(totallinediscount).toFixed(2));
-
-
-            var podiscountPercent = $('#editpodiscount').val();
-            var poDiscount = ((sum - totallinediscount) * podiscountPercent) / 100;
-
-            var showPoDiscount = addCommas(parseFloat(poDiscount).toFixed(2));
-
-            var fulldiscount = totallinediscount + poDiscount;
-            var netTot = sum - fulldiscount;
-
-            var shownet = addCommas(parseFloat(netTot).toFixed(2));
-
-            $('#divitemcountview').html(count);
-            $('#divsubtotalview').html(showsum);
-            $('#divtotalview').html(shownet);
-            $('#divdiscountview').html(showlinediscount);
-            $('#divdiscountPOview').html(showPoDiscount);
+            Object.keys(updates).forEach(id => document.querySelector(id).textContent = updates[id]);
         }
 
         $("#createorderform").keypress(function (e) {

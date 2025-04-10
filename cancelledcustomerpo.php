@@ -849,63 +849,46 @@ include "include/topnavbar.php";
         });
 
 
-
-
         function tabletotal1() {
-            var sum = 0;
-            var totallinediscount = 0;
-            var count = 0;
-            $(".totwithoutdiscount").each(function () {
-                var row = $(this).closest('tr');
-                var status = row.find('td:nth-child(11)').text();
+            let sum = 0, totallinediscount = 0, count = 0;
+            let podiscountPercent = parseFloat($('#editpodiscount').val()) || 0;
 
-                if (status == 3) {
-                    return;
-                }
-                var cleansum = $(this).text().split(",").join("")
-                sum += parseFloat(cleansum);
-            });
+            let totRows = document.querySelectorAll(".totwithoutdiscount");
+            let discRows = document.querySelectorAll(".editlinediscount");
 
-            $(".totwithoutdiscount").each(function () {
-                var row = $(this).closest('tr');
-                var status = row.find('td:nth-child(11)').text();
-                if (status != 3) {
+            // Convert NodeLists to arrays and process them together
+            let allRows = [...totRows, ...discRows];
+
+            allRows.forEach(cell => {
+                let row = cell.closest('tr');
+                let status = row.cells[10]?.textContent.trim(); // Directly access 11th <td> (index 10)
+
+                if (status === "3") return; // Skip rows where status == 3
+
+                let value = parseFloat(cell.textContent.replace(/,/g, "")) || 0;
+
+                if (cell.classList.contains("totwithoutdiscount")) {
+                    sum += value;
                     count++;
+                } else if (cell.classList.contains("editlinediscount")) {
+                    totallinediscount += value;
                 }
             });
 
-            $(".editlinediscount").each(function () {
-                var row = $(this).closest('tr');
-                var status = row.find('td:nth-child(11)').text();
+            let poDiscount = ((sum - totallinediscount) * podiscountPercent) / 100;
+            let netTot = sum - (totallinediscount + poDiscount);
 
-                if (status == 3) {
-                    return;
-                }
-                var cleantotallinediscount = $(this).text().split(",").join("")
-                totallinediscount += parseFloat(cleantotallinediscount);
-            });
+            // Batch update UI to prevent layout thrashing
+            let updates = {
+                "#divitemcountview": count,
+                "#divsubtotalview": addCommas(sum.toFixed(2)),
+                "#divtotalview": addCommas(netTot.toFixed(2)),
+                "#divdiscountview": addCommas(totallinediscount.toFixed(2)),
+                "#divdiscountPOview": addCommas(poDiscount.toFixed(2))
+            };
 
-            var showsum = addCommas(parseFloat(sum).toFixed(2));
-            var showlinediscount = addCommas(parseFloat(totallinediscount).toFixed(2));
-
-
-            var podiscountPercent = $('#editpodiscount').val();
-            var poDiscount = ((sum - totallinediscount) * podiscountPercent) / 100;
-
-            var showPoDiscount = addCommas(parseFloat(poDiscount).toFixed(2));
-
-            var fulldiscount = totallinediscount + poDiscount;
-            var netTot = sum - fulldiscount;
-
-            var shownet = addCommas(parseFloat(netTot).toFixed(2));
-
-            $('#divitemcountview').html(count);
-            $('#divsubtotalview').html(showsum);
-            $('#divtotalview').html(shownet);
-            $('#divdiscountview').html(showlinediscount);
-            $('#divdiscountPOview').html(showPoDiscount);
+            Object.keys(updates).forEach(id => document.querySelector(id).textContent = updates[id]);
         }
-
 
         $('#modalorderview').on('hidden.bs.modal', function (e) {
             $('#tableorderview > tbody').html('');
