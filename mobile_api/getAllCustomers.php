@@ -2,7 +2,7 @@
 require_once('dbConnect.php');
 $arrayinvoice = array();
 
-$sql = "SELECT `idtbl_customer`,`name`, `nic`, `phone`, `email`, `address`, `vat_num`, `s_vat`, `numofvisitdays`, `creditlimit`, `credittype`, `creditperiod`, `emergencydate`, `status`, `updatedatetime`, `tbl_user_idtbl_user`, `tbl_area_idtbl_area` FROM `tbl_customer` WHERE `status`=1";
+$sql = "SELECT `idtbl_customer`,`customer`, `nic`, `phone`, `email`, `address`, `vat_num`, `s_vat`, `numofvisitdays`, `creditlimit`, `credittype`, `creditperiod`, `emergencydate`, `status`, `updatedatetime`, `tbl_user_idtbl_user`, `tbl_area_idtbl_area` FROM `tbl_customer` WHERE `status`=1";
 $res = mysqli_query($con, $sql);
 $result = array();
 while ($row = mysqli_fetch_array($res)) {
@@ -39,7 +39,7 @@ while ($row = mysqli_fetch_array($res)) {
         $lastInvNo = $rowLastInvNo['idtbl_invoice'];
     }
 
-    array_push($result, array("id" => $row['idtbl_customer'], "shop_name" => $row['name'], "mobile" => $row['phone'],  "address" => $row['address'], "creditlimit" => $row['creditlimit'], "outStanding" => "$outstanding", "visitStatus" => "1", "LastVisitDate" => "$lastVisitDate", "lastInvNo" => "$lastInvNo"));
+    array_push($result, array("id" => $row['idtbl_customer'], "shop_name" => $row['customer'], "mobile" => $row['phone'],  "address" => $row['address'], "creditlimit" => $row['creditlimit'], "outStanding" => "$outstanding", "visitStatus" => "1", "LastVisitDate" => "$lastVisitDate", "lastInvNo" => "$lastInvNo"));
 }
 
 print(json_encode($result));

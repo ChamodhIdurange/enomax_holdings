@@ -33,7 +33,7 @@ $resultproduct = $conn->query($sqlproduct1);
 $sqlreplist1 = "SELECT `idtbl_employee`, `name` FROM `tbl_employee` WHERE `tbl_user_type_idtbl_user_type`=7 AND `status`=1";
 $resultreplist1 = $conn->query($sqlreplist1);
 
-$sqlcustomerlist1 = "SELECT `idtbl_customer`, `name` FROM `tbl_customer` WHERE `status`=1";
+$sqlcustomerlist1 = "SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1";
 $resultcustomerlist1 = $conn->query($sqlcustomerlist1);
 
 $sqllocationlist1 = "SELECT `idtbl_locations`, `locationname` FROM `tbl_locations` WHERE `status`=1";

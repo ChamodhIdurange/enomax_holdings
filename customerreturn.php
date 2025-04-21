@@ -1,7 +1,7 @@
 <?php
 include "include/header.php";
 
-$sqlreturncustomer = "SELECT `u`.`idtbl_return`, `u`.`returndate`, `u`.`total`, `ua`.`name`, `u`.`acceptance_status`, `u`.`damaged_reason` FROM `tbl_return` as `u` LEFT JOIN `tbl_customer` AS `ua` ON (`ua`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer`)  WHERE `u`.`acceptance_status` IN (0,1)";
+$sqlreturncustomer = "SELECT `u`.`idtbl_return`, `u`.`returndate`, `u`.`total`, `ua`.`customer`, `u`.`acceptance_status`, `u`.`damaged_reason` FROM `tbl_return` as `u` LEFT JOIN `tbl_customer` AS `ua` ON (`ua`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer`)  WHERE `u`.`acceptance_status` IN (0,1)";
 $resultreturncustomer = $conn->query($sqlreturncustomer);
 
 include "include/topnavbar.php";
@@ -44,7 +44,7 @@ include "include/topnavbar.php";
                                                     while ($row = $resultreturncustomer->fetch_assoc()) { ?>
                                             <tr>
                                                 <td><?php echo $row['idtbl_return'] ?></td>
-                                                <td><?php echo $row['name'] ?></td>
+                                                <td><?php echo $row['customer'] ?></td>
                                                 <td><?php echo $row['returndate'] ?></td>
                                                 <td><?php echo $row['damaged_reason'] ?></td>
                                                 <td class="text-right">Rs.<?php echo number_format($row['total'], 2); ?>

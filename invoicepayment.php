@@ -13,7 +13,7 @@ $resultbank =$conn-> query($sqlbank);
 $sqlasm="SELECT `idtbl_employee`, `name` FROM `tbl_employee` WHERE `status`=1 AND `tbl_user_type_idtbl_user_type` IN ('8','9') ORDER BY `name` ASC";
 $resultasm =$conn-> query($sqlasm);
 
-$sqlcreditnote="SELECT `u`.`idtbl_creditenote`, `u`.`balAmount`, `c`.`name` FROM `tbl_creditenote` AS `u` LEFT JOIN `tbl_customer` AS `c` ON (`u`.`tbl_customer_idtbl_customer` = `c`.`idtbl_customer`) WHERE `u`.`status`=1 AND `u`.`settle`=0 AND `u`.`balAmount`>0";
+$sqlcreditnote="SELECT `u`.`idtbl_creditenote`, `u`.`balAmount`, `c`.`customer` FROM `tbl_creditenote` AS `u` LEFT JOIN `tbl_customer` AS `c` ON (`u`.`tbl_customer_idtbl_customer` = `c`.`idtbl_customer`) WHERE `u`.`status`=1 AND `u`.`settle`=0 AND `u`.`balAmount`>0";
 $resultcreditnote =$conn-> query($sqlcreditnote); 
 
 include "include/topnavbar.php"; 
@@ -199,7 +199,7 @@ include "include/topnavbar.php";
                                                 <select id="creditnote" name="creditnote" type="text" style="width: 100%;" class="form-control form-control-sm" disabled required>
                                                     <option value="">Select</option>
                                                     <?php if($resultcreditnote->num_rows > 0) {while ($rowcreditnote = $resultcreditnote-> fetch_assoc()) { ?>
-                                                    <option value="<?php echo $rowcreditnote['idtbl_creditenote'] ?>" data-creditnoteamount="<?php echo $rowcreditnote['balAmount']; ?>"><?php echo 'CRN'.$rowcreditnote['idtbl_creditenote'].'-'.number_format($rowcreditnote['balAmount'], 2).' / ' . $rowcreditnote['name']; ?></option>
+                                                    <option value="<?php echo $rowcreditnote['idtbl_creditenote'] ?>" data-creditnoteamount="<?php echo $rowcreditnote['balAmount']; ?>"><?php echo 'CRN'.$rowcreditnote['idtbl_creditenote'].'-'.number_format($rowcreditnote['balAmount'], 2).' / ' . $rowcreditnote['customer']; ?></option>
                                                     <?php }} ?>
                                                 </select>
                                             </div>

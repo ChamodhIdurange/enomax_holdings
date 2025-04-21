@@ -7,7 +7,7 @@ $totalbalrefill=0;
 $validfrom=$_POST['validfrom'];
 $validto=$_POST['validto'];
 
-$sqlinvoice="SELECT `tbl_customer`.`name`, `tbl_invoice`.`idtbl_invoice`, `tbl_invoice`.`date`, `tbl_invoice`.`total` FROM `tbl_customer` LEFT JOIN `tbl_invoice` ON `tbl_invoice`.`tbl_customer_idtbl_customer`=`tbl_customer`.`idtbl_customer` WHERE `tbl_customer`.`type`=1 AND `tbl_customer`.`status`=1 AND `tbl_invoice`.`date` BETWEEN '$validfrom' AND '$validto' AND `tbl_invoice`.`status`=1 AND `tbl_invoice`.`companydiffsend`=0";
+$sqlinvoice="SELECT `tbl_customer`.`customer`, `tbl_invoice`.`idtbl_invoice`, `tbl_invoice`.`date`, `tbl_invoice`.`total` FROM `tbl_customer` LEFT JOIN `tbl_invoice` ON `tbl_invoice`.`tbl_customer_idtbl_customer`=`tbl_customer`.`idtbl_customer` WHERE `tbl_customer`.`type`=1 AND `tbl_customer`.`status`=1 AND `tbl_invoice`.`date` BETWEEN '$validfrom' AND '$validto' AND `tbl_invoice`.`status`=1 AND `tbl_invoice`.`companydiffsend`=0";
 $resultinvoice=$conn->query($sqlinvoice);
 ?>
 <table class="table table-striped table-bordered table-sm small">
@@ -40,7 +40,7 @@ $resultinvoice=$conn->query($sqlinvoice);
             <td><?php echo $rowinvoice['date']; ?></td>
             <td><?php echo 'INV-'.$rowinvoice['idtbl_invoice']; ?></td>
             <td class="invnumber"><?php echo $rowinvoice['idtbl_invoice']; ?></td>
-            <td colspan="10"><?php echo $rowinvoice['name']; ?></td>
+            <td colspan="10"><?php echo $rowinvoice['customer']; ?></td>
         </tr>
         <?php 
         while($rowinvoicedetail=$resultinvoicedetail->fetch_assoc()){ 

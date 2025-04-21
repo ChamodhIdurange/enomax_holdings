@@ -1,7 +1,7 @@
 <?php 
 include "include/header.php";  
 
-$sqlcustomer="SELECT `idtbl_customer`, `name` FROM `tbl_customer` WHERE `status`=1";
+$sqlcustomer="SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1";
 $resultcustomer =$conn-> query($sqlcustomer);
 
 include "include/topnavbar.php"; 

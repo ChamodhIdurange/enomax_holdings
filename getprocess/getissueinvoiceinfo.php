@@ -28,7 +28,7 @@ $rowinvoice = $resultinvoice->fetch_assoc();
 $cusID = $rowinvoice['tbl_customer_idtbl_customer'];
 
 // Query to fetch customer details
-$sqlcustomer = "SELECT `type`, `name`, `nic`, `phone`, `email`, `address` FROM `tbl_customer` WHERE `idtbl_customer`='$cusID' AND `status`=1";
+$sqlcustomer = "SELECT `type`, `customer`, `nic`, `phone`, `email`, `address` FROM `tbl_customer` WHERE `idtbl_customer`='$cusID' AND `status`=1";
 $resultcustomer = $conn->query($sqlcustomer);
 
 // Check if the query succeeded
@@ -41,7 +41,7 @@ $rowcustomer = $resultcustomer->fetch_assoc();
 
 <div class="row">
     <div class="col">
-        <?php echo $rowcustomer['name'].'<br>'.$rowcustomer['nic'].'<br>'.$rowcustomer['phone'].'<br>'.$rowcustomer['email'].'<br>'.$rowcustomer['address'] ?>
+        <?php echo $rowcustomer['customer'].'<br>'.$rowcustomer['nic'].'<br>'.$rowcustomer['phone'].'<br>'.$rowcustomer['email'].'<br>'.$rowcustomer['address'] ?>
     </div>
 </div>
 

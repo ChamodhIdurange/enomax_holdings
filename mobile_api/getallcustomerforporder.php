@@ -7,7 +7,7 @@ $res = mysqli_query($con, $sql);
 $result = array();
 
 while ($row = mysqli_fetch_array($res)) {
-    array_push($result, array( "id" => $row['idtbl_customer'], "customername" => $row['name']));
+    array_push($result, array( "id" => $row['idtbl_customer'], "customername" => $row['customer']));
 }
 
 print(json_encode($result));

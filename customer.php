@@ -25,7 +25,7 @@ while ($rowproduct = $resultproduct-> fetch_assoc()) {
 $sqlarea="SELECT `idtbl_area`, `area` FROM `tbl_area` WHERE `status`=1";
 $resultarea =$conn-> query($sqlarea); 
 
-$sqlcustomer="SELECT `idtbl_customer`, `name` FROM `tbl_customer` WHERE `status`=1 ORDER BY `name` ASC";
+$sqlcustomer="SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `customer` ASC";
 $resultcustomer =$conn-> query($sqlcustomer); 
 
 $sqlproduct="SELECT `idtbl_product`, `product_name` FROM `tbl_product` WHERE `status`=1";
@@ -414,7 +414,7 @@ include "include/topnavbar.php";
                                         <option value="">Select</option>
                                         <?php if($resultcustomer->num_rows > 0) {while ($rowcustomer = $resultcustomer-> fetch_assoc()) { ?>
                                         <option value="<?php echo $rowcustomer['idtbl_customer'] ?>">
-                                            <?php echo $rowcustomer['name'] ?></option>
+                                            <?php echo $rowcustomer['customer'] ?></option>
                                         <?php }} ?>
                                     </select>
                                     <input type="hidden" name="hidecustomerclose" id="hidecustomerclose" value="">
@@ -574,7 +574,7 @@ include "include/topnavbar.php";
                     "data": "idtbl_customer"
                 },
                 {
-                    "data": "name"
+                    "data": "customer"
                 },
                 {
                     "data": "area"

@@ -2,13 +2,13 @@
 include "include/header.php";  
 
 
-$sqlreturndamage="SELECT `e`.`name` as `asm`, `u`.`idtbl_return`, `u`.`returndate`, `u`.`total`, `u`.`damaged_reason`, `ua`.`name` FROM `tbl_return` as `u` LEFT JOIN `tbl_customer` AS `ua` ON (`ua`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer`) JOIN `tbl_employee` AS `e` ON (`e`.`idtbl_employee` = `u`.`tbl_employee_idtbl_employee`) WHERE `u`.`acceptance_status` = '0' and `u`.`returntype` = '3'";
+$sqlreturndamage="SELECT `e`.`name` as `asm`, `u`.`idtbl_return`, `u`.`returndate`, `u`.`total`, `u`.`damaged_reason`, `ua`.`customer` FROM `tbl_return` as `u` LEFT JOIN `tbl_customer` AS `ua` ON (`ua`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer`) JOIN `tbl_employee` AS `e` ON (`e`.`idtbl_employee` = `u`.`tbl_employee_idtbl_employee`) WHERE `u`.`acceptance_status` = '0' and `u`.`returntype` = '3'";
 $resultreturndamaged =$conn-> query($sqlreturndamage);
 
-$sqlreturndamageaccepted="SELECT `e`.`name` as `asm`, `u`.`idtbl_return`, `u`.`returndate`, `u`.`total`, `u`.`damaged_reason`, `ua`.`name`, `u`.`credit_note` FROM `tbl_return` as `u` LEFT JOIN `tbl_customer` AS `ua` ON (`ua`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer`) JOIN `tbl_employee` AS `e` ON (`e`.`idtbl_employee` = `u`.`tbl_employee_idtbl_employee`) WHERE `u`.`acceptance_status` = '1' and `u`.`returntype` = '3' and `u`.`recieved_status` = '0'";
+$sqlreturndamageaccepted="SELECT `e`.`name` as `asm`, `u`.`idtbl_return`, `u`.`returndate`, `u`.`total`, `u`.`damaged_reason`, `ua`.`customer`, `u`.`credit_note` FROM `tbl_return` as `u` LEFT JOIN `tbl_customer` AS `ua` ON (`ua`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer`) JOIN `tbl_employee` AS `e` ON (`e`.`idtbl_employee` = `u`.`tbl_employee_idtbl_employee`) WHERE `u`.`acceptance_status` = '1' and `u`.`returntype` = '3' and `u`.`recieved_status` = '0'";
 $resultdamageaccepted =$conn-> query($sqlreturndamageaccepted);
 
-$sqlreturndamagedelivered="SELECT `e`.`name` as `asm`, `u`.`idtbl_return`, `u`.`returndate`, `u`.`total`, `u`.`damaged_reason`, `ua`.`name` FROM `tbl_return` as `u` LEFT JOIN `tbl_customer` AS `ua` ON (`ua`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer`) JOIN `tbl_employee` AS `e` ON (`e`.`idtbl_employee` = `u`.`tbl_employee_idtbl_employee`) WHERE `u`.`acceptance_status` = '1' and `u`.`returntype` = '3' and `u`.`recieved_status` = '1'";
+$sqlreturndamagedelivered="SELECT `e`.`name` as `asm`, `u`.`idtbl_return`, `u`.`returndate`, `u`.`total`, `u`.`damaged_reason`, `ua`.`customer` FROM `tbl_return` as `u` LEFT JOIN `tbl_customer` AS `ua` ON (`ua`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer`) JOIN `tbl_employee` AS `e` ON (`e`.`idtbl_employee` = `u`.`tbl_employee_idtbl_employee`) WHERE `u`.`acceptance_status` = '1' and `u`.`returntype` = '3' and `u`.`recieved_status` = '1'";
 $resultdamagedelivered =$conn-> query($sqlreturndamagedelivered);
 
 
@@ -81,7 +81,7 @@ include "include/topnavbar.php";
 
                                                             <td><?php echo $row['idtbl_return'] ?></td>
                                                             <td><?php echo $row['asm'] ?></td>
-                                                            <td><?php echo $row['name'] ?></td>
+                                                            <td><?php echo $row['customer'] ?></td>
                                                             <td><?php echo $row['returndate'] ?></td>
                                                             <td class="text-right">Rs.<?php echo $row['total'] ?>.00
                                                             </td>
@@ -133,7 +133,7 @@ include "include/topnavbar.php";
 
                                                             <td><?php echo $row['idtbl_return'] ?></td>
                                                             <td><?php echo $row['asm'] ?></td>
-                                                            <td><?php echo $row['name'] ?></td>
+                                                            <td><?php echo $row['customer'] ?></td>
                                                             <td><?php echo $row['returndate'] ?></td>
                                                             <td class="text-right">Rs.<?php echo $row['total'] ?>.00
                                                             </td>
@@ -194,7 +194,7 @@ include "include/topnavbar.php";
 
                                                             <td><?php echo $row['idtbl_return'] ?></td>
                                                             <td><?php echo $row['asm'] ?></td>
-                                                            <td><?php echo $row['name'] ?></td>
+                                                            <td><?php echo $row['customer'] ?></td>
                                                             <td><?php echo $row['returndate'] ?></td>
                                                             <td class="text-right">Rs.<?php echo $row['total'] ?>.00
                                                             </td>

@@ -16,7 +16,7 @@ $resultreplist = $conn->query($sqlreplist);
 $sqlsalemanagerlist = "SELECT `idtbl_sales_manager`, `salesmanagername` FROM `tbl_sales_manager` WHERE `status`=1";
 $resultmanagerlist = $conn->query($sqlsalemanagerlist);
 
-$sqlcustomerlist = "SELECT `idtbl_customer`, `name` FROM `tbl_customer` WHERE `status`=1";
+$sqlcustomerlist = "SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1";
 $resultcustomerlist = $conn->query($sqlcustomerlist);
 
 $sqllocationlist = "SELECT `idtbl_locations`, `locationname` FROM `tbl_locations` WHERE `status`=1";
@@ -28,7 +28,7 @@ $resultarealist = $conn->query($sqlarealist);
 $sqlhelperlist = "SELECT `idtbl_employee`, `name` FROM `tbl_employee` WHERE `tbl_user_type_idtbl_user_type`=7 AND `status`=1";
 $resulthelperlist = $conn->query($sqlhelperlist);
 
-$sqlcustomer = "SELECT `idtbl_customer`, `name` FROM `tbl_customer` WHERE `status`=1 ORDER BY `name` ASC";
+$sqlcustomer = "SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `customer` ASC";
 $resultcustomer = $conn->query($sqlcustomer);
 
 $sqlvehicle = "SELECT `idtbl_vehicle`, `vehicleno` FROM `tbl_vehicle` WHERE `status`=1";
@@ -538,6 +538,13 @@ include "include/topnavbar.php";
                                 <?php } } ?>
                             </select>
                         </div>
+                        <div class="col-md-6">
+                            <label class="small font-weight-bold text-dark">Due Date*</label>
+                            <div class="input-group input-group-sm">
+                                <input type="number" class="form-control" placeholder="" name="duedate"
+                                    id="duedate" required>
+                            </div>
+                        </div>
                     </div>
                     <button type="button" class="btn btn-primary btn-sm fa-pull-right mt-3" id="btncuspoupdate"><i
                             class="fa fa-save"></i>&nbsp;Update</button>
@@ -965,6 +972,7 @@ include "include/topnavbar.php";
                             '" data-customerid="' + full['tbl_customer_idtbl_customer'] +
                             '" data-customername="' + full['cusname'] + ' - ' +  full['cusaddress']  +
                             '" data-repid="' + full['tbl_employee_idtbl_employee'] +
+                            '" data-duedate="' + full['duedate'] +
                             '"><i class="fas fa-pen"></i></button>';
                         button +=
                             '<button class="btn btn-outline-';
@@ -1303,6 +1311,7 @@ include "include/topnavbar.php";
             var customername = $(this).data('customername');
             var podate = $(this).data('podate');
             var repid = $(this).data('repid');
+            var duedate = $(this).data('duedate');
             $('#editsalesrep').val(repid);
 
             $('#hiddencustomerpoid').val(id);
@@ -1310,6 +1319,7 @@ include "include/topnavbar.php";
 
             $('#editorderdate').val(podate);
             $('#editsalesrep').val(repid);
+            $('#duedate').val(duedate);
 
             $('#editcustomer').append(new Option(customername, customerid, true, true)).trigger('change');
             $('#editcustomer').val(customerid);
@@ -2032,6 +2042,7 @@ include "include/topnavbar.php";
                 var orderdate = $('#editorderdate').val();
                 var customerid = $('#editcustomer').val();
                 var salesrepId = $('#editsalesrep').val();
+                var duedate = $('#duedate').val();
                 var porderId = $('#hiddencustomerpoid').val();
 
                 $.ajax({
@@ -2040,12 +2051,13 @@ include "include/topnavbar.php";
                         orderdate: orderdate,
                         customerid: customerid,
                         salesrepId: salesrepId,
-                        porderId: porderId
+                        porderId: porderId,
+                        duedate: duedate
                     },
                     url: 'process/updatecustomerporder.php',
                     success: function (result) { //console.log(result)
                         var obj = JSON.parse(result);
-                        action(obj);
+                        // action(obj);
                         setTimeout(function () {
                             window.location.reload();
                         }, 1500);

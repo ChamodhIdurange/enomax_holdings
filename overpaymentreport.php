@@ -2,7 +2,7 @@
 include "include/header.php";  
 include "include/topnavbar.php";
 
-$sqlcustomer="SELECT `idtbl_customer`, `name` FROM `tbl_customer` WHERE `status`=1 ORDER BY `name` ASC";
+$sqlcustomer="SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `name` ASC";
 $resultcustomer =$conn-> query($sqlcustomer);
 
 include "include/topnavbar.php"; 

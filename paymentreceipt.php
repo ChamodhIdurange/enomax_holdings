@@ -100,7 +100,7 @@ include "include/topnavbar.php";
                     "data": "date"
                 },
                 {
-                    "data": "name"
+                    "data": "customer"
                 },
                 {
                     "data": "address"
@@ -205,4 +205,5 @@ include "include/topnavbar.php";
     }
 </script>
 <?php include "include/footer.php"; ?>
+
 

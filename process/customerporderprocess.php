@@ -47,7 +47,7 @@ if ($recordOption == 1) {
         $customercontact =  $_POST['customercontact'];
         $customeraddress =  $_POST['customeraddress'];
 
-        $insertcustomer = "INSERT INTO `tbl_customer`(`type`, `name`, `nic`, `phone`, `email`, `address`, `vat_num`, `s_vat`, `numofvisitdays`, `creditlimit`, `credittype`, `creditperiod`, `emergencydate`, `status`, `updatedatetime`, `tbl_user_idtbl_user`, `tbl_area_idtbl_area`) VALUES ('1', '$directcustomer', '', '$customercontact', '', '$customeraddress', '', '', 0, 0, 0, 0,'','1','$updatedatetime', '$userID', '1')";
+        $insertcustomer = "INSERT INTO `tbl_customer`(`type`, `customer`, `nic`, `phone`, `email`, `address`, `vat_num`, `s_vat`, `numofvisitdays`, `creditlimit`, `credittype`, `creditperiod`, `emergencydate`, `status`, `updatedatetime`, `tbl_user_idtbl_user`, `tbl_area_idtbl_area`) VALUES ('1', '$directcustomer', '', '$customercontact', '', '$customeraddress', '', '', 0, 0, 0, 0,'','1','$updatedatetime', '$userID', '1')";
         $conn->query($insertcustomer);
 
         $customer = $conn->insert_id;
@@ -117,7 +117,7 @@ if ($recordOption == 1) {
 //         $customercontact =  $_POST['customercontact'];
 //         $customeraddress =  $_POST['customeraddress'];
 
-//         $insertcustomer = "INSERT INTO `tbl_customer`(`type`, `name`, `nic`, `phone`, `email`, `address`, `vat_num`, `s_vat`, `numofvisitdays`, `creditlimit`, `credittype`, `creditperiod`, `emergencydate`, `status`, `updatedatetime`, `tbl_user_idtbl_user`, `tbl_area_idtbl_area`) VALUES ('1', '$directcustomer', '', '$customercontact', '', '$customeraddress', '', '', 0, 0, 0, 0,'','1','$updatedatetime', '$userID', '1')";
+//         $insertcustomer = "INSERT INTO `tbl_customer`(`type`, `customer`, `nic`, `phone`, `email`, `address`, `vat_num`, `s_vat`, `numofvisitdays`, `creditlimit`, `credittype`, `creditperiod`, `emergencydate`, `status`, `updatedatetime`, `tbl_user_idtbl_user`, `tbl_area_idtbl_area`) VALUES ('1', '$directcustomer', '', '$customercontact', '', '$customeraddress', '', '', 0, 0, 0, 0,'','1','$updatedatetime', '$userID', '1')";
 //         $conn->query($insertcustomer);
 
 //         $customer = $conn->insert_id;

@@ -7,7 +7,7 @@ $customerID = $_POST['customer'];
 
 $totalAmount = 0;
 
-$sql = "SELECT `u`.`idtbl_invoice`,`u`.`invoiceno`, `u`.`total`, `ua`.`product_name`, `ub`.`area`, `uc`.`name` AS `cusname`, `ue`.`name` AS `repname`
+$sql = "SELECT `u`.`idtbl_invoice`,`u`.`invoiceno`, `u`.`total`, `ua`.`product_name`, `ub`.`area`, `uc`.`customer` AS `cusname`, `ue`.`name` AS `repname`
         FROM `tbl_invoice` AS `u`
         LEFT JOIN `tbl_customer` AS `uc` ON `u`.`tbl_customer_idtbl_customer` = `uc`.`idtbl_customer`
         LEFT JOIN `tbl_customer_order` AS `uf` ON `u`.`tbl_customer_order_idtbl_customer_order` = `uf`.`idtbl_customer_order`

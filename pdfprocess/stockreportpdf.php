@@ -14,7 +14,7 @@ $dompdf = new Dompdf($options);
 
 $fromdate = $_GET['fromdate'];
 
-$sqlstock = "SELECT `p`.`retail`, `sp`.`category` as `subcat`, `gp`.`category` as `groupcat`, `pc`.`category` as `maincat`, `p`.`product_name`, SUM(`s`.`qty`) AS `qty`, `m`.`name` 
+$sqlstock = "SELECT `p`.`saleprice`, `p`.`retail`, `sp`.`category` as `subcat`, `gp`.`category` as `groupcat`, `pc`.`category` as `maincat`, `p`.`product_name`, SUM(`s`.`qty`) AS `qty`, `m`.`name` 
              FROM `tbl_stock` as `s` 
              LEFT JOIN `tbl_product` as `p` ON (`p`.`idtbl_product`=`s`.`tbl_product_idtbl_product`) 
              LEFT JOIN `tbl_sizes` AS `m` ON (`m`.`idtbl_sizes` = `p`.`tbl_sizes_idtbl_sizes`) 
@@ -99,25 +99,35 @@ if ($resultstock->num_rows > 0) {
                         <th class="thc">Size</th>
                         <th class="thc">Available Stock</th>
                         <th class="thc">Retail Price</th>
+                        <th class="thc">Sale Price</th>
                         <th class="thc">Total Price</th>
                     </tr>  
                 </thead>
                 <tbody>';
 
-    
+    $totalGrand = 0; 
     while ($rowresultstock = $resultstock->fetch_assoc()) {
-        $total = $rowresultstock['retail'] * $rowresultstock['qty'];
+        $total = $rowresultstock['saleprice'] * $rowresultstock['qty'];
+        $totalGrand += $total;
         $html .= '
         <tr>
             <td class="tdc">' . $rowresultstock['product_name'] . '</td>  
             <td class="tdc">' . $rowresultstock['name'] . '</td>
             <td class="tdc">' . $rowresultstock['qty'] . '</td>
             <td class="tdc">' . number_format($rowresultstock['retail'], 2) . '</td>
+            <td class="tdc">' . number_format($rowresultstock['saleprice'], 2) . '</td>
             <td class="text-right">Rs.' . number_format($total, 2, '.', ',') . '</td>
         </tr>';
     }
     $html .= '
                 </tbody>
+
+                <tfoot>
+                    <tr>
+                        <td colspan="5" class="text-right font-weight-bold">Grand Total:</td>
+                        <td class="text-right font-weight-bold">Rs. ' . number_format($totalGrand, 2, '.', ',') . '</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

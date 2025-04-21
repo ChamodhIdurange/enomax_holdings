@@ -11,7 +11,7 @@ $sqlcustomer="SELECT * FROM `tbl_contact_details` WHERE `person_id` = '$record' 
 $resultcustomer=$conn->query($sqlcustomer);
 
 
-$sqlcustomerdetails="SELECT `email`, `name`, `phone` FROM `tbl_customer` WHERE `idtbl_customer` = '$record'";
+$sqlcustomerdetails="SELECT `email`, `customer`, `phone` FROM `tbl_customer` WHERE `idtbl_customer` = '$record'";
 $resultcustomerdetails =$conn-> query($sqlcustomerdetails); 
 $resultpoints = $resultcustomerdetails-> fetch_assoc();
 
@@ -58,7 +58,7 @@ include "include/topnavbar.php";
                     <div class="page-header-content py-3">
                         <h1 class="page-header-title">
                             <div class="page-header-icon"><i data-feather="user"></i></div>
-                            <span><?php echo $resultpoints['name'] ?>'s Profile</span>
+                            <span><?php echo $resultpoints['customer'] ?>'s Profile</span>
                         </h1>
                     </div>
                 </div>
@@ -74,7 +74,7 @@ include "include/topnavbar.php";
                                         <div class="d-flex flex-column align-items-center text-center p-3 py-2"><img
                                                 class="rounded-circle mt-5" width="150px"
                                                 src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span
-                                                class="font-weight-bold"><?php echo $resultpoints['name']; ?></span><span
+                                                class="font-weight-bold"><?php echo $resultpoints['customer']; ?></span><span
                                                 class="text-black-50"><?php  echo $resultpoints['phone'] ?></span><span><?php echo $resultpoints['email']; ?>
                                             </span><span> <button type="button"
                                                     class="btn btn-outline-primary btn-sm fa-pull-right ml-2"

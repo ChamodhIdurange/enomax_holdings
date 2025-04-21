@@ -6,7 +6,7 @@ $orderID=$_POST['orderID'];
 $sqlorderdetail="SELECT `u`.*, `ua`.`product_code`, `ua`.`product_name` AS `issueproduct` FROM `tbl_customer_order_detail` AS `u` LEFT JOIN `tbl_product` AS `ua` ON `ua`.`idtbl_product`=`u`.`tbl_product_idtbl_product` WHERE `u`.`tbl_customer_order_idtbl_customer_order`='$orderID'";
 $resultorderdetail=$conn->query($sqlorderdetail);
 
-$sqlorder="SELECT `p`.`podiscountpercentage`, `p`.`total`, `p`.`confirm`, `p`.`dispatchissue`, `p`.`delivered`, `p`.`discount`, `p`.`podiscount`, `p`.`nettotal`, `p`.`remark`, `c`.`name`, `c`.`phone` FROM `tbl_customer_order` as `p`  JOIN `tbl_customer` AS `c` ON (`c`.`idtbl_customer` = `p`.`tbl_customer_idtbl_customer`) WHERE `p`.`idtbl_customer_order`='$orderID'";
+$sqlorder="SELECT `p`.`podiscountpercentage`, `p`.`total`, `p`.`confirm`, `p`.`dispatchissue`, `p`.`delivered`, `p`.`discount`, `p`.`podiscount`, `p`.`nettotal`, `p`.`remark`, `c`.`customer`, `c`.`phone` FROM `tbl_customer_order` as `p`  JOIN `tbl_customer` AS `c` ON (`c`.`idtbl_customer` = `p`.`tbl_customer_idtbl_customer`) WHERE `p`.`idtbl_customer_order`='$orderID'";
 $resultorder=$conn->query($sqlorder);
 $roworder=$resultorder->fetch_assoc();
 
@@ -36,7 +36,7 @@ while($roworderdetail=$resultorderdetail->fetch_assoc()){
 
 $obj=new stdClass();
 $obj->remark=$roworder['remark'];
-$obj->cusname=$roworder['name'];
+$obj->cusname=$roworder['customer'];
 $obj->cuscontact=$roworder['phone'];
 $obj->confirm=$roworder['confirm'];
 $obj->dispatchissue=$roworder['dispatchissue'];

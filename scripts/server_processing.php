@@ -30,7 +30,7 @@ $primaryKey = 'idtbl_porders';
 // indexes
 $columns = array(
 	array( 'db' => '`u`.`idtbl_porders`', 'dt' => 0, 'field' => 'idtbl_porders' ),
-	array( 'db' => '`ud`.`name`',   'dt' => 2, 'field' => 'name' ),
+	array( 'db' => '`ud`.`customer`',   'dt' => 2, 'field' => 'customer' ),
 	array( 'db' => '`u`.`date`',  'dt' => 1, 'field' => 'date' ),
 	array( 'db' => '`uc`.`nettotal`',   'dt' => 3, 'field' => 'nettotal' )
 //	array( 'db' => '`u`.`office`',     'dt' => 3, 'field' => 'office'),

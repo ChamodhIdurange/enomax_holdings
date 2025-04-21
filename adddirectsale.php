@@ -486,7 +486,7 @@ include "include/topnavbar.php";
                                     <?php if($resultCustomer->num_rows > 0) {while ($row = $resultCustomer-> fetch_assoc()) { ?>
                                     <tr>
                                         <td><?php echo $row['idtbl_customer'] ?></td>
-                                        <td><?php echo $row['name'] ?></td>
+                                        <td><?php echo $row['customer'] ?></td>
                                         <td><?php echo $row['phone'] ?></td>
                                         <td><?php echo $row['email'] ?></td>
                                         <td><?php echo $row['address'] ?></td>

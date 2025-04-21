@@ -4,7 +4,7 @@ require_once('../connection/db.php');
 $sqlemployee2="SELECT `idtbl_employee`, `name` FROM `tbl_employee` WHERE `status` IN (1,2) AND `tbl_user_type_idtbl_user_type` IN (8,9)";
 $resultemployee2 =$conn-> query($sqlemployee2); 
 
-$sqlnotassign="SELECT `idtbl_customer`, `name` FROM `tbl_customer` WHERE `status` IN (1,2) AND `ref` = '0' ORDER BY `name` asc";
+$sqlnotassign="SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status` IN (1,2) AND `ref` = '0' ORDER BY `name` asc";
 $resultnotassign =$conn-> query($sqlnotassign); 
 ?>
 <div class="row">
@@ -39,7 +39,7 @@ $resultnotassign =$conn-> query($sqlnotassign);
                         <?php while ($row = $resultnotassign-> fetch_assoc()) { ?>
                         <tr>
                             <td><?php echo $row['idtbl_customer'] ?></td>
-                            <td><?php echo $row['name'] ?></td>
+                            <td><?php echo $row['customer'] ?></td>
                             <td>
                                 <div class="form-check">
                                     <input class="form-check-input selectcheckbox" type="checkbox" value="1" id="">

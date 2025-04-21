@@ -43,7 +43,7 @@ $columns = array(
 	array( 'db' => '`u`.`callstatus`',   'dt' => 'callstatus', 'field' => 'callstatus' ),
 	array( 'db' => '`u`.`status`',   'dt' => 'status', 'field' => 'status' ),
 	array( 'db' => '`ub`.`area`', 'dt' => 'area', 'field' => 'area' ),
-    array( 'db' => '`uc`.`name`', 'dt' => 'cusname', 'field' => 'cusname', 'as' => 'cusname' ),
+    array( 'db' => '`uc`.`customer`', 'dt' => 'cusname', 'field' => 'cusname', 'as' => 'cusname' ),
     array( 'db' => '`ud`.`name`', 'dt' => 'repname', 'field' => 'repname', 'as' => 'repname' )
 );
 

@@ -25,7 +25,7 @@ while ($rowproduct = $resultproduct-> fetch_assoc()) {
 $sqlarea="SELECT `idtbl_area`, `area` FROM `tbl_area` WHERE `status`=1";
 $resultarea =$conn-> query($sqlarea); 
 
-$sqlcustomer="SELECT `idtbl_customer`, `name` FROM `tbl_customer` WHERE `status`=1 ORDER BY `name` ASC";
+$sqlcustomer="SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `customer` ASC";
 $resultcustomer =$conn-> query($sqlcustomer); 
 
 $sqlproduct="SELECT `idtbl_product`, `product_name` FROM `tbl_product` WHERE `status`=1";

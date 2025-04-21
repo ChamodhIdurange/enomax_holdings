@@ -19,6 +19,7 @@ $sqlstock = "SELECT `p`.`product_code`, `p`.`saleprice`, `sp`.`category` as `sub
 $resultstock = $conn->query($sqlstock);
 
 if ($resultstock->num_rows > 0) {
+    $totalGrand = 0; 
     echo '<table class="table table-bordered table-striped table-sm nowrap" id="dataTable">
             <thead>
                 <tr>
@@ -34,6 +35,7 @@ if ($resultstock->num_rows > 0) {
             <tbody>';
     while ($rowstock = $resultstock->fetch_assoc()) {
         $total = $rowstock['saleprice'] * $rowstock['qty'];
+        $totalGrand += $total;
         echo '<tr>
                 <td>' . $rowstock['product_name'] . '</td>
                 <td>' . $rowstock['product_code'] . '</td>
@@ -44,7 +46,14 @@ if ($resultstock->num_rows > 0) {
                 <td class="text-right">Rs.' . number_format($total, 2, '.', ',') . '</td>
             </tr>';
     }
-    echo '</tbody></table>';
+    echo '</tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6" class="text-right font-weight-bold">Grand Total:</td>
+                <td class="text-right font-weight-bold">Rs. ' . number_format($totalGrand, 2, '.', ',') . '</td>
+            </tr>
+        </tfoot>
+        </table>';
 } else {
     echo '<div class="alert alert-info" role="alert">No records found.</div>';
 }

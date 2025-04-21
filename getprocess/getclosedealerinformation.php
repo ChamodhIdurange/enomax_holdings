@@ -3,7 +3,7 @@ require_once('../connection/db.php');
 
 $customerID=$_POST['customerID'];
 
-$sqlcustomer="SELECT `name`, `phone`, `email`, `address` FROM `tbl_customer` WHERE `status`=1 AND `idtbl_customer`='$customerID'";
+$sqlcustomer="SELECT `customer`, `phone`, `email`, `address` FROM `tbl_customer` WHERE `status`=1 AND `idtbl_customer`='$customerID'";
 $resultcustomer=$conn->query($sqlcustomer);
 $rowcustomer=$resultcustomer->fetch_assoc();
 
@@ -20,7 +20,7 @@ $rowcustomerclosedetail=$resultcustomerclosedetail->fetch_assoc();
 ?>
 <div class="row">
     <div class="col-12">
-        <h5 class="font-weight-light"><?php echo $rowcustomer['name'] ?></h5>
+        <h5 class="font-weight-light"><?php echo $rowcustomer['customer'] ?></h5>
         <p><?php echo $rowcustomer['phone'] ?></p>
         <p><?php echo $rowcustomer['email'] ?></p>
         <p><?php echo $rowcustomer['address'] ?></p>

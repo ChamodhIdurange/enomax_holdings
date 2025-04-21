@@ -4,7 +4,7 @@ require_once('../connection/db.php');
 $validfrom=$_POST['validfrom'];
 $validto=$_POST['validto'];
 
-$sqlinvoicelist="SELECT `tbl_invoice`.`idtbl_invoice`, `tbl_invoice`.`date`, `tbl_invoice`.`total`, `tbl_invoice`.`paymentcomplete`, `tbl_customer`.`name` FROM `tbl_invoice` LEFT JOIN `tbl_customer` ON `tbl_customer`.`idtbl_customer`=`tbl_invoice`.`tbl_customer_idtbl_customer` WHERE `tbl_invoice`.`status`=1 AND `tbl_invoice`.`date` BETWEEN '$validfrom' AND '$validto'";
+$sqlinvoicelist="SELECT `tbl_invoice`.`idtbl_invoice`, `tbl_invoice`.`date`, `tbl_invoice`.`total`, `tbl_invoice`.`paymentcomplete`, `tbl_customer`.`customer` FROM `tbl_invoice` LEFT JOIN `tbl_customer` ON `tbl_customer`.`idtbl_customer`=`tbl_invoice`.`tbl_customer_idtbl_customer` WHERE `tbl_invoice`.`status`=1 AND `tbl_invoice`.`date` BETWEEN '$validfrom' AND '$validto'";
 $resultinvoicelist =$conn-> query($sqlinvoicelist);
 
 ?>
@@ -49,7 +49,7 @@ $resultinvoicelist =$conn-> query($sqlinvoicelist);
         <tr class="<?php if($rowinvoicelist['paymentcomplete']==1){echo 'table-success';} ?>">
             <td><?php echo 'INV-'.$rowinvoicelist['idtbl_invoice'] ?><i class="far fa-question-circle fa-pull-right pointer mt-1 text-primary invoiceinfobtn" id="<?php echo $invoiceID; ?>"></i></td>
             <td><?php echo $rowinvoicelist['date'] ?></td>
-            <td><?php echo $rowinvoicelist['name'] ?></td>
+            <td><?php echo $rowinvoicelist['customer'] ?></td>
             <td class="text-right"><?php if($rowinvoicelist['paymentcomplete']==0){echo number_format(($rowinvoicelist['total']-$rowinvpayamount['payamount']),2);}else{echo number_format('0',2);} ?></td>
             <td class="text-right"><?php echo number_format($cashtotal,2) ?></td>
         <td class="text-right"><?php echo number_format($chequetotal,2) ?><?php if($chequetotal>0){ ?><button class="btn btn-sm btn-link fa-pull-right" data-container="body" data-placement="bottom" data-toggle="popover" data-trigger="hover" title="Cheque Info" data-content="<?php echo $chequelist; ?>"><i class="far fa-question-circle"></i></button><?php } ?></td>

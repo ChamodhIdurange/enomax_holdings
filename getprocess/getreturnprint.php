@@ -7,7 +7,7 @@ $record = $_POST['id'];
 $sql = "SELECT `d`.`actualqty`, `d`.`idtbl_return_details`,`p`.`product_name`, `d`.`unitprice`, `d`.`qty`, `d`.`discount`, `d`.`total` FROM `tbl_return` as `r` join `tbl_return_details` as `d` ON (`r`.`idtbl_return` = `d`.`tbl_return_idtbl_return`) JOIN `tbl_product` as `p` ON (`d`.`tbl_product_idtbl_product` = `p`.`idtbl_product`) WHERE `d`.`tbl_return_idtbl_return` = '$record'";
 $result = $conn->query($sql);
 
-$sqlReturn = "SELECT `idtbl_return`, `tbl_customer`.`name` AS `cusname`, `tbl_employee`.`name`, `tbl_return`.`returndate` FROM `tbl_return` LEFT JOIN `tbl_customer` ON (`tbl_customer`.`idtbl_customer` = `tbl_return`.`tbl_customer_idtbl_customer`) LEFT JOIN `tbl_employee` ON (`tbl_employee`.`idtbl_employee` = `tbl_return`.`tbl_employee_idtbl_employee`) WHERE `idtbl_return` = '$record'";
+$sqlReturn = "SELECT `idtbl_return`, `tbl_customer`.`customer` AS `cusname`, `tbl_employee`.`name`, `tbl_return`.`returndate` FROM `tbl_return` LEFT JOIN `tbl_customer` ON (`tbl_customer`.`idtbl_customer` = `tbl_return`.`tbl_customer_idtbl_customer`) LEFT JOIN `tbl_employee` ON (`tbl_employee`.`idtbl_employee` = `tbl_return`.`tbl_employee_idtbl_employee`) WHERE `idtbl_return` = '$record'";
 $resultReturn = $conn->query($sqlReturn);
 $rowReturn = $resultReturn->fetch_assoc();
 $cusname =  $rowReturn['cusname'];

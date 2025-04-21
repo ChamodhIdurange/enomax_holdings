@@ -38,7 +38,7 @@ $columns = array(
 	array( 'db' => '`u`.`backstockdate`',   'dt' => 'backstockdate', 'field' => 'backstockdate' ),
 	array( 'db' => '`u`.`returncusstatus`',   'dt' => 'returncusstatus', 'field' => 'returncusstatus' ),
 	array( 'db' => '`u`.`returncusdate`',   'dt' => 'returncusdate', 'field' => 'returncusdate' ),
-	array( 'db' => '`ua`.`name`',   'dt' => 'name', 'field' => 'name' ),
+	array( 'db' => '`ua`.`customer`',   'dt' => 'customer', 'field' => 'customer' ),
 	array( 'db' => '`ub`.`product_name`',   'dt' => 'product_name', 'field' => 'product_name' ),
 	array( 'db' => '`u`.`status`',   'dt' => 'status', 'field' => 'status' )
 );

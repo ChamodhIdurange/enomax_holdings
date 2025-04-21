@@ -34,7 +34,7 @@ $columns = array(
 	array( 'db' => '`u`.`date`', 'dt' => 'date', 'field' => 'date' ),
 	array( 'db' => '`u`.`payment`', 'dt' => 'payment', 'field' => 'payment' ),
 	array( 'db' => '`u`.`balance`', 'dt' => 'balance', 'field' => 'balance' ),
-	array( 'db' => '`c`.`name`', 'dt' => 'name', 'field' => 'name' ),
+	array( 'db' => '`c`.`customer`', 'dt' => 'customer', 'field' => 'customer' ),
 	array( 'db' => '`c`.`address`', 'dt' => 'address', 'field' => 'address' ),
 	array( 'db' => '`i`.`paymentcomplete`', 'dt' => 'paymentcomplete', 'field' => 'paymentcomplete' ),
 	array( 'db' => '`i`.`idtbl_invoice`', 'dt' => 'idtbl_invoice', 'field' => 'idtbl_invoice' ),

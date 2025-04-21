@@ -19,7 +19,7 @@ while($rowcusdays=$resultcusdays->fetch_assoc()){
 
 $obj=new stdClass();
 $obj->id=$row['idtbl_customer'];
-$obj->name=$row['name'];
+$obj->name=$row['customer'];
 $obj->type=$row['type'];
 $obj->nic=$row['nic'];
 $obj->phone=$row['phone'];

@@ -1,7 +1,7 @@
 <?php 
 include "include/header.php";  
 
-$sqlcustomer="SELECT `idtbl_customer`, `name` FROM `tbl_customer` WHERE `status`=1 ORDER BY `name` ASC";
+$sqlcustomer="SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `name` ASC";
 $resultcustomer =$conn-> query($sqlcustomer);
 
 $sqlproduct="SELECT `idtbl_product`, `product_name` FROM `tbl_product` WHERE `status`=1";
@@ -36,7 +36,7 @@ include "include/topnavbar.php";
                                         <select name="customer" id="customer" class="form-control form-control-sm" required>
                                             <option value="">Select</option>
                                             <?php if($resultcustomer->num_rows > 0) {while ($rowcustomer = $resultcustomer-> fetch_assoc()) { ?>
-                                            <option value="<?php echo $rowcustomer['idtbl_customer'] ?>"><?php echo $rowcustomer['name'] ?></option>
+                                            <option value="<?php echo $rowcustomer['idtbl_customer'] ?>"><?php echo $rowcustomer['customer'] ?></option>
                                             <?php }} ?>
                                         </select>
                                     </div>

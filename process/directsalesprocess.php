@@ -34,7 +34,7 @@ $today=date('Y-m-d');
 $updatedatetime=date('Y-m-d h:i:s');
 
 if(empty($_POST['customer'])){
-    $insertuser="INSERT INTO `tbl_customer`(`name`, `phone`, `address`, `email`, `updatedatetime`, `tbl_user_idtbl_user`, `status`, `tbl_area_idtbl_area`) VALUES ('$customername','$contact', '$addresscus', '', '$updatedatetime', '$userID','1', '$locationID')";
+    $insertuser="INSERT INTO `tbl_customer`(`customer`, `phone`, `address`, `email`, `updatedatetime`, `tbl_user_idtbl_user`, `status`, `tbl_area_idtbl_area`) VALUES ('$customername','$contact', '$addresscus', '', '$updatedatetime', '$userID','1', '$locationID')";
 
     $conn->query($insertuser);
     $customerID=$conn->insert_id;

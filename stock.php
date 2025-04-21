@@ -150,20 +150,34 @@ $(document).ready(function() {
                         "buttons": [{
                                 extend: 'csv',
                                 className: 'btn btn-success btn-sm',
-                                title: 'Stock Report',
+                                title: 'Enomax Holdings (Stock Report)',
                                 text: '<i class="fas fa-file-csv mr-2"></i> CSV'
                             },
                             {
                                 extend: 'pdf',
                                 className: 'btn btn-danger btn-sm',
-                                title: 'Stock Report',
+                                title: 'Enomax Holdings (Stock Report)',
                                 text: '<i class="fas fa-file-pdf mr-2"></i> PDF'
                             },
                             {
                                 extend: 'print',
                                 className: 'btn btn-primary btn-sm',
-                                title: 'Stock Report',
-                                text: '<i class="fas fa-print mr-2"></i> Print'
+                                title: 'Enomax Holdings (Stock Report)',
+                                text: '<i class="fas fa-print mr-2"></i> Print',
+                                footer: true,
+                                autoPrint: true, // Optional: If you want print dialog to open immediately
+                                customize: function (win) {
+                                    $(win.document.body)
+                                        .css('font-size', '10px') // smaller font size to fit more
+                                        .prepend(
+                                            '<h3 style="text-align:center;">Stock Report</h3>'
+                                        );
+
+                                    $(win.document.body).find('table')
+                                        .addClass('compact')
+                                        .css('font-size', 'inherit')
+                                        .css('width', '100%'); // force table to full width
+                                }
                             }
                         ],
                         "paging": true,

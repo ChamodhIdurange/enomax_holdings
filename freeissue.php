@@ -9,7 +9,7 @@ $result =$conn-> query($sql);
 $sqlproduct="SELECT `idtbl_product`, `product_name` FROM `tbl_product` WHERE `status` = '1'";
 $resultproduct =$conn-> query($sqlproduct); 
 
-$sqlcustomer="SELECT `idtbl_customer`, `name` FROM `tbl_customer` WHERE `status` = '1'";
+$sqlcustomer="SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status` = '1'";
 $resultCustomer =$conn-> query($sqlcustomer); 
 
 $sqldata="SELECT `ft`.`type`, `fe`.`idtbl_free_issue`, `fe`.`reason`, `fe`.`updatedatetime` FROM `tbl_free_issue` as `fe` JOIN `tbl_freeissue_type` as `ft` on (`ft`.`idtbl_freeissue_type` = `fe`.`tbl_freeissue_type_idtbl_freeissue_type`)";
@@ -129,7 +129,7 @@ $resultdata =$conn-> query($sqldata);
                                             <option value="">Select</option>
                                             <?php if($resultCustomer->num_rows > 0) {while ($rowcustomer = $resultCustomer-> fetch_assoc()) { ?>
                                             <option value="<?php echo $rowcustomer['idtbl_customer'] ?>">
-                                                <?php echo $rowcustomer['name'] ?></option>
+                                                <?php echo $rowcustomer['customer'] ?></option>
 
                                             <?php }} ?>
                                         </select>

@@ -19,7 +19,7 @@ $repID = isset( $_GET['rep']) ?  $_GET['rep'] : 0;
 $searchType =  $_GET['searchType'];
 $aginvalue = isset( $_GET['aginvalue']) ?  $_GET['aginvalue'] : 0;
 
-$sql = "SELECT `u`.`idtbl_invoice`, `u`.`invoiceno`, `u`.`total`, `u`.`date`, `uc`.`name` AS `cusname`, 
+$sql = "SELECT `u`.`idtbl_invoice`, `u`.`invoiceno`, `u`.`total`, `u`.`date`, `uc`.`customer` AS `cusname`, 
         `ue`.`name` AS `repname`, `uf`.`payamount`
         FROM `tbl_invoice` AS `u`
         LEFT JOIN `tbl_customer` AS `uc` ON `u`.`tbl_customer_idtbl_customer` = `uc`.`idtbl_customer`

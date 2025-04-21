@@ -11,7 +11,7 @@ $today = date("Y-m-d");
 
 $sqloutstanding =    "SELECT 
                     `e`.`name` AS 'empname',
-                    `c`.`name` AS 'customername',
+                    `c`.`customer` AS 'customername',
                     `c`.`address`,
                     `c`.`idtbl_customer`,
                     `co`.`date`,

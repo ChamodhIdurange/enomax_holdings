@@ -9,7 +9,7 @@ $result = mysqli_query($conn, $sql);
 $customerarray = array();
 
 while ($row = mysqli_fetch_array($result)) {
-    array_push($customerarray, array("id" => $row['idtbl_customer'], "name" => $row['name'], "nic" => $row['nic'], "phone" => $row['phone'], "email" => $row['email'], "address" => $row['address'], "areaId" => $row['tbl_area_idtbl_area']));
+    array_push($customerarray, array("id" => $row['idtbl_customer'], "name" => $row['customer'], "nic" => $row['nic'], "phone" => $row['phone'], "email" => $row['email'], "address" => $row['address'], "areaId" => $row['tbl_area_idtbl_area']));
 }
 
 echo json_encode($customerarray);

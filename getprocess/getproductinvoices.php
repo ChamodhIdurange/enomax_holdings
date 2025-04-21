@@ -9,7 +9,7 @@ $totalBalance = 0;
 $customerarray = array();
 
 
-$sql = "SELECT `u`.`nettotal`, `u`.`idtbl_invoice`, `u`.`invoiceno`, `u`.`total`, `u`.`date`, `uc`.`name` AS `cusname`, `ua`.`qty`, `ua`.`saleprice`
+$sql = "SELECT `u`.`nettotal`, `u`.`idtbl_invoice`, `u`.`invoiceno`, `u`.`total`, `u`.`date`, `uc`.`customer` AS `cusname`, `ua`.`qty`, `ua`.`saleprice`
         FROM `tbl_invoice` AS `u`
         LEFT JOIN `tbl_invoice_detail` AS `ua` ON `u`.`idtbl_invoice` = `ua`.`tbl_invoice_idtbl_invoice`
         LEFT JOIN `tbl_customer` AS `uc` ON `u`.`tbl_customer_idtbl_customer` = `uc`.`idtbl_customer`

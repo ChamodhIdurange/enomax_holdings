@@ -2,7 +2,7 @@
 include "include/header.php";  
 include "connection/db.php";  
 
-$sqlcustomer="SELECT `idtbl_customer`, `name` FROM `tbl_customer` WHERE `status`=1 ORDER BY `name` ASC";
+$sqlcustomer="SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `name` ASC";
 $resultcustomer =$conn-> query($sqlcustomer);
 
 $sqlproduct="SELECT `idtbl_product`, `product_name` FROM `tbl_product` WHERE `status`=1 ORDER BY `product_name` ASC";
@@ -88,7 +88,7 @@ include "include/topnavbar.php";
                                                 <option value="0">All</option>
                                                 <?php while ($rowcustomerlist = $resultcustomer->fetch_assoc()) { ?>
                                                 <option value="<?php echo $rowcustomerlist['idtbl_customer']; ?>">
-                                                    <?php echo $rowcustomerlist['name']; ?>
+                                                    <?php echo $rowcustomerlist['customer']; ?>
                                                 </option>
                                                 <?php } ?>
                                             </select>

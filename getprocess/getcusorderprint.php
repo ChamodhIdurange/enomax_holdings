@@ -4,7 +4,7 @@ require_once('../connection/db.php');
 
 $orderID=$_POST['orderID'];
 
-$sqlorder="SELECT `p`.`subtotal`, `p`.`disamount`, `p`.`nettotal`, `p`.`remark`, `c`.`name`, `c`.`phone`, `p`.`orderdate` FROM `tbl_porder` as `p` JOIN `tbl_porder_otherinfo` AS `o` ON (`o`.`porderid` = `p`.`idtbl_porder`) JOIN `tbl_customer` AS `c` ON (`c`.`idtbl_customer` = `o`.`customerid`) WHERE `p`.`idtbl_porder`='$orderID'";
+$sqlorder="SELECT `p`.`subtotal`, `p`.`disamount`, `p`.`nettotal`, `p`.`remark`, `c`.`customer`, `c`.`phone`, `p`.`orderdate` FROM `tbl_porder` as `p` JOIN `tbl_porder_otherinfo` AS `o` ON (`o`.`porderid` = `p`.`idtbl_porder`) JOIN `tbl_customer` AS `c` ON (`c`.`idtbl_customer` = `o`.`customerid`) WHERE `p`.`idtbl_porder`='$orderID'";
 $resultorder=$conn->query($sqlorder);
 $roworder=$resultorder->fetch_assoc();
 
@@ -80,7 +80,7 @@ while($rowaccessories=$resultaccessories->fetch_assoc()){
                 <tr>
                     <td class="align-top">
                         <h6 class="small">Customer details</h6>
-                        <b>Name:</b> <?php echo $roworder['name'] ?><br>
+                        <b>Name:</b> <?php echo $roworder['customer'] ?><br>
                         <b>Contact:</b> <?php echo $roworder['phone'] ?>
 
                     </td>

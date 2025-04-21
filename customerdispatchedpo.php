@@ -16,7 +16,7 @@ $resultreplist = $conn->query($sqlreplist);
 $sqlsalemanagerlist = "SELECT `idtbl_sales_manager`, `salesmanagername` FROM `tbl_sales_manager` WHERE `status`=1";
 $resultmanagerlist = $conn->query($sqlsalemanagerlist);
 
-$sqlcustomerlist = "SELECT `idtbl_customer`, `name` FROM `tbl_customer` WHERE `status`=1";
+$sqlcustomerlist = "SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1";
 $resultcustomerlist = $conn->query($sqlcustomerlist);
 
 $sqllocationlist = "SELECT `idtbl_locations`, `locationname` FROM `tbl_locations` WHERE `status`=1";
@@ -28,7 +28,7 @@ $resultarealist = $conn->query($sqlarealist);
 $sqlhelperlist = "SELECT `idtbl_employee`, `name` FROM `tbl_employee` WHERE `tbl_user_type_idtbl_user_type`=7 AND `status`=1";
 $resulthelperlist = $conn->query($sqlhelperlist);
 
-$sqlcustomer = "SELECT `idtbl_customer`, `name` FROM `tbl_customer` WHERE `status`=1 ORDER BY `name` ASC";
+$sqlcustomer = "SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `customer` ASC";
 $resultcustomer = $conn->query($sqlcustomer);
 
 include "include/topnavbar.php";

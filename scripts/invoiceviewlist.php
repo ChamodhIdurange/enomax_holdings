@@ -35,11 +35,11 @@ $columns = array(
 	array( 'db' => '`u`.`nettotal`', 'dt' => 'nettotal', 'field' => 'nettotal' ),
 	array( 'db' => '`u`.`paymentcomplete`', 'dt' => 'paymentcomplete', 'field' => 'paymentcomplete' ),
 	array( 'db' => '`u`.`vat_status`', 'dt' => 'vat_status', 'field' => 'vat_status' ),
-	array( 'db' => '`ua`.`name`',   'dt' => 'name', 'field' => 'name' ),
+	array( 'db' => '`ua`.`customer`',   'dt' => 'customer', 'field' => 'customer' ),
 	array( 'db' => '`ub`.`idtbl_customer_order`',   'dt' => 'idtbl_customer_order', 'field' => 'idtbl_customer_order' ),
 	array( 'db' => '`ub`.`return`',   'dt' => 'return', 'field' => 'return' ),
 	array( 'db' => '`ub`.`cuspono`',   'dt' => 'cuspono', 'field' => 'cuspono' ),
-	array( 'db' => '`uc`.`name`', 'dt' => 'salepep', 'field' => 'salepep', 'as' => 'salepep' ),
+	array( 'db' => '`uc`.`customer`', 'dt' => 'salepep', 'field' => 'salepep', 'as' => 'salepep' ),
 	array( 'db' => '`ud`.`area`',   'dt' => 'area', 'field' => 'area' ),
 	array( 'db' => '`u`.`status`',   'dt' => 'status', 'field' => 'status' )
 );

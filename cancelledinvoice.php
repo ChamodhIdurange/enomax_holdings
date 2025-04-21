@@ -123,7 +123,7 @@ include "include/topnavbar.php";
                     "data": "cuspono"
                 },
                 {
-                    "data": "name"
+                    "data": "customer"
                 },
                 {
                     "data": "salepep"

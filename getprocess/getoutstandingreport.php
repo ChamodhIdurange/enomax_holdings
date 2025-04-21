@@ -13,7 +13,7 @@ $totalAmount = 0;
 $totalPayAmount = 0;
 $totalBalance = 0;
 
-$sql = "SELECT `u`.`nettotal`, `u`.`idtbl_invoice`, `u`.`invoiceno`, `u`.`total`, `u`.`date`, `uc`.`name` AS `cusname`, `ue`.`name` AS `repname`, `uf`.`payamount`
+$sql = "SELECT `u`.`nettotal`, `u`.`idtbl_invoice`, `u`.`invoiceno`, `u`.`total`, `u`.`date`, `uc`.`customer` AS `cusname`, `ue`.`name` AS `repname`, `uf`.`payamount`
         FROM `tbl_invoice` AS `u`
         LEFT JOIN `tbl_customer` AS `uc` ON `u`.`tbl_customer_idtbl_customer` = `uc`.`idtbl_customer`
         LEFT JOIN `tbl_customer_order` AS `ud` ON `u`.`tbl_customer_order_idtbl_customer_order` = `ud`.`idtbl_customer_order`
@@ -38,7 +38,7 @@ if ($searchType == '1') {
 } elseif ($searchType == '4') {
     
 }
-$sql .= " ORDER BY `uc`.`name` ASC";
+$sql .= " ORDER BY `uc`.`customer` ASC";
 
 
 $result = $conn->query($sql);

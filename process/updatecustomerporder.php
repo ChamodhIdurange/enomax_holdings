@@ -12,12 +12,13 @@ $customerid = $_POST['customerid'];
 $orderdate = $_POST['orderdate'];
 $porderId = $_POST['porderId'];
 $salesrepId = $_POST['salesrepId'];
+$duedate = $_POST['duedate'];
 
 
-$sql = "UPDATE `tbl_customer_order` SET `tbl_customer_idtbl_customer`='$customerid', `date`='$orderdate', `tbl_employee_idtbl_employee`='$salesrepId' WHERE `idtbl_customer_order`='$porderId'";
+$sql = "UPDATE `tbl_customer_order` SET `tbl_customer_idtbl_customer`='$customerid', `date`='$orderdate', `tbl_employee_idtbl_employee`='$salesrepId', `duedate`='$duedate' WHERE `idtbl_customer_order`='$porderId'";
 $conn->query($sql);
 
-$updateInvoice = "UPDATE `tbl_invoice` SET `tbl_customer_idtbl_customer`='$customerid', `date`='$orderdate' WHERE `tbl_customer_order_idtbl_customer_order`='$porderId'";
+$updateInvoice = "UPDATE `tbl_invoice` SET `tbl_customer_idtbl_customer`='$customerid', `date`='$orderdate', `duedate`='$duedate' WHERE `tbl_customer_order_idtbl_customer_order`='$porderId'";
 
 if ($conn->query($updateInvoice) == true) {
     $actionObj = new stdClass();

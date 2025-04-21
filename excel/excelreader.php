@@ -30,7 +30,7 @@ for ($row = 1; $row <= $lastRow; $row++) {
     $cusvisit=$worksheet->getCell('M'.$row)->getValue();
     $cusday=$worksheet->getCell('N'.$row)->getValue();
     
-    $query = "INSERT INTO `tbl_customer`(`type`, `name`, `nic`, `phone`, `email`, `address`, `vat_num`, `s_vat`, `numofvisitdays`, `creditlimit`, `credittype`, `creditperiod`, `emergencydate`, `status`, `updatedatetime`, `tbl_user_idtbl_user`, `tbl_area_idtbl_area`) VALUES ('$custype', '$cusname', '$cusnic', '$cusmobile', '$cusemail', '$cusaddress', '$cusvat', '$cussvat', '$cusvisit', '$cuslimit','$cuscredit','$cusdays','','1','$updatedatetime', '$userID', '$cusarea')";
+    $query = "INSERT INTO `tbl_customer`(`type`, `customer`, `nic`, `phone`, `email`, `address`, `vat_num`, `s_vat`, `numofvisitdays`, `creditlimit`, `credittype`, `creditperiod`, `emergencydate`, `status`, `updatedatetime`, `tbl_user_idtbl_user`, `tbl_area_idtbl_area`) VALUES ('$custype', '$cusname', '$cusnic', '$cusmobile', '$cusemail', '$cusaddress', '$cusvat', '$cussvat', '$cusvisit', '$cuslimit','$cuscredit','$cusdays','','1','$updatedatetime', '$userID', '$cusarea')";
     if($conn->query($query)==true){
         $customerID=$conn->insert_id;
 
