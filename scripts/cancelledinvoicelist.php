@@ -28,6 +28,7 @@ $primaryKey = 'idtbl_invoice';
 // The `db` parameter represents the column name in the database, while the `dt`
 // parameter represents the DataTables column identifier. In this case simple
 // indexes
+
 $columns = array(
 	array( 'db' => '`u`.`idtbl_invoice`', 'dt' => 'idtbl_invoice', 'field' => 'idtbl_invoice' ),
 	array( 'db' => '`u`.`date`', 'dt' => 'date', 'field' => 'date' ),

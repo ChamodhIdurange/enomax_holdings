@@ -101,6 +101,7 @@ include "include/topnavbar.php";
         var statuscheck = '<?php echo $statuscheck; ?>';
         var deletecheck = '<?php echo $deletecheck; ?>';
 
+        
         $('#dataTable').DataTable({
             "destroy": true,
             "processing": true,

@@ -2,7 +2,7 @@
 include "include/header.php";  
 include "connection/db.php";  
 
-$sqlcustomer = "SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `name` ASC";
+$sqlcustomer = "SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `customer` ASC";
 $resultcustomer = $conn->query($sqlcustomer);
 
 $sqlrep = "SELECT `idtbl_employee`, `name` FROM `tbl_employee` WHERE `status`=1 ORDER BY `name` ASC";

@@ -1,8 +1,8 @@
 <?php 
 include "include/header.php";  
-include "connection/db.php";  
+include "include/topnavbar.php"; 
 
-$sqlcustomer="SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `name` ASC";
+$sqlcustomer="SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `customer` ASC";
 $resultcustomer =$conn-> query($sqlcustomer);
 
 $sqlproduct="SELECT `idtbl_product`, `product_name` FROM `tbl_product` WHERE `status`=1 ORDER BY `product_name` ASC";
@@ -32,6 +32,9 @@ include "include/topnavbar.php";
                     </div>
                 </div>
             </div>
+            <?php 
+            
+            ?>
             <div class="container-fluid mt-2 p-0 p-2">
                 <div class="card">
                     <div class="card-body p-0 p-2">
@@ -45,11 +48,11 @@ include "include/topnavbar.php";
                                                 <select class="form-control form-control-sm" name="searchType"
                                                     id="searchType">
                                                     <option value="0">Select Type</option>
-                                                    <option value="1">All</option>
+                                                    <!-- <option value="1">All</option> -->
                                                     <option value="2">Rep Vise</option>
-                                                    <option value="3">Product Vise</option>
-                                                    <option value="4">Customer Vise</option>
-                                                    <option value="5">Area Vise</option>
+                                                    <!-- <option value="3">Product Vise</option> -->
+                                                    <!-- <option value="4">Customer Vise</option> -->
+                                                    <!-- <option value="5">Area Vise</option> -->
                                                 </select>
                                             </div>
                                         </div>

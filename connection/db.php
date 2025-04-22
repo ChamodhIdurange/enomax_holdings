@@ -1,6 +1,4 @@
 <?php
-define('TIMEZONE', 'Asia/Colombo');
-date_default_timezone_set(TIMEZONE);
 
 $servername = "localhost";
 $username = "root";
