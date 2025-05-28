@@ -1,6 +1,8 @@
 <?php
 include "include/header.php";
 
+
+
 $sqlcommonnames = "SELECT DISTINCT `common_name` FROM `tbl_product` WHERE `status`=1";
 $resultcommonnames = $conn->query($sqlcommonnames);
 
@@ -2728,6 +2730,7 @@ include "include/topnavbar.php";
         var discountAmount = (totPrice * discountprecentage) / 100;
         var netTotal = totPrice - discountAmount;
 
+        $('#modaleditdiscountamount').val(discountAmount);
         $('#modaleditnettotal').val(parseFloat(netTotal).toFixed(2));
 
     }

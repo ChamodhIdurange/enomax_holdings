@@ -3,6 +3,9 @@ session_start();
 require_once('../connection/db.php');
 require_once '../vendor/autoload.php'; // Adjust the path as necessary
 
+ini_set('memory_limit', '999M');
+ini_set('max_execution_time', '999');
+
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -44,6 +47,7 @@ $poderId = $rowporderinfo['idtbl_customer_order'];
 $remark = $rowporderinfo['remark'];
 $invoiceno = $rowporderinfo['invoiceno'];
 $cuspono = $rowporderinfo['cuspono'];
+$fulltot = $rowporderinfo['total'];
 
 $confirm = $rowporderinfo['confirm']; 
 $dispatchissue = $rowporderinfo['dispatchissue']; 
@@ -212,6 +216,7 @@ $html = '
                     <th id="detailth">Product Name</th>
                     <th id="detailth" align="right">Quantity</th>
                     <th id="detailth" align="right">Sale Price</th>
+                    <th id="detailth" align="right">Discount</th>
                     <th id="detailth" align="right">Total</th>
                 </tr>
             </thead>
@@ -238,7 +243,7 @@ $html = '
                     $qtyValue = $rowporderdetail['qty'];
                 }
                 $totnew = $qtyValue * $rowporderdetail['saleprice'];
-                $fulltot += $totnew;
+                // $fulltot += $totnew;
 
                 $html .= '
                     <tr>
@@ -247,6 +252,7 @@ $html = '
                         <td id="detailtd">' . $rowporderdetail['product_name'] . '</td>
                         <td id="detailtd" align="right">' . $qtyValue . '</td>
                         <td id="detailtd" align="right">' . number_format($rowporderdetail['saleprice'], 2) . '</td>
+                        <td id="detailtd" align="right">' . number_format($rowporderdetail['discount'], 2) . '</td>
                         <td id="detailtd" align="right">' . number_format((($rowporderdetail['saleprice'] * $qtyValue)-$rowporderdetail['discount']), 2) . '</td>
                     </tr>
                 ';

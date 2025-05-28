@@ -1,6 +1,8 @@
 <?php
 include "include/header.php";
 
+
+
 $sqlcommonnames = "SELECT DISTINCT `common_name` FROM `tbl_product` WHERE `status`=1";
 $resultcommonnames = $conn->query($sqlcommonnames);
 
@@ -82,7 +84,7 @@ include "include/topnavbar.php";
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col">
-                                        <button type="button" class="btn btn-outline-primary btn-sm fa-pull-right"
+                                        <button type="button" class="btn btn-outline-primary btn-sm fa-pull-right d-none"
                                             id="btnordercreate"><i class="fas fa-plus"></i>&nbsp;Create Purchsing
                                             Order</button>
                                     </div>
@@ -2716,6 +2718,7 @@ include "include/topnavbar.php";
         var discountAmount = (totPrice * discountprecentage) / 100;
         var netTotal = totPrice - discountAmount;
 
+        $('#modaleditdiscountamount').val(discountAmount);
         $('#modaleditnettotal').val(parseFloat(netTotal).toFixed(2));
 
     }
@@ -2771,3 +2774,7 @@ include "include/topnavbar.php";
     }
 </script>
 <?php include "include/footer.php"; ?>
+
+
+
+

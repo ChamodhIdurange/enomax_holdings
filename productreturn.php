@@ -340,7 +340,7 @@ include "include/topnavbar.php";
                             obj[i].invoicedetailid +
                             '</td><td>' +
                             obj[i].productname +
-                            '</td><td>' + obj[i].saleprice + '</td><td>' + obj[
+                            '</td><td><td><input type = "text" name="editsalepricereturn" value="' + obj[i].saleprice + '"> </td><td>' + obj[
                                 i].qty +
                             '</td><td><input type = "text" name="editqtyreturn" value="0"></td></tr>'
                         );
@@ -489,32 +489,32 @@ include "include/topnavbar.php";
             }
         });
     });
-    $('#customerinvoice').change(function () {
-        var invoiceId = $(this).val();
-        $.ajax({
-            type: "POST",
-            data: {
-                customerId: '',
-                type: 1,
-                invoiceId: invoiceId,
-            },
-            url: 'getprocess/getcustomerinvoiceproducts.php',
-            success: function (result) { //alert(result);
-                var objfirst = JSON.parse(result);
-                var html1 = '';
-                html1 += '<option value="">Select</option>';
-                $.each(objfirst, function (i, item) {
-                    html1 += '<option value="' + objfirst[i].id + '" data-saleprice="' +
-                        objfirst[i].saleprice + '" data-unitprice="' + objfirst[i]
-                        .unitprice + '">';
-                    html1 += objfirst[i].name;
-                    html1 += '</option>';
-                });
+    // $('#customerinvoice').change(function () {
+    //     var invoiceId = $(this).val();
+    //     $.ajax({
+    //         type: "POST",
+    //         data: {
+    //             customerId: '',
+    //             type: 1,
+    //             invoiceId: invoiceId,
+    //         },
+    //         url: 'getprocess/getcustomerinvoiceproducts.php',
+    //         success: function (result) { //alert(result);
+    //             var objfirst = JSON.parse(result);
+    //             var html1 = '';
+    //             html1 += '<option value="">Select</option>';
+    //             $.each(objfirst, function (i, item) {
+    //                 html1 += '<option value="' + objfirst[i].id + '" data-saleprice="' +
+    //                     objfirst[i].saleprice + '" data-unitprice="' + objfirst[i]
+    //                     .unitprice + '">';
+    //                 html1 += objfirst[i].name;
+    //                 html1 += '</option>';
+    //             });
 
-                $('#product').empty().append(html1);
-            }
-        });
-    });
+    //             $('#product').empty().append(html1);
+    //         }
+    //     });
+    // });
 
     $("#formsubmit").click(function () {
         $('#tablereturn > tbody').empty();
@@ -524,6 +524,7 @@ include "include/topnavbar.php";
             $("#submitBtn").click();
         } else {
 
+            
 
             $('#tablereturnamount tbody tr').each(function () {
                 // Get the text value of each of the first five columns individually
@@ -531,10 +532,11 @@ include "include/topnavbar.php";
                 var productId = $(this).find('td:eq(1)').text();
                 var invoiceDetailId = $(this).find('td:eq(2)').text();
                 var productName = $(this).find('td:eq(3)').text();
-                var saleprice = $(this).find('td:eq(4)').text();
                 var qty = $(this).find('td:eq(5)').text();
 
                 var inputValue = $(this).find('input[name="editqtyreturn"]').val();
+                var saleprice = $(this).find('input[name="editsalepricereturn"]').val();
+
                 var salepricenoformat = parseFloat(saleprice.replace(/,/g, ''));
 
                 var showtotalreturn = addCommas(parseFloat(inputValue * salepricenoformat).toFixed(2));
