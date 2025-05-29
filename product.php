@@ -4,6 +4,7 @@ include "include/header.php";
 // $sql="SELECT * FROM `tbl_product` WHERE `status` IN (1,2)";
 // $result =$conn-> query($sql); 
 
+
 $sqlcategory="SELECT `idtbl_product_category`, `category` FROM `tbl_product_category` WHERE `status`=1";
 $resultcategory=$conn->query($sqlcategory);
 
@@ -284,6 +285,10 @@ include "include/topnavbar.php";
                                                 <th>Product</th>
                                                 <th>Code</th>
                                                 <th>Category</th>
+                                                <th>Group Category</th>
+                                                <th>Sub Category</th>
+                                                <th>Size Category</th>
+                                                <th>Size</th>
                                                 <th>Retail Price</th>
                                                 <th>Whole Sale Price</th>
                                                 <th class="text-right">Actions</th>
@@ -363,6 +368,18 @@ include "include/topnavbar.php";
                 },
                 {
                     "data": "category"
+                },
+                {
+                    "data": "groupcategory"
+                },
+                {
+                    "data": "subcategory"
+                },
+                {
+                    "data": "sizecategory"
+                },
+                {
+                    "data": "sizename"
                 },
                 {
                     "data": "saleprice"

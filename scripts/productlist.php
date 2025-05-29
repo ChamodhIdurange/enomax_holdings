@@ -21,6 +21,7 @@
 // DB table to use
 $table = 'tbl_product';
 
+
 // Table's primary key
 $primaryKey = 'idtbl_product';
 
@@ -35,6 +36,10 @@ $columns = array(
 	array( 'db' => '`u`.`saleprice`', 'dt' => 'saleprice', 'field' => 'saleprice' ),
 	array( 'db' => '`u`.`retail`', 'dt' => 'retail', 'field' => 'retail' ),
 	array( 'db' => '`ua`.`category`', 'dt' => 'category', 'field' => 'category' ),
+	array( 'db' => '`ub`.`name`', 'dt' => 'sizecategory', 'field' => 'sizecategory', 'as' => 'sizecategory' ),
+	array( 'db' => '`uc`.`name`', 'dt' => 'sizename', 'field' => 'sizename', 'as' => 'sizename' ),
+	array( 'db' => '`ud`.`category`', 'dt' => 'groupcategory', 'field' => 'groupcategory', 'as' => 'groupcategory' ),
+	array( 'db' => '`ue`.`category`', 'dt' => 'subcategory', 'field' => 'subcategory', 'as' => 'subcategory' ),
 	array( 'db' => '`u`.`status`', 'dt' => 'status', 'field' => 'status' )
 );
 
@@ -55,8 +60,8 @@ $sql_details = array(
 // require( 'ssp.class.php' );
 require('ssp.customized.class.php');
 
-$joinQuery = "FROM `tbl_product` AS `u` LEFT JOIN `tbl_product_category` AS `ua` ON (`u`.`tbl_product_category_idtbl_product_category` = `ua`.`idtbl_product_category`)";
-$extraWhere = "`u`.`status` IN (1,0)";
+$joinQuery = "FROM `tbl_product` AS `u` LEFT JOIN `tbl_product_category` AS `ua` ON (`u`.`tbl_product_category_idtbl_product_category` = `ua`.`idtbl_product_category`) LEFT JOIN `tbl_size_categories` AS `ub` ON (`u`.`tbl_size_categories_idtbl_size_categories` = `ub`.`idtbl_size_categories`) LEFT JOIN `tbl_sizes` AS `uc` ON (`u`.`tbl_sizes_idtbl_sizes` = `uc`.`idtbl_sizes`) LEFT JOIN `tbl_group_category` AS `ud` ON (`u`.`tbl_group_category_idtbl_group_category` = `ud`.`idtbl_group_category`) LEFT JOIN `tbl_sub_product_category` AS `ue` ON (`u`.`tbl_sub_product_category_idtbl_sub_product_category` = `ue`.`idtbl_sub_product_category`)";
+$extraWhere = "`u`.`status` IN (1,2)";
 
 echo json_encode(
 	SSP::simple( $_POST, $sql_details, $table, $primaryKey, $columns, $joinQuery, $extraWhere)
