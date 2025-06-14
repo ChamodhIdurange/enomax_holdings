@@ -15,7 +15,9 @@ $sql = "SELECT `u`.`idtbl_invoice`,`u`.`invoiceno`, `u`.`total`, `ua`.`product_n
         LEFT JOIN `tbl_area` AS `ub` ON `u`.`tbl_area_idtbl_area` = `ub`.`idtbl_area`
         LEFT JOIN `tbl_invoice_detail` AS `ud` ON `u`.`idtbl_invoice` = `ud`.`tbl_invoice_idtbl_invoice`
         LEFT JOIN `tbl_product` AS `ua` ON `ud`.`tbl_product_idtbl_product` = `ua`.`idtbl_product`
-        WHERE `u`.`date` BETWEEN '$validfrom' AND '$validto'";
+        WHERE `u`.`date` BETWEEN '$validfrom' AND '$validto'
+        AND    `u`.`status` = 1
+        AND    `ud`.`status` = 1";
 
 if ($customerID > 0) {
     $sql .= " AND `u`.`tbl_customer_idtbl_customer` = '$customerID'";
