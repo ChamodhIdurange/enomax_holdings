@@ -5,7 +5,6 @@ require_once('../connection/db.php');
 $fromdate = $_POST['fromdate'];
 $todate = $_POST['todate'];
 $today = date("Y-m-d");
-
 // AND `u`.`date` BETWEEN '$fromdate' AND '$todate'
 
 // $sql =    "SELECT  
@@ -37,11 +36,13 @@ $sql =    "SELECT
             FROM `tbl_invoice` AS `u`  
             LEFT JOIN `tbl_invoice_detail` AS `d` 
                 ON `d`.`tbl_invoice_idtbl_invoice` = `u`.`idtbl_invoice` 
+            LEFT JOIN `tbl_customer_order` AS `uf` 
+                ON `u`.`tbl_customer_order_idtbl_customer_order` = `uf`.`idtbl_customer_order`
             LEFT JOIN `tbl_product` AS `p` 
                 ON `p`.`idtbl_product` = `d`.`tbl_product_idtbl_product` 
             WHERE `u`.`status` IN (1, 2) 
                 AND `d`.`status` = '1'
-                AND `u`.`status` = '1'
+                AND `uf`.`delivered` = '1'
                 AND `u`.`date` BETWEEN '$fromdate' AND '$todate'
             GROUP BY `u`.`idtbl_invoice`";
 
