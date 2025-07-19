@@ -27,7 +27,7 @@ include "include/topnavbar.php";
                     <div class="page-header-content py-3">
                         <h1 class="page-header-title">
                             <div class="page-header-icon"><i data-feather="file"></i></div>
-                            <span>Sale Report</span>
+                            <span>All Purchase Order Report</span>
                         </h1>
                     </div>
                 </div>
@@ -223,7 +223,7 @@ $(document).ready(function() {
                 product: product,
                 area: area,
             },
-            url: 'getprocess/getcustomersalereportaccoperiod.php',
+            url: 'getprocess/getallpurchaseordersaccorepid.php',
             success: function(result) {
                 $('#targetviewdetail').html(result);
                 $('#hideprintBtn').show();
@@ -318,4 +318,3 @@ $(document).ready(function() {
     }
 });
 </script>
-
