@@ -11,7 +11,7 @@ date_default_timezone_set(TIMEZONE);
 $IP = "localhost";
 $user = "root";
 $pass = "";
-$db = "erav_enomax_v2";
+$db = "erav_enomax_v3";
 $con = mysqli_connect($IP, $user, $pass, $db);
 
 // Check connection

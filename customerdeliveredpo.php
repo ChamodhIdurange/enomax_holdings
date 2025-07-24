@@ -420,25 +420,27 @@ include "include/topnavbar.php";
                     </div>
                 </div>
                 <div class="row mt-3" id="errordivaddnew">
-
                 </div>
-                <table class="table table-striped table-bordered table-sm small mt-4" id="tableorderview">
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Product Code</th>
-                            <th class="d-none">ProductID</th>
-                            <th class="d-none">PoDetailID</th>
-                            <th class="text-center">Qty</th>
-                            <th class="text-center">Discount (%)</th>
-                            <th class="text-right"> Discount</th>
-                            <th class="text-right">Total</th>
-                            <th class="text-right">Unit Price</th>
-                            <th class="text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div style="overflow-x: auto; display: block;">
+                    <table class="table table-striped table-bordered table-sm small mt-4" id="tableorderview" style="min-width: 1000px;">
+                        <thead>
+                            <tr>
+                                <th style="position: sticky; top: 0; background: white; z-index: 1;">Product</th>
+                                <th style="position: sticky; top: 0; background: white; z-index: 1;">Product Code</th>
+                                <th class="d-none" style="position: sticky; top: 0; background: white; z-index: 1;">ProductID</th>
+                                <th class="d-none" style="position: sticky; top: 0; background: white; z-index: 1;">PoDetailID</th>
+                                <th class="text-center" style="position: sticky; top: 0; background: white; z-index: 1;">Qty</th>
+                                <th class="text-center" style="position: sticky; top: 0; background: white; z-index: 1;">Discount (%)</th>
+                                <th class="text-right" style="position: sticky; top: 0; background: white; z-index: 1;">Discount</th>
+                                <th class="text-right" style="position: sticky; top: 0; background: white; z-index: 1;">Total</th>
+                                <th class="text-right" style="position: sticky; top: 0; background: white; z-index: 1;">Unit Price</th>
+                                <th class="text-center" style="position: sticky; top: 0; background: white; z-index: 1;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="row">
                     <div class="col-md-3">
                         <label>PO Discount (%)</label>
