@@ -22,14 +22,18 @@ if(isset($_SESSION['userid'])){
         $resultprivilegecheck =$conn-> query($sqlprivilegecheck);
         $rowprivilegecheck = $resultprivilegecheck-> fetch_assoc();
         
-        $objmenu=new stdClass();
-        $objmenu->add=$rowprivilegecheck['add'];
-        $objmenu->edit=$rowprivilegecheck['edit'];
-        $objmenu->statuschange=$rowprivilegecheck['statuschange'];
-        $objmenu->remove=$rowprivilegecheck['remove'];
-        $objmenu->access_status=$rowprivilegecheck['access_status'];
-        $objmenu->menuid=$rowprivilegecheck['tbl_menu_list_idtbl_menu_list'];
-        array_push($menuprivilegearray, $objmenu);
+        if ($rowprivilegecheck !== null) {
+            $objmenu = new stdClass();
+            $objmenu->add = $rowprivilegecheck['add'];
+            $objmenu->edit = $rowprivilegecheck['edit'];
+            $objmenu->statuschange = $rowprivilegecheck['statuschange'];
+            $objmenu->remove = $rowprivilegecheck['remove'];
+            $objmenu->access_status = $rowprivilegecheck['access_status'];
+            $objmenu->menuid = $rowprivilegecheck['tbl_menu_list_idtbl_menu_list'];
+            array_push($menuprivilegearray, $objmenu);
+        } else {
+            echo 'error';
+        }
     }
 }
 
