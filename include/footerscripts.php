@@ -90,7 +90,7 @@
     }
 
     $(document).on("click", ".btntableaction", function () {
-        var url = 'https://aws.erav.lk/inomax/'+$(this).attr("data-url");
+        var url = 'https://localhost/enomax_holdings/'+$(this).attr("data-url");
         var actiontype = $(this).attr("data-actiontype");
 
         var title;
