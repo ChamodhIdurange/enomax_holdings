@@ -36,6 +36,7 @@ $columns = array(
 	array( 'db' => '`u`.`total`', 'dt' => 'total', 'field' => 'total' ),
 	array( 'db' => '`u`.`discount`', 'dt' => 'discount', 'field' => 'discount' ),
 	array( 'db' => '`u`.`nettotal`', 'dt' => 'nettotal', 'field' => 'nettotal' ),
+	array( 'db' => '`u`.`vat`', 'dt' => 'vat', 'field' => 'vat' ),
 	array( 'db' => '`u`.`confirm`', 'dt' => 'confirm', 'field' => 'confirm' ),
 	array( 'db' => '`u`.`dispatchissue`', 'dt' => 'dispatchissue', 'field' => 'dispatchissue' ),
 	array( 'db' => '`u`.`ship`',   'dt' => 'ship', 'field' => 'ship' ),

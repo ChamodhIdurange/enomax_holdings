@@ -4,6 +4,15 @@ if (!isset($_SESSION['userid'])) {
     header("Location:index.php");
 }
 require_once('../connection/db.php'); //die('bc');
+
+$taxQuery = "SELECT `vat_rate` FROM `tbl_vat` LIMIT 1";
+$taxResult = $conn->query($taxQuery);
+$tax = 0;
+if ($taxResult && $taxResult->num_rows > 0) {
+    $taxRow = $taxResult->fetch_assoc();
+    $tax = $taxRow['vat_rate'];
+}
+
 $userID = $_SESSION['userid'];
 $recordOption = $_POST['recordOption'];
 $recordID = $_POST['recordID'];
@@ -24,6 +33,16 @@ $podiscount = $_POST['podiscount'];
 $tableData = json_decode($tableData);
 
 $updatedatetime = date('Y-m-d h:i:s');
+
+$taxcus = "SELECT vat_num FROM tbl_customer WHERE idtbl_customer = '$customer'";
+$taxcusresult = $conn->query($taxcus);
+$taxcusrow = $taxcusresult->fetch_assoc();
+
+if($taxcusrow['vat_num'] != ''){
+    $tax = $tax;
+}else{
+    $tax = 0;
+}
 
 // podiscount
 // podiscountamount
@@ -55,7 +74,7 @@ if ($recordOption == 1) {
     $month = date('n');
 
 
-    $insretorder = "INSERT INTO `tbl_customer_order`(`cuspono`, `date`, `total`, `discount`, `podiscount`, `podiscountpercentage`, `vat`, `nettotal`, `remark`, `vatpre`, `status`, `insertdatetime`, `tbl_user_idtbl_user`, `tbl_area_idtbl_area`, `tbl_employee_idtbl_employee`, `tbl_locations_idtbl_locations`, `tbl_customer_idtbl_customer`) VALUES ('$cuspono', '$orderdate','$total','$discount', '$podiscountamount', '$podiscount', '0', '$nettotal', '$remark', '0','1', '$updatedatetime', '$userID', '$area', '$repname', '$location' , '$customer')";
+    $insretorder = "INSERT INTO `tbl_customer_order`(`cuspono`, `date`, `total`, `discount`, `podiscount`, `podiscountpercentage`, `vat`, `nettotal`, `remark`, `vatpre`, `status`, `insertdatetime`, `tbl_user_idtbl_user`, `tbl_area_idtbl_area`, `tbl_employee_idtbl_employee`, `tbl_locations_idtbl_locations`, `tbl_customer_idtbl_customer`) VALUES ('$cuspono', '$orderdate','$total','$discount', '$podiscountamount', '$podiscount', '$tax', '$nettotal', '$remark', '0','1', '$updatedatetime', '$userID', '$area', '$repname', '$location' , '$customer')";
 
     if ($conn->query($insretorder) == true) {
         $orderID = $conn->insert_id;

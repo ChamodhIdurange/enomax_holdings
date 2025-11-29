@@ -39,6 +39,7 @@ $columns = array(
 	array( 'db' => '`u`.`vat_status`', 'dt' => 'vat_status', 'field' => 'vat_status' ),
 	array( 'db' => '`ua`.`customer`',   'dt' => 'customer', 'field' => 'customer' ),
 	array( 'db' => '`ub`.`idtbl_customer_order`',   'dt' => 'idtbl_customer_order', 'field' => 'idtbl_customer_order' ),
+	array( 'db' => '`ub`.`vat`',   'dt' => 'vat', 'field' => 'vat' ),
 	array( 'db' => '`ub`.`return`',   'dt' => 'return', 'field' => 'return' ),
 	array( 'db' => '`ub`.`cuspono`',   'dt' => 'cuspono', 'field' => 'cuspono' ),
 	array( 'db' => '`uc`.`name`', 'dt' => 'salepep', 'field' => 'salepep', 'as' => 'salepep' ),

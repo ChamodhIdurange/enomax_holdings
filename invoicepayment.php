@@ -795,5 +795,3 @@ include "include/topnavbar.php";
 
 </script>
 <?php include "include/footer.php"; ?>
-
-

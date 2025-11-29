@@ -130,6 +130,7 @@ include "include/topnavbar.php";
                                                 <th>Remarks</th>
                                                 <th>Customer</th>
                                                 <th class="text-right">Subtotal</th>
+                                                <th class="text-right">VAT(%)</th>
                                                 <th class="text-right">Discount</th>
                                                 <th class="text-right">Nettotal</th>
                                                 <th class="text-center">Confirm</th>
@@ -882,6 +883,9 @@ include "include/topnavbar.php";
                     "render": function (data, type, full) {
                         return parseFloat(full['total']).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     }
+                },
+                {
+                    "data": "vat"
                 },
                 {
                     "targets": -1,

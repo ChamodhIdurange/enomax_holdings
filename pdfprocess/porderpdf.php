@@ -1,4 +1,5 @@
 <?php
+//porderpdf.php
 session_start();
 require_once('../connection/db.php');
 require_once '../vendor/autoload.php'; // Adjust the path as necessary
@@ -30,10 +31,17 @@ $totalpayment = 0;
 $net_total = 0;
 $newtemp = 0;
 
+// For VAT calculations
+$subtotal_before_discount = 0;
+$total_discount = 0;
+$subtotal_after_discount = 0;
+$vat_amount = 0;
+$grand_total = 0;
+
 $sqlpoprinted="UPDATE `tbl_customer_order` SET `is_printed`='1' WHERE `idtbl_customer_order`='$recordID'";
 $conn->query($sqlpoprinted);
 
-$sqlporderinfo = "SELECT `o`.`cuspono`, `i`.`invoiceno`, `o`.`discount`, `o`.`podiscount`, `o`.`confirm`, `o`.`dispatchissue`, `o`.`delivered`,`o`.`remark`, `o`.`idtbl_customer_order`, `o`.`date`, `o`.`total`, `l`.`idtbl_locations`, `l`.`locationname`, `c`.`customer`, `c`.`address`, `c`.`phone` AS 'customerphone' , `e`.`name` AS `saleref`, `e`.`phone`, `a`.`area`, `u`.`name` as `username`, `o`.`tbl_customer_idtbl_customer`, `o`.`cuspono` FROM `tbl_customer_order` AS `o` LEFT JOIN `tbl_invoice` AS `i` ON (`i`.`tbl_customer_order_idtbl_customer_order` = `o`.`idtbl_customer_order`) LEFT JOIN `tbl_customer_order_detail` AS `od` ON `o`.`idtbl_customer_order`=`od`.`tbl_customer_order_idtbl_customer_order` LEFT JOIN `tbl_customer` AS `c` ON (`c`.`idtbl_customer` = `o`.`tbl_customer_idtbl_customer`) LEFT JOIN `tbl_locations` AS `l` ON (`l`.`idtbl_locations` = `o`.`tbl_locations_idtbl_locations`) LEFT JOIN `tbl_employee` AS `e` ON `e`.`idtbl_employee`=`o`.`tbl_employee_idtbl_employee` LEFT JOIN `tbl_area` AS `a` ON `a`.`idtbl_area`=`o`.`tbl_area_idtbl_area` LEFT JOIN `tbl_user` AS `u` ON `u`.`idtbl_user`=`o`.`tbl_user_idtbl_user` WHERE `o`.`status`=1 AND `o`.`idtbl_customer_order`='$recordID'";
+$sqlporderinfo = "SELECT `o`.`cuspono`, `i`.`invoiceno`, `o`.`discount`, `o`.`podiscount`,`o`.`podiscountpercentage`,`o`.`vat`, `o`.`confirm`, `o`.`dispatchissue`, `o`.`delivered`,`o`.`remark`, `o`.`idtbl_customer_order`, `o`.`date`, `o`.`total`, `l`.`idtbl_locations`, `l`.`locationname`, `c`.`customer`, `c`.`vat_num`, `c`.`address`, `c`.`phone` AS 'customerphone' , `e`.`name` AS `saleref`, `e`.`phone`, `a`.`area`, `u`.`name` as `username`, `o`.`tbl_customer_idtbl_customer`, `o`.`cuspono` FROM `tbl_customer_order` AS `o` LEFT JOIN `tbl_invoice` AS `i` ON (`i`.`tbl_customer_order_idtbl_customer_order` = `o`.`idtbl_customer_order`) LEFT JOIN `tbl_customer_order_detail` AS `od` ON `o`.`idtbl_customer_order`=`od`.`tbl_customer_order_idtbl_customer_order` LEFT JOIN `tbl_customer` AS `c` ON (`c`.`idtbl_customer` = `o`.`tbl_customer_idtbl_customer`) LEFT JOIN `tbl_locations` AS `l` ON (`l`.`idtbl_locations` = `o`.`tbl_locations_idtbl_locations`) LEFT JOIN `tbl_employee` AS `e` ON `e`.`idtbl_employee`=`o`.`tbl_employee_idtbl_employee` LEFT JOIN `tbl_area` AS `a` ON `a`.`idtbl_area`=`o`.`tbl_area_idtbl_area` LEFT JOIN `tbl_user` AS `u` ON `u`.`idtbl_user`=`o`.`tbl_user_idtbl_user` WHERE `o`.`status`=1 AND `o`.`idtbl_customer_order`='$recordID'";
 $resultporderinfo = $conn->query($sqlporderinfo);
 $rowporderinfo = $resultporderinfo->fetch_assoc();
 
@@ -52,8 +60,12 @@ $fulltot = $rowporderinfo['total'];
 $confirm = $rowporderinfo['confirm']; 
 $dispatchissue = $rowporderinfo['dispatchissue']; 
 $delivered = $rowporderinfo['delivered']; 
+$actualvat = $rowporderinfo['vat']; 
 $qtyflag=0;
 
+// Check if customer is VAT registered
+$vat_num = isset($rowporderinfo['vat_num']) ? trim($rowporderinfo['vat_num']) : '';
+$isTaxCustomer = !empty($vat_num);
 
 if($confirm == 1 && ($dispatchissue == null || $dispatchissue == 0) && ($delivered == null || $delivered == 0)){
     $qtyflag = 1;
@@ -181,15 +193,31 @@ $html = '
                 <td colspan="3" height="1.8cm"></td>
             </tr>
             <tr>
-                <td class="leftboxtop" width="10cm">
-                    <table border="0" width="100%" style="margin-top:-70; padding-left:0.3cm;">
-                        <tr>
-                            <th>Customer Details - '. $customerID .'</th>
-                        </tr>
-                        <tr>
-                            <td>'. $customername . '<br><br>' . $customeraddress . '<br><br>Tel : ' . $customerPhone . '<br><br>Date : ' . $porderDate . '</td>
-                        </tr>
-                    </table>
+                <td class="leftboxtop" width="10cm">';
+                
+                if($isTaxCustomer){
+                    $html .= '
+                        <table border="0" width="100%" style="margin-top:-70; padding-left:0.3cm;">
+                            <tr>
+                                <th>Customer Details - '. $customerID .'</th>
+                            </tr>
+                            <tr>
+                                <td>'. $customername . '<br><br>' . $customeraddress . '<br><br>Tel : ' . $customerPhone . '<br><br>Date : ' . $porderDate . '<br><br>VAT No: ' . $vat_num . '</td>
+                            </tr>
+                        </table>';
+                } else {
+                    $html .= '
+                        <table border="0" width="100%" style="margin-top:-70; padding-left:0.3cm;">
+                            <tr>
+                                <th>Customer Details - '. $customerID .'</th>
+                            </tr>
+                            <tr>
+                                <td>'. $customername . '<br><br>' . $customeraddress . '<br><br>Tel : ' . $customerPhone . '<br><br>Date : ' . $porderDate . '</td>
+                            </tr>
+                        </table>';
+                }
+                
+                $html .= '
                 </td>
                 <td style="padding-left:100px;" width="8cm">
                     <table width="100%" height="100%" style="margin-top:-70;" border="0">
@@ -225,6 +253,7 @@ $html = '
             $itemCount = 0;
             $count = 0;
             $count1 = 0;
+            $fulltot = 0;
 
             while ($rowporderdetail = $resultporderdetail->fetch_assoc()) {
                 
@@ -242,8 +271,21 @@ $html = '
                 } else if ($qtyflag == 3) {
                     $qtyValue = $rowporderdetail['qty'];
                 }
-                $totnew = $qtyValue * $rowporderdetail['saleprice'];
-                // $fulltot += $totnew;
+
+                // CORRECT VAT LOGIC: Extract base price from VAT-inclusive price
+                if($isTaxCustomer){
+                    $base_price = $rowporderdetail['saleprice'] / (1 + ($actualvat / 100));
+                    $base_discount = $rowporderdetail['discount'] / (1 + ($actualvat / 100));
+                } else {
+                    // For non-VAT customers, use price as-is
+                    $base_price = $rowporderdetail['saleprice'];
+                    $base_discount = $rowporderdetail['discount'];
+                }
+                
+                // Calculate line total (base price before VAT)
+                $basetot = $qtyValue * $base_price;
+                $line_total_base = ($qtyValue * $base_price) - $base_discount;
+                $fulltot += $line_total_base;
 
                 $html .= '
                     <tr>
@@ -251,24 +293,23 @@ $html = '
                         <td id="detailtd">' . $rowporderdetail['product_code'] . '</td>
                         <td id="detailtd">' . $rowporderdetail['product_name'] . '</td>
                         <td id="detailtd" align="right">' . $qtyValue . '</td>
-                        <td id="detailtd" align="right">' . number_format($rowporderdetail['saleprice'], 2) . '</td>
-                        <td id="detailtd" align="right">' . number_format($rowporderdetail['discount'], 2) . '</td>
-                        <td id="detailtd" align="right">' . number_format((($rowporderdetail['saleprice'] * $qtyValue)-$rowporderdetail['discount']), 2) . '</td>
+                        <td id="detailtd" align="right">' . number_format($base_price, 2) . '</td>
+                        <td id="detailtd" align="right">' . number_format($base_discount, 2) . '</td>
+                        <td id="detailtd" align="right">' . number_format($line_total_base, 2) . '</td>
                     </tr>
                 ';
-                $temptotal = $qtyValue * $rowporderdetail['saleprice'];
+                $temptotal = $qtyValue * $base_price;
                 $newtemp += $temptotal;
                 if ($count1 % 28 == 0) {
                     $html .= '
                         <tr>
-                            <td colspan="5">This page Total Showing here. See the Next page Thank You</td>
+                            <td colspan="6">This page Total Showing here. See the Next page Thank You</td>
                             <td style="width:2.6cm;" align="right">' . number_format($newtemp, 2) . '</td>
                         </tr>
                     ';
                     $newtemp = 0;
                 }
             }
-            $discount = $fulltot - $rowporderinfo['total'];
             $html .= '
             </table> 
             ';
@@ -292,27 +333,83 @@ $html = '
                                     <td width="8cm">
                                         <table border="0" id="tablefooter" style="margin-right:35px"> 
                                         ';
-                                            // $fulldiscount = $rowporderinfo["discount"] + $rowporderinfo["podiscount"];
-                                            $fulldiscount = $rowporderinfo["podiscount"];
-                                            $net_total = $fulltot - ($fulldiscount + $rowporderinfo["discount"]) ;
-
+                                        
+                                        if($isTaxCustomer){
+                                            // VAT CUSTOMER CALCULATION
+                                            // 1. Subtotal (before any discounts)
+                                            $subtotal_before_discount = $fulltot;
+                                            
+                                            // 2. Apply PO discount percentage
+                                            $po_discount_amount = $subtotal_before_discount * ($rowporderinfo["podiscountpercentage"] / 100);
+                                            
+                                            // 3. Subtotal after PO discount
+                                            $subtotal_after_po_discount = $subtotal_before_discount - $po_discount_amount;
+                                            
+                                            // 4. Apply line item discount (already deducted in line items)
+                                            $line_discount = $rowporderinfo["discount"] / (1 + ($actualvat / 100));
+                                            
+                                            // 5. Net amount before VAT
+                                            $net_before_vat = $subtotal_after_po_discount - $line_discount;
+                                            
+                                            // 6. Calculate VAT on subtotal before discount
+                                            $vat_amount = $subtotal_before_discount * ($actualvat / 100);
+                                            
+                                            // 7. Grand total (subtotal after PO discount + VAT)
+                                            $grand_total = $subtotal_after_po_discount + $vat_amount;
+                                            
                                             $html .= '
                                             <tr>
                                                 <td align="right" style="font-weight: bold;">Item Count:</td>
                                                 <td align="right">' . $itemCount . '</td>
                                             </tr>
                                             <tr>
-                                                <td align="right" style="font-weight: bold;">Net Total:</td>
-                                                <td align="right">' . number_format($fulltot - $rowporderinfo["discount"] , 2) . '</td>
+                                                <td align="right" style="font-weight: bold;">Subtotal (Before VAT):</td>
+                                                <td align="right">' . number_format($subtotal_before_discount, 2) . '</td>
                                             </tr>
                                             <tr>
-                                                <td align="right" style="font-weight: bold;">Discount:</td>
-                                                <td align="right" style="padding-top:0.2cm;">' . number_format($fulldiscount, 2) . '</td>
+                                                <td align="right" style="font-weight: bold;">PO Discount:</td>
+                                                <td align="right" style="padding-top:0.2cm;">' . number_format($po_discount_amount, 2) . '</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" style="font-weight: bold;">Net Before VAT:</td>
+                                                <td align="right" style="padding-top:0.2cm;font-weight: bold;">' . number_format($subtotal_after_po_discount, 2) . '</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" style="font-weight: bold;">VAT (' . $actualvat . '%):</td>
+                                                <td align="right" style="padding-top:0.2cm;">' . number_format($vat_amount, 2) . '</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" style="font-weight: bold;">Grand Total:</td>
+                                                <td align="right" style="padding-top:0.2cm;font-weight: bold;">' . number_format($grand_total, 2) . '</td>
+                                            </tr>
+                                            ';
+                                        } else {
+                                            // NON-VAT CUSTOMER CALCULATION (simpler)
+                                            $subtotal = $rowporderinfo["total"] - $rowporderinfo["discount"];
+                                            $po_discount = $rowporderinfo["podiscount"];
+                                            $final_total = $subtotal - $po_discount;
+                                            
+                                            $html .= '
+                                            <tr>
+                                                <td align="right" style="font-weight: bold;">Item Count:</td>
+                                                <td align="right">' . $itemCount . '</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" style="font-weight: bold;">Subtotal:</td>
+                                                <td align="right">' . number_format($subtotal, 2) . '</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" style="font-weight: bold;">PO Discount:</td>
+                                                <td align="right" style="padding-top:0.2cm;">' . number_format($po_discount, 2) . '</td>
                                             </tr>
                                             <tr>
                                                 <td align="right" style="font-weight: bold;">Total:</td>
-                                                <td align="right" style="padding-top:0.2cm;font-weight: bold;">' . number_format($net_total, 2) . '</td>
+                                                <td align="right" style="padding-top:0.2cm;font-weight: bold;">' . number_format($final_total, 2) . '</td>
                                             </tr>
+                                            ';
+                                        }
+
+                                        $html .= '
                                         </table>
                                     </td>
                                 </tr>
@@ -353,3 +450,4 @@ $dompdf->loadHtml($html);
 $dompdf->setPaper('21.5cm', '27.5cm', 'portrait');
 $dompdf->render();
 $dompdf->stream("Test.pdf", ["Attachment" => 0]);
+?>

@@ -47,6 +47,7 @@ include "include/topnavbar.php";
                                                         <th>Area</th>
                                                         <th>Sale Rep</th>
                                                         <th class="text-right">Total</th>
+                                                        <th>VAT(%)</th>
                                                         <th>Payment</th>
                                                         <th class="text-right">Actions</th>
                                                     </tr>
@@ -223,6 +224,9 @@ include "include/topnavbar.php";
                         var payment = addCommas(parseFloat(full['nettotal']).toFixed(2));
                         return payment;
                     }
+                },
+                {
+                    "data": "vat"
                 },
                 {
                     "targets": -1,

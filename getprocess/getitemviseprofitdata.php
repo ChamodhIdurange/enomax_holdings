@@ -8,22 +8,53 @@ $today = date("Y-m-d");
 
 // AND `u`.`date` BETWEEN '$fromdate' AND '$todate'
 
-$sql =    "SELECT  
-                `d`.`tbl_product_idtbl_product`, 
-                `u`.`cuspono`, 
-                SUM((`d`.`saleprice` - `d`.`unitprice`) * `d`.`dispatchqty`) AS `total_profit`,
-                SUM(`d`.`dispatchqty`) AS `total_qty`,
-                `p`.`product_name`
-            FROM `tbl_customer_order` AS `u`  
-            LEFT JOIN `tbl_customer_order_detail` AS `d` 
-                ON `d`.`tbl_customer_order_idtbl_customer_order` = `u`.`idtbl_customer_order` 
-            LEFT JOIN `tbl_product` AS `p` 
-                ON `p`.`idtbl_product` = `d`.`tbl_product_idtbl_product` 
-            WHERE `u`.`status` IN (1, 2) 
-                AND `u`.`delivered` = '1'
-                AND `d`.`status` = '1'
-                AND `u`.`date` BETWEEN '$fromdate' AND '$todate'
-            GROUP BY `d`.`tbl_product_idtbl_product`";
+// $sql =    "SELECT  
+//                 `d`.`tbl_product_idtbl_product`, 
+//                 `u`.`cuspono`, 
+//                 -- SUM((`d`.`saleprice` - `d`.`unitprice`) * `d`.`dispatchqty`) AS `total_profit`,
+//                 SUM((`invd`.`saleprice` - `invd`.`unitprice`) * `invd`.`qty`) AS `total_profit`,
+//                 SUM(`invd`.`qty`) AS `total_qty`,
+//                 `p`.`product_name`
+//             FROM `tbl_customer_order` AS `u`  
+//             LEFT JOIN `tbl_customer_order_detail` AS `d` 
+//                 ON `d`.`tbl_customer_order_idtbl_customer_order` = `u`.`idtbl_customer_order` 
+//             LEFT JOIN tbl_invoice i 
+//                 ON u.idtbl_customer_order = i.tbl_customer_order_idtbl_customer_order
+//             LEFT JOIN `tbl_invoice_detail` AS `invd` 
+//                 ON `invd`.`tbl_invoice_idtbl_invoice` = `i`.`idtbl_invoice` 
+//             LEFT JOIN `tbl_product` AS `p` 
+//                 ON `p`.`idtbl_product` = `d`.`tbl_product_idtbl_product` 
+//             WHERE `u`.`status` IN (1, 2) 
+//                 AND `u`.`delivered` = '1'
+//                 AND `d`.`status` = '1'
+//                 AND `u`.`date` BETWEEN '$fromdate' AND '$todate'
+//             GROUP BY `d`.`tbl_product_idtbl_product`";
+
+$sql = "SELECT  
+            `u`.`idtbl_invoice`, 
+            `u`.`date`, 
+            `u`.`invoiceno`, 
+            `uf`.`cuspono`, 
+            `p`.`product_name`,
+            SUM(`d`.`qty`) AS `total_qty`,
+            SUM((`d`.`saleprice` - `d`.`unitprice`) * `d`.`qty`) AS `total_profit`,
+            SUM((`d`.`unitprice`) * `d`.`qty`) AS `total_cost`,
+            `u`.`nettotal`,
+            IFNULL(SUM(d.discount), 0) AS total_discount,
+            `u`.`total`,
+            u.discount AS invoice_discount
+        FROM `tbl_invoice` AS `u`  
+        LEFT JOIN `tbl_invoice_detail` AS `d` 
+            ON `d`.`tbl_invoice_idtbl_invoice` = `u`.`idtbl_invoice` 
+        LEFT JOIN `tbl_customer_order` AS `uf` 
+            ON `u`.`tbl_customer_order_idtbl_customer_order` = `uf`.`idtbl_customer_order`
+        LEFT JOIN `tbl_product` AS `p` 
+            ON `p`.`idtbl_product` = `d`.`tbl_product_idtbl_product` 
+        WHERE `u`.`status` IN (1, 2) 
+            AND `d`.`status` = '1'
+            AND `uf`.`delivered` = '1'
+            AND `u`.`date` BETWEEN '$fromdate' AND '$todate'
+        GROUP BY `u`.`idtbl_invoice`";
 
 $result = $conn->query($sql);
 
@@ -43,14 +74,14 @@ if ($result->num_rows > 0) {
     $full_profit=0;
     
     while ($rowstock = $result->fetch_assoc()) {
-        $full_profit += $rowstock['total_profit'];
+        $full_profit += ($rowstock['total_profit'] - $rowstock['invoice_discount'] - $rowstock['total_discount']);
         $c++;
         echo '<tr>
                 <td class="text-center">' . $c . '</td>
                 <td class="text-center">' . $rowstock['cuspono'] . '</td>
                 <td class="text-center">' . $rowstock['product_name'] . '</td>
                 <td class="text-center">' . $rowstock['total_qty'] . '</td>
-                <td class="text-right">' . number_format($rowstock['total_profit'], 2, '.', ',')  . '</td>
+                <td class="text-right">' . number_format($rowstock['total_profit'] - $rowstock['invoice_discount'] - $rowstock['total_discount'], 2) . '</td>
             </tr>';
     }
     echo '</tbody>

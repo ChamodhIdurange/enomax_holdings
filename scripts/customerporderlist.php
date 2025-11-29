@@ -37,6 +37,7 @@ $columns = array(
 	array( 'db' => '`u`.`confirm`', 'dt' => 'confirm', 'field' => 'confirm' ),
 	array( 'db' => '`u`.`dispatchissue`', 'dt' => 'dispatchissue', 'field' => 'dispatchissue' ),
 	array( 'db' => '`u`.`ship`',   'dt' => 'ship', 'field' => 'ship' ),
+	array( 'db' => '`u`.`vat`', 'dt' => 'vat', 'field' => 'vat' ),
 	array( 'db' => '`u`.`delivered`',   'dt' => 'delivered', 'field' => 'delivered' ),
 	array( 'db' => '`u`.`is_printed`',   'dt' => 'is_printed', 'field' => 'is_printed' ),
 	array( 'db' => '`u`.`status`',   'dt' => 'status', 'field' => 'status' ),

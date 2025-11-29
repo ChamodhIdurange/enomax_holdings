@@ -173,7 +173,7 @@ if ($lastElement == 'useraccount.php') {
     $editcheck   = checkprivilege($menuprivilegearray, 34, 2);
     $statuscheck = checkprivilege($menuprivilegearray, 34, 3);
     $deletecheck = checkprivilege($menuprivilegearray, 34, 4);
-} else if ($lastElement == 'dailycash.php') {
+} else if ($lastElement == 'rptsalerepcollections.php') {
     $addcheck    = checkprivilege($menuprivilegearray, 35, 1);
     $editcheck   = checkprivilege($menuprivilegearray, 35, 2);
     $statuscheck = checkprivilege($menuprivilegearray, 35, 3);
@@ -345,6 +345,12 @@ else if ($lastElement == 'rptallpurchaseorders.php') {
     $editcheck   = checkprivilege($menuprivilegearray, 107, 2);
     $statuscheck = checkprivilege($menuprivilegearray, 107, 3);
     $deletecheck = checkprivilege($menuprivilegearray, 107, 4);
+}
+else if ($lastElement == 'vatreport.php') {
+    $addcheck    = checkprivilege($menuprivilegearray, 114, 1);
+    $editcheck   = checkprivilege($menuprivilegearray, 114, 2);
+    $statuscheck = checkprivilege($menuprivilegearray, 114, 3);
+    $deletecheck = checkprivilege($menuprivilegearray, 114, 4);
 }
 
 
@@ -634,7 +640,7 @@ function checkprivilege($arraymenu, $menuID, $type)
                 Reports
                 <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
             </a>
-            <div class="collapse <?php if ($lastElement == "stock.php" | $lastElement == "customeroutstanding.php" | $lastElement == "dailysale.php" | $lastElement == "dailycash.php" | $lastElement == "salereportcustomer.php" | $lastElement == "accountreport.php" | $lastElement == "bufferstockmaintainreport.php" | $lastElement == "ouritemrange.php" | $lastElement == "salesorder.php" | $lastElement == "bincard.php" | $lastElement == "overpaymentreport.php" | $lastElement == "productinvoicesreport.php" | $lastElement == "rptrepvisesales.php" | $lastElement == "rptcustomeroutstanding.php" | $lastElement == "rptsalerepcollections.php" | $lastElement == "rptinventorydetails.php" | $lastElement == "rptstockadjustmentdetails.php" | $lastElement == "rptitemviseprofitreport.php" | $lastElement == "rptinvoiceviseprofitreport.php" | $lastElement == "rptinvoicepaymentmethod.php" | $lastElement == "rptcustomerorderholdstock.php" | $lastElement == "rptallpurchaseorders.php") {echo 'show';} ?>"
+            <div class="collapse <?php if ($lastElement == "stock.php" | $lastElement == "customeroutstanding.php" | $lastElement == "dailysale.php" | $lastElement == "rptsalerepcollections.php" | $lastElement == "salereportcustomer.php" | $lastElement == "accountreport.php" | $lastElement == "bufferstockmaintainreport.php" | $lastElement == "ouritemrange.php" | $lastElement == "salesorder.php" | $lastElement == "bincard.php" | $lastElement == "overpaymentreport.php" | $lastElement == "productinvoicesreport.php" | $lastElement == "rptrepvisesales.php" | $lastElement == "rptcustomeroutstanding.php" | $lastElement == "rptsalerepcollections.php" | $lastElement == "rptinventorydetails.php" | $lastElement == "rptstockadjustmentdetails.php" | $lastElement == "rptitemviseprofitreport.php" | $lastElement == "rptinvoiceviseprofitreport.php" | $lastElement == "rptinvoicepaymentmethod.php" | $lastElement == "rptcustomerorderholdstock.php" | $lastElement == "rptallpurchaseorders.php") {echo 'show';} ?>"
                 id="collapsereport" data-parent="#accordionSidenav">
                 <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
                     <?php if (menucheck($menuprivilegearray, 31) == 1) { ?>
@@ -650,7 +656,7 @@ function checkprivilege($arraymenu, $menuID, $type)
                     <!-- <a class="nav-link p-0 px-3 py-1" href="dailysale.php">Daily Sale</a> -->
                     <?php }
                                     if (menucheck($menuprivilegearray, 35) == 1) { ?>
-                    <a class="nav-link p-0 px-3 py-1" href="dailycash.php">Daily Cash & Cheque</a>
+                    <a class="nav-link p-0 px-3 py-1" href="rptsalerepcollections.php">Daily Cash & Cheque</a>
                     <?php }
                                     if (menucheck($menuprivilegearray, 36) == 1) { ?>
                     <a class="nav-link p-0 px-3 py-1" href="salereportcustomer.php">Sale Reports</a>
@@ -699,6 +705,9 @@ function checkprivilege($arraymenu, $menuID, $type)
                     <?php }
                                     if (menucheck($menuprivilegearray, 107) == 1) { ?>
                     <a class="nav-link p-0 px-3 py-1" href="rptallpurchaseorders.php">All Purchase order Report</a>
+                    <?php }
+                                    if (menucheck($menuprivilegearray, 114) == 1) { ?>
+                    <a class="nav-link p-0 px-3 py-1" href="vatreport.php">VAT Report</a>
                     <?php } ?>
                 </nav>
             </div>
