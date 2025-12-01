@@ -56,7 +56,7 @@ $sql = "
         c.vat_num, 
         i.nettotal AS invoice_value,
         co.vat AS vat_rate,
-        COALESCE(i.discount, 0) AS invoice_discount
+        co.podiscountpercentage AS invoice_discount_percentage
     FROM tbl_invoice i
     INNER JOIN tbl_customer c 
         ON i.tbl_customer_idtbl_customer = c.idtbl_customer
@@ -89,14 +89,15 @@ $output = '
             <th class="text-center">VAT Rate(%)</th>
             <th class="text-center">Invoice Value</th>
             <th class="text-center">VAT Amount</th>
+            <th class="text-center">Grand Total</th>
         </tr>
     </thead>
     <tbody>
 ';
 
 $count = 1;
-$totalInvoice = 0.0; 
-$totalVAT = 0.0;     
+$totalInvoice = 0.0;
+$totalVAT = 0.0;
 
 $detailStmt = $conn->prepare("
     SELECT qty, saleprice, discount 
@@ -114,9 +115,9 @@ while ($row = $result->fetch_assoc()) {
     $invoiceno = $row['invoiceno'];
     $customerName = $row['customer'];
     $vatNum = trim($row['vat_num']);
-    $invoiceDiscount = floatval($row['invoice_discount']);
+    $invoiceDiscountPercentage = floatval($row['invoice_discount_percentage']);
     $vatRateFromOrder = isset($row['vat_rate']) ? floatval($row['vat_rate']) : 0.0;
-    $vatRate = ($vatRateFromOrder > 0) ? $vatRateFromOrder : $taxRate;
+    $actualvat = ($vatRateFromOrder > 0) ? $vatRateFromOrder : $taxRate;
 
     $isTaxCustomer = ($vatNum !== '');
 
@@ -124,38 +125,59 @@ while ($row = $result->fetch_assoc()) {
     $detailStmt->execute();
     $detailRes = $detailStmt->get_result();
 
-    $subTotalExVat = 0.0; 
+    $fulltot = 0.0; // Subtotal before discount (base price before VAT)
 
     while ($item = $detailRes->fetch_assoc()) {
         $qty = floatval($item['qty']);
         $saleprice = floatval($item['saleprice']);
-        $lineDiscount = floatval($item['discount']);
+        $linediscount = floatval($item['discount']);
 
-        if ($isTaxCustomer && $vatRate > 0) {
-            $unitExVat = $saleprice / (1 + ($vatRate / 100));
+        // SAME LOGIC AS INVOICE PDF: Extract base price from VAT-inclusive price
+        if ($isTaxCustomer && $actualvat > 0) {
+            $base_price = $saleprice / (1 + ($actualvat / 100));
+            $base_discount = $linediscount / (1 + ($actualvat / 100));
         } else {
-            $unitExVat = $saleprice;
+            // For non-VAT customers, use price as-is
+            $base_price = $saleprice;
+            $base_discount = $linediscount;
         }
 
-        $lineTotalExVat = ($unitExVat * $qty) - $lineDiscount;
-        $subTotalExVat += $lineTotalExVat;
+        // Calculate line total (base price before VAT)
+        $line_total_base = ($qty * $base_price) - $base_discount;
+        $fulltot += $line_total_base;
     }
 
-    $netBeforeVat = $subTotalExVat - $invoiceDiscount; 
-    if ($netBeforeVat < 0) {
-        $netBeforeVat = 0; 
+    // Calculate totals - SAME LOGIC AS INVOICE PDF
+    if ($isTaxCustomer && $actualvat > 0) {
+        // VAT CUSTOMER CALCULATION
+        // 1. Subtotal (before any discounts)
+        $subtotal_before_discount = $fulltot;
+
+        // 2. Calculate base invoice discount
+        $base_invoice_discount = $subtotal_before_discount * ($invoiceDiscountPercentage / 100);
+
+        // 3. Net amount before VAT
+        $net_before_vat = $subtotal_before_discount - $base_invoice_discount;
+
+        // 4. Calculate VAT on subtotal before discount
+        $vat_amount = $subtotal_before_discount * ($actualvat / 100);
+
+        // 5. Grand total
+        $grand_total = $net_before_vat + $vat_amount;
+
+        // For display purposes
+        $invoiceValue = $net_before_vat;
+        $vatAmount = $vat_amount;
+    } else {
+        // NON-VAT CUSTOMER - shouldn't appear in this report but included for completeness
+        $invoiceValue = $fulltot - ($fulltot * ($invoiceDiscountPercentage / 100));
+        $vatAmount = 0.0;
     }
 
-    $vatAmount = 0.0;
-    $grandTotal = $netBeforeVat; 
-
-    if ($isTaxCustomer && $vatRate > 0) {
-        $vatAmount = $netBeforeVat * ($vatRate / 100);
-        $grandTotal = $netBeforeVat + $vatAmount;
-    }
-
-    $totalInvoice += $netBeforeVat; 
+    $totalInvoice += $invoiceValue;
     $totalVAT += $vatAmount;
+
+    $totalGrand = $totalInvoice + $totalVAT;
 
     $output .= '
     <tr>
@@ -164,9 +186,10 @@ while ($row = $result->fetch_assoc()) {
         <td>' . htmlspecialchars($invoiceno) . '</td>
         <td>' . htmlspecialchars($customerName) . '</td>
         <td>' . htmlspecialchars($vatNum) . '</td>
-        <td class="text-center">' . number_format($vatRate, 2) . '</td>
-        <td class="text-right">' . number_format($netBeforeVat, 2) . '</td>
+        <td class="text-center">' . number_format($actualvat, 2) . '</td>
+        <td class="text-right">' . number_format($invoiceValue, 2) . '</td>
         <td class="text-right">' . number_format($vatAmount, 2) . '</td>
+        <td class="text-right">' . number_format($invoiceValue + $vatAmount, 2) . '</td>
     </tr>';
 }
 
@@ -179,6 +202,7 @@ $output .= '
             <td colspan="6" class="text-right">Total</td>
             <td class="text-right">' . number_format($totalInvoice, 2) . '</td>
             <td class="text-right">' . number_format($totalVAT, 2) . '</td>
+            <td class="text-right">' . number_format($totalInvoice + $totalVAT, 2) . '</td>
         </tr>
     </tfoot>
 </table>
