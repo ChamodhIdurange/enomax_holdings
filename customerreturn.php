@@ -1,7 +1,7 @@
 <?php
 include "include/header.php";
 
-$sqlreturncustomer = "SELECT `u`.`idtbl_return`, `u`.`returndate`, `u`.`total`, `ua`.`customer`, `u`.`acceptance_status`, `u`.`damaged_reason` FROM `tbl_return` as `u` LEFT JOIN `tbl_customer` AS `ua` ON (`ua`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer`)  WHERE `u`.`acceptance_status` IN (0,1)";
+$sqlreturncustomer = "SELECT `u`.`idtbl_return`,`u`.`returntype`, `u`.`returndate`, `u`.`total`, `ua`.`customer`, `u`.`acceptance_status`, `u`.`damaged_reason`, `su`.`suppliername` FROM `tbl_return` as `u` LEFT JOIN `tbl_customer` AS `ua` ON (`ua`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer`) LEFT JOIN `tbl_supplier` AS `su` ON (`su`.`idtbl_supplier` = `u`.`tbl_supplier_idtbl_supplier`) WHERE `u`.`acceptance_status` IN (0,1)";
 $resultreturncustomer = $conn->query($sqlreturncustomer);
 
 include "include/topnavbar.php";
@@ -32,7 +32,8 @@ include "include/topnavbar.php";
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Customer name</th>
+                                                <th>Customer name / Supplier name</th>
+                                                <th>Type</th>
                                                 <th>Date</th>
                                                 <th>Remark</th>
                                                 <th>Total</th>
@@ -41,37 +42,47 @@ include "include/topnavbar.php";
                                         </thead>
                                         <tbody>
                                             <?php if ($resultreturncustomer->num_rows > 0) {
-                                                    while ($row = $resultreturncustomer->fetch_assoc()) { ?>
-                                            <tr>
-                                                <td><?php echo $row['idtbl_return'] ?></td>
-                                                <td><?php echo $row['customer'] ?></td>
-                                                <td><?php echo $row['returndate'] ?></td>
-                                                <td><?php echo $row['damaged_reason'] ?></td>
-                                                <td class="text-right">Rs.<?php echo number_format($row['total'], 2); ?>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-sm rounded btnView"
-                                                        id="<?php echo $row['idtbl_return']; ?>"
-                                                        name="<?php echo $row['acceptance_status']; ?>"><i
-                                                            class="fas fa-eye"></i></button>
-                                                    <?php if($row['acceptance_status'] == 0) { ?>
-                                                    <button class="btn btn-outline-secondary btn-sm btnEdit"
-                                                        id="<?php echo $row['idtbl_return']; ?>"
-                                                        data-returndate="<?php echo $row['returndate']; ?>"><i
-                                                            class="fas fa-pen"></i></button>
-                                                    <?php }else ?>
-                                                    <?php if($row['acceptance_status'] == 0) { ?>
-                                                    <button
-                                                        data-url="process/statusacceptreturn.php?record=<?php echo $row['idtbl_return'] ?>&type=2"
-                                                        data-actiontype="8"
-                                                        class="btn btn-outline-warning btn-sm btntableaction"><i
-                                                            data-feather="x-square"></i></button>
-                                                    <?php }else{ ?>
-                                                    <button class="btn btn-outline-success btn-sm"><i
-                                                            data-feather="check"></i></button>
-                                                    <?php }?>
-                                                </td>
-                                            </tr>
+                                                while ($row = $resultreturncustomer->fetch_assoc()) { ?>
+                                                    <tr>
+                                                        <td><?php echo $row['idtbl_return'] ?></td>
+                                                        <td><?php echo $row['customer'] ? $row['customer'] : $row['suppliername']; ?></td>
+                                                        <td>
+                                                            <?php
+                                                            if ($row['returntype'] == 1) {
+                                                                echo "Customer Return";
+                                                            } else if ($row['returntype'] == 2) {
+                                                                echo "Supplier Return";
+                                                            } else if ($row['returntype'] == 3) {
+                                                                echo "Damage Return";
+                                                            }
+                                                            ?>
+                                                        <td><?php echo $row['returndate'] ?></td>
+                                                        <td><?php echo $row['damaged_reason'] ?></td>
+                                                        <td class="text-right">Rs.<?php echo number_format($row['total'], 2); ?>
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-primary btn-sm rounded btnView"
+                                                                id="<?php echo $row['idtbl_return']; ?>"
+                                                                name="<?php echo $row['acceptance_status']; ?>"><i
+                                                                    class="fas fa-eye"></i></button>
+                                                            <?php if ($row['acceptance_status'] == 0) { ?>
+                                                                <button class="btn btn-outline-secondary btn-sm btnEdit"
+                                                                    id="<?php echo $row['idtbl_return']; ?>"
+                                                                    data-returndate="<?php echo $row['returndate']; ?>"><i
+                                                                        class="fas fa-pen"></i></button>
+                                                            <?php } else ?>
+                                                            <?php if ($row['acceptance_status'] == 0) { ?>
+                                                                <button
+                                                                    data-url="process/statusacceptreturn.php?record=<?php echo $row['idtbl_return'] ?>&type=2"
+                                                                    data-actiontype="8"
+                                                                    class="btn btn-outline-warning btn-sm btntableaction"><i
+                                                                        data-feather="x-square"></i></button>
+                                                            <?php } else { ?>
+                                                                <button class="btn btn-outline-success btn-sm"><i
+                                                                        data-feather="check"></i></button>
+                                                            <?php } ?>
+                                                        </td>
+                                                    </tr>
                                             <?php }
                                             } ?>
                                         </tbody>
@@ -169,10 +180,10 @@ include "include/topnavbar.php";
 </div>
 <?php include "include/footerscripts.php"; ?>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         document.getElementById('btnorderprint').addEventListener("click", print);
         $('#dataTable').DataTable({});
-        $('#dataTable tbody').on('click', '.btnEdit', function () {
+        $('#dataTable tbody').on('click', '.btnEdit', function() {
             var id = $(this).attr('id');
             var returndate = $(this).data('returndate');
 
@@ -182,7 +193,7 @@ include "include/topnavbar.php";
         });
     })
 
-    $('#returntype').change(function () {
+    $('#returntype').change(function() {
         var type = $(this).val();
 
         if (type == 1) {
@@ -205,7 +216,7 @@ include "include/topnavbar.php";
         }
     });
 
-    $("#btnreturnupdate").click(function () {
+    $("#btnreturnupdate").click(function() {
         if (!$("#editreturnform")[0].checkValidity()) {
             $("#hiddeneditsubmit").click();
         } else {
@@ -219,7 +230,7 @@ include "include/topnavbar.php";
                     returnId: returnId
                 },
                 url: 'process/updatecustomerreturnprocess.php',
-                success: function (result) { // alert(result)
+                success: function(result) { // alert(result)
                     var obj = JSON.parse(result);
                     if (obj.status == 1) {
                         actionreload(obj.action);
@@ -231,7 +242,7 @@ include "include/topnavbar.php";
         }
     });
 
-    $('#dataTable tbody').on('click', '.btnView', function () {
+    $('#dataTable tbody').on('click', '.btnView', function() {
         var id = $(this).attr('id');
         var acceptancestatus = $(this).attr('name');
         // alert("asd")
@@ -241,7 +252,7 @@ include "include/topnavbar.php";
                 recordID: id
             },
             url: 'getprocess/getreturndetails.php',
-            success: function (result) {
+            success: function(result) {
                 // alert(result)
                 $('#viewmodaltitle').html('Return No ' + id)
                 $('#viewdetail').html(result);
@@ -255,6 +266,7 @@ include "include/topnavbar.php";
             }
         });
     });
+
     function print() {
         printJS({
             printable: 'viewdispatchprint',

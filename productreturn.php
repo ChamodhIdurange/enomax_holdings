@@ -12,6 +12,9 @@ $resultproduct = $conn->query($sqlproduct);
 $sqlhelperlist = "SELECT `idtbl_employee`, `name` FROM `tbl_employee` WHERE `tbl_user_type_idtbl_user_type`=7 AND `status`=1";
 $resulthelperlist = $conn->query($sqlhelperlist);
 
+$sqlsupplier = "SELECT `idtbl_supplier`, `suppliername` FROM `tbl_supplier` WHERE `status`=1";
+$resultsupplier = $conn->query($sqlsupplier);
+
 include "include/topnavbar.php";
 ?>
 <div id="layoutSidenav">
@@ -57,7 +60,7 @@ include "include/topnavbar.php";
                                             class="form-control form-control-sm rounded-0" required>
                                             <option value="">Select</option>
                                             <option value="1">Customer return</option>
-                                            <!-- <option value="2">Supplier return</option> -->
+                                            <option value="2">Supplier return</option>
                                             <option value="3">Damage return</option>
                                         </select>
                                     </div>
@@ -67,6 +70,21 @@ include "include/topnavbar.php";
                                             <select class="form-control form-control-sm rounded-0" name="customer"
                                                 id="customer">
                                                 <option value="">Select</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" id="supplierdiv">
+                                        <label class="small font-weight-bold text-dark">Supplier*</label>
+                                        <div class="input-group input-group-sm">
+                                            <select class="form-control form-control-sm rounded-0" name="supplier"
+                                                id="supplier">
+                                                <option value="">Select</option>
+                                                <?php if ($resultsupplier->num_rows > 0) {
+                                                    while ($rowsupplier = $resultsupplier->fetch_assoc()) { ?>
+                                                <option value="<?php echo $rowsupplier['idtbl_supplier'] ?>">
+                                                    <?php echo $rowsupplier['suppliername'] ?></option>
+                                                <?php }
+                                                } ?>
                                             </select>
                                         </div>
                                     </div>
@@ -233,160 +251,341 @@ include "include/topnavbar.php";
 </div>
 <?php include "include/footerscripts.php"; ?>
 <script>
-    $(document).ready(function () {
-        var addcheck = '<?php echo $addcheck; ?>';
-        var editcheck = '<?php echo $editcheck; ?>';
-        var statuscheck = '<?php echo $statuscheck; ?>';
-        var deletecheck = '<?php echo $deletecheck; ?>';
-       
-        $('body').tooltip({
-            selector: '[data-toggle="tooltip"]'
-        });
-        $('[data-toggle="tooltip"]').tooltip({
-            trigger: 'hover'
+   $(document).ready(function () {
+    var addcheck = '<?php echo $addcheck; ?>';
+    var editcheck = '<?php echo $editcheck; ?>';
+    var statuscheck = '<?php echo $statuscheck; ?>';
+    var deletecheck = '<?php echo $deletecheck; ?>';
+   
+    $('body').tooltip({
+        selector: '[data-toggle="tooltip"]'
+    });
+    $('[data-toggle="tooltip"]').tooltip({
+        trigger: 'hover'
+    });
 
-        });
+    // Initialize Select2 for return product
+    $("#returnproduct").select2({
+        ajax: {
+            url: "getprocess/getproductforselect2.php",
+            type: "post",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    searchTerm: params.term,
+                };
+            },
+            processResults: function (response) {
+                return {
+                    results: response
+                };
+            },
+            cache: true
+        }
+    });
 
+    // Initialize Select2 for customer
+    $("#customer").select2({
+        ajax: {
+            url: "getprocess/getcustomerlistforreturn.php",
+            type: "post",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    searchTerm: params.term,
+                };
+            },
+            processResults: function (response) {
+                return {
+                    results: response
+                };
+            },
+            cache: true
+        }
+    });
+
+    // Hide unnecessary fields initially
+    $('#addproductdiv').addClass('d-none'); 
+    $('#fieldcustomerinvoice').removeClass('d-none'); 
+    $('#supplierdiv').addClass('d-none');
+    $('#reasondiv').removeClass('d-none');
+
+    // Handle return type change
+    $('#returntype').change(function () {
+        var type = $(this).val();
+        
+        // Reset all fields
+        $('#tablereturnamount tbody').empty();
+        $('#tablereturn tbody').empty();
+        $('#customer').val('').trigger('change');
+        $('#supplier').val('').trigger('change');
+        $('#customerinvoice').val('').trigger('change');
+        $('#returnproduct').val('').trigger('change');
+        resetTotals();
+
+        if (type == 1) { // Customer return
+            $('#customer').closest('.col-3').removeClass('d-none');
+            $('#customer').prop('required', true);
+            $('#supplierdiv').addClass('d-none');
+            $('#supplier').prop('required', false);
+            $('#reasondiv').removeClass('d-none');
+            $('#remarks').prop('required', false);
+            $('#addproductdiv').addClass('d-none');
+            $('#fieldcustomerinvoice').removeClass('d-none');
+            $('#repname').prop('required', true);
+            $('#repname').closest('.col-3').removeClass('d-none');
+            
+        } else if (type == 2) { // Supplier return
+            $('#customer').closest('.col-3').addClass('d-none');
+            $('#customer').prop('required', false);
+            $('#supplierdiv').removeClass('d-none');
+            $('#supplier').prop('required', true);
+            $('#reasondiv').removeClass('d-none');
+            $('#remarks').prop('required', false);
+            $('#addproductdiv').removeClass('d-none');
+            $('#fieldcustomerinvoice').addClass('d-none');
+            $('#repname').prop('required', false);
+            $('#repname').closest('.col-3').addClass('d-none');
+            
+        } else if (type == 3) { // Damage return
+            $('#customer').closest('.col-3').removeClass('d-none');
+            $('#customer').prop('required', true);
+            $('#supplierdiv').addClass('d-none');
+            $('#supplier').prop('required', false);
+            $('#reasondiv').removeClass('d-none');
+            $('#remarks').prop('required', true);
+            $('#addproductdiv').addClass('d-none');
+            $('#fieldcustomerinvoice').removeClass('d-none');
+            $('#repname').prop('required', true);
+            $('#repname').closest('.col-3').removeClass('d-none');
+        }
+    });
+
+    // Handle supplier change - Load products for that supplier
+    $('#supplier').change(function () {
+        var supplierId = $(this).val();
+        
+        // Reinitialize returnproduct select2 with supplier filter
+        $("#returnproduct").select2('destroy');
         $("#returnproduct").select2({
             ajax: {
-                url: "getprocess/getproductforselect2.php",
-                // url: "getprocess/getproductaccosupplier.php",
+                url: "getprocess/getproductaccosupplier.php",
                 type: "post",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
                     return {
-                        searchTerm: params.term, // search term
+                        searchTerm: params.term,
+                        supplierId: supplierId
                     };
                 },
-                processResults: function (response) { //console.log(response)
+                processResults: function (response) {
                     return {
                         results: response
                     };
                 },
                 cache: true
-            }
-        });
-
-        $("#customer").select2({
-            ajax: {
-                url: "getprocess/getcustomerlistforreturn.php",
-                // url: "getprocess/getproductaccosupplier.php",
-                type: "post",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        searchTerm: params.term, // search term
-                    };
-                },
-                processResults: function (response) { //console.log(response)
-                    return {
-                        results: response
-                    };
-                },
-                cache: true
-            }
-        });
-
-        $('#addproductdiv').addClass('d-none'); 
-        $('#fieldcustomerinvoice').removeClass('d-none'); 
-        
-
-        $('#customer').change(function () {
-            var customer = $(this).val();
-
-            $.ajax({
-                type: "POST",
-                data: {
-                    customerId: customer,
-                },
-                url: 'getprocess/getinvoicesaccocustomer.php',
-                success: function (result) { //alert(result)
-                    var objfirst = JSON.parse(result);
-                    var html = '';
-                    html += '<option value="">Select</option>';
-                    $.each(objfirst, function (i, item) {
-                        //alert(objfirst[i].id);
-                        html += '<option value="' + objfirst[i].invoiceId + '">';
-                        html += objfirst[i].invoiceId + ' - ' + objfirst[i]
-                            .invoiceNo;
-                        html += '</option>';
-                    });
-                    $('#customerinvoice').empty().append(html);
-                }
-            });
-        });
-        $('#customerinvoice').change(function () {
-            var invoiceId = $(this).val();
-            $('#tablereturn tbody').empty();
-
-            $.ajax({
-                type: "POST",
-                data: {
-                    invoiceId: invoiceId,
-                },
-                url: 'getprocess/returngettable.php',
-                success: function (result) { //alert(result)
-                    var obj = JSON.parse(result);
-                    $.each(obj, function (i, item) {
-
-                        $('#tablereturnamount > tbody:last').append(
-                            '<tr class="pointer"><td class="d-none">' +
-                            obj[i].invoiceid +
-                            '</td><td class="d-none">' +
-                            obj[i].productid +
-                            '</td><td class="d-none">' +
-                            obj[i].invoicedetailid +
-                            '</td><td>' +
-                            obj[i].productname +
-                            '</td><td><td><input type = "text" name="editsalepricereturn" value="' + obj[i].saleprice + '"> </td><td>' + obj[
-                                i].qty +
-                            '</td><td><input type = "text" name="editqtyreturn" value="0"></td></tr>'
-                        );
-                    });
-                }
-            });
-        });
-
-        $('input[name="invoicestatus"]').click(function () {
-            if ($(this).val() == 1) {
-                $('#addproductdiv').addClass('d-none'); 
-                $('#fieldcustomerinvoice').removeClass('d-none'); 
-                
-            } else {
-                $('#addproductdiv').removeClass('d-none');
-                $('#fieldcustomerinvoice').addClass('d-none');
-            }
-        });
-
-        $('#subformsubmit').click(function () {
-            if (!$("#subform")[0].checkValidity()) {
-                // If the form is invalid, submit it. The form won't actually submit;
-                // this will just cause the browser to display the native HTML5 error messages.
-                $("#hiddensubformsubmit").click();
-            } else {
-                var returnproduct = $('#returnproduct').val();
-                var returnproductname = $("#returnproduct option:selected").text();
-
-                var saleprice = $('#saleprice').val();
-                var invoiceqty = $('#invoiceqty').val();
-
-                $('#tablereturnamount > tbody:last').append(
-                    '<tr class="pointer"><td class="d-none">0</td><td class="d-none">' +
-                    returnproduct + '</td><td class="d-none">0</td><td>' + returnproductname +
-                    '</td><td>' + saleprice + '</td><td>' + invoiceqty +
-                    '</td><td><input type = "text" name="editqtyreturn" value="0"></td></tr>');
-
-                $('#returnproduct').val('');
-                $('#saleprice').val('');
-                $('#invoiceqty').val('');
             }
         });
     });
 
+    // Handle customer change for invoice returns
+    $('#customer').change(function () {
+        var customer = $(this).val();
 
-    $('#btnCreateReturn').click(function () { //alert('IN');
+        $.ajax({
+            type: "POST",
+            data: {
+                customerId: customer,
+            },
+            url: 'getprocess/getinvoicesaccocustomer.php',
+            success: function (result) {
+                var objfirst = JSON.parse(result);
+                var html = '';
+                html += '<option value="">Select</option>';
+                $.each(objfirst, function (i, item) {
+                    html += '<option value="' + objfirst[i].invoiceId + '">';
+                    html += objfirst[i].invoiceId + ' - ' + objfirst[i].invoiceNo;
+                    html += '</option>';
+                });
+                $('#customerinvoice').empty().append(html);
+            }
+        });
+    });
+
+    // Handle customer invoice change
+    $('#customerinvoice').change(function () {
+        var invoiceId = $(this).val();
+        $('#tablereturnamount tbody').empty();
+
+        $.ajax({
+            type: "POST",
+            data: {
+                invoiceId: invoiceId,
+            },
+            url: 'getprocess/returngettable.php',
+            success: function (result) {
+                var obj = JSON.parse(result);
+                $.each(obj, function (i, item) {
+                    $('#tablereturnamount > tbody:last').append(
+                        '<tr class="pointer"><td class="d-none">' +
+                        obj[i].invoiceid +
+                        '</td><td class="d-none">' +
+                        obj[i].productid +
+                        '</td><td class="d-none">' +
+                        obj[i].invoicedetailid +
+                        '</td><td>' +
+                        obj[i].productname +
+                        '</td><td><input type="text" name="editsalepricereturn" value="' + 
+                        obj[i].saleprice + '"></td><td>' + 
+                        obj[i].qty +
+                        '</td><td><input type="text" name="editqtyreturn" value="0"></td></tr>'
+                    );
+                });
+            }
+        });
+    });
+
+    // Handle invoice status radio button change
+    $('input[name="invoicestatus"]').click(function () {
+        if ($(this).val() == 1) {
+            $('#addproductdiv').addClass('d-none'); 
+            $('#fieldcustomerinvoice').removeClass('d-none'); 
+        } else {
+            $('#addproductdiv').removeClass('d-none');
+            $('#fieldcustomerinvoice').addClass('d-none');
+        }
+    });
+
+    // Add product to return table (for non-invoice returns)
+    // Add product to return table (for non-invoice returns)
+$('#subformsubmit').click(function () {
+    var returntype = $('#returntype').val();
+    
+    // Check if return type is selected first
+    if (!returntype) {
+        alert('Please select return type first');
+        return;
+    }
+    
+    var returnproduct = $('#returnproduct').val();
+    
+    if (!returnproduct) {
+        alert('Please select a product');
+        return;
+    }
+
+    // For supplier return, get unit price and stock ID from select2 data
+    if (returntype == 2) {
+        var selectedOption = $("#returnproduct").select2('data')[0];
+        var unitprice = selectedOption.unitprice || 0;
+        var stockQty = selectedOption.stock || 0;
+        var stockId = selectedOption.stockid || 0;  // Get stock ID
+        var batchQty = selectedOption.batchqty || '';  // Get batch number
+        var returnproductname = selectedOption.text;
+        
+        $('#tablereturnamount > tbody:last').append(
+            '<tr class="pointer">' +
+            '<td class="d-none">0</td>' +  // invoice id
+            '<td class="d-none">' + returnproduct + '</td>' +  // product id
+            '<td class="d-none">0</td>' +  // invoice detail id
+            '<td>' + returnproductname + '</td>' +  // product name with batch
+            '<td><input type="text" name="editsalepricereturn" value="' + unitprice + '" readonly></td>' +  // unit price
+            '<td>' + stockQty + '</td>' +  // available qty
+            '<td><input type="text" name="editqtyreturn" value="0"></td>' +  // return qty input
+            '<td class="d-none">' + stockId + '</td>' +  // STOCK ID (hidden)
+            '<td class="d-none">' + batchQty + '</td>' +  // BATCH NUMBER (hidden)
+            '</tr>'
+        );
+        
+        $('#returnproduct').val('').trigger('change');
+    } else {
+        // For other return types - validate all fields
+        if (!$("#subform")[0].checkValidity()) {
+            $("#hiddensubformsubmit").click();
+            return;
+        }
+        
+        var returnproductname = $("#returnproduct option:selected").text();
+        var saleprice = $('#saleprice').val();
+        var invoiceqty = $('#invoiceqty').val();
+
+        if (!saleprice || !invoiceqty) {
+            alert('Please fill all fields');
+            return;
+        }
+
+        $('#tablereturnamount > tbody:last').append(
+            '<tr class="pointer">' +
+            '<td class="d-none">0</td>' +
+            '<td class="d-none">' + returnproduct + '</td>' +
+            '<td class="d-none">0</td>' +
+            '<td>' + returnproductname + '</td>' +
+            '<td><input type="text" name="editsalepricereturn" value="' + saleprice + '"></td>' +
+            '<td>' + invoiceqty + '</td>' +
+            '<td><input type="text" name="editqtyreturn" value="0"></td>' +
+            '<td class="d-none">0</td>' +  // no stock id for customer/damage returns
+            '<td class="d-none"></td>' +  // no batch for customer/damage returns
+            '</tr>'
+        );
+
+        $('#returnproduct').val('').trigger('change');
+        $('#saleprice').val('');
+        $('#invoiceqty').val('');
+    }
+});
+
+// Process return items and add to final table
+$("#formsubmit").click(function () {
+    if (!$("#returnform")[0].checkValidity()) {
+        $("#submitBtn").click();
+    } else {
+        $('#tablereturn > tbody').empty();
+        
+        $('#tablereturnamount tbody tr').each(function () {
+            var invoiceId = $(this).find('td:eq(0)').text();
+            var productId = $(this).find('td:eq(1)').text();
+            var invoiceDetailId = $(this).find('td:eq(2)').text();
+            var productName = $(this).find('td:eq(3)').text();
+            var qty = $(this).find('td:eq(5)').text();
+            var inputValue = $(this).find('input[name="editqtyreturn"]').val();
+            var saleprice = $(this).find('input[name="editsalepricereturn"]').val();
+            var stockId = $(this).find('td:eq(7)').text();  // GET STOCK ID
+            var batchQty = $(this).find('td:eq(8)').text();  // GET BATCH NUMBER
+
+            var salepricenoformat = parseFloat(saleprice.replace(/,/g, ''));
+            var showtotalreturn = addCommas(parseFloat(inputValue * salepricenoformat).toFixed(2));
+
+            if (inputValue != 0 && parseFloat(inputValue) > 0) {
+                $('#tablereturn > tbody:last').append(
+                    '<tr class="pointer">' +
+                    '<td class="d-none">' + productId + '</td>' +  // col_1: product id
+                    '<td>' + productName + '</td>' +  // col_2: product name
+                    '<td>' + saleprice + '</td>' +  // col_3: sale price
+                    '<td>' + inputValue + '</td>' +  // col_4: qty
+                    '<td class="">' + 0 + '</td>' +  // col_5: discount
+                    '<td class="total d-none">' + (salepricenoformat * inputValue) + '</td>' +  // col_6: total
+                    '<td class="text-right">' + showtotalreturn + '</td>' +  // col_7: total display
+                    '<td class="discount d-none">' + 0 + '</td>' +  // col_8: discount amount
+                    '<td class="d-none">' + 0 + '</td>' +  // col_9: (unused)
+                    '<td class="d-none">' + invoiceDetailId + '</td>' +  // col_10: invoice detail id
+                    '<td class="d-none">' + salepricenoformat + '</td>' +  // col_11: unit price
+                    '<td class="d-none">' + stockId + '</td>' +  // col_12: STOCK ID
+                    '<td class="d-none">' + batchQty + '</td>' +  // col_13: BATCH NUMBER
+                    '</tr>'
+                );
+            }
+        });
+
+        $('#tablereturnamount tbody').empty();
+        calculateTotals();
+    }
+});
+
+    // Create return - Submit to database
+    $('#btnCreateReturn').click(function () {
         var tbody = $("#tablereturn tbody");
         if (tbody.children().length > 0) {
             jsonObj = [];
@@ -400,6 +599,7 @@ include "include/topnavbar.php";
 
             var returntype = $('#returntype').val();
             var customer = $('#customer').val();
+            var supplier = $('#supplier').val();
             var customerinvoice = $('#customerinvoice').val();
             var total = $('#hidetotalorder').val();
             var remarks = $('#remarks').val();
@@ -407,6 +607,32 @@ include "include/topnavbar.php";
             var netamount = $('#hidenetamount').val();
             var repId = $('#repname').val();
             var invoicestatus = $('input[name="invoicestatus"]:checked').val();
+
+            // Validation
+            if (!returntype) {
+                alert('Please select return type');
+                return;
+            }
+
+            if (returntype == 1 || returntype == 3) {
+                if (!customer) {
+                    alert('Please select customer');
+                    return;
+                }
+                if (!repId) {
+                    alert('Please select rep name');
+                    return;
+                }
+            }
+
+            if (returntype == 2) {
+                if (!supplier) {
+                    alert('Please select supplier');
+                    return;
+                }
+                // No rep name required for supplier return
+                repId = 0;
+            }
 
             $.ajax({
                 type: "POST",
@@ -416,6 +642,7 @@ include "include/topnavbar.php";
                     total: total,
                     remarks: remarks,
                     customer: customer,
+                    supplier: supplier,
                     customerinvoice: customerinvoice,
                     discountamount: discountamount,
                     netamount: netamount,
@@ -423,228 +650,77 @@ include "include/topnavbar.php";
                     repId: repId
                 },
                 url: 'process/returnprocess.php',
-                success: function (result) {//alert(result)
-                    location.reload();
+                success: function (result) {
+                    console.log('Server Response:', result);
+                    try {
+                        var response = JSON.parse(result);
+                        alert(response.message);
+                        if (response.type === 'success') {
+                            location.reload();
+                        }
+                    } catch(e) {
+                        console.error('Parse error:', e);
+                        console.error('Raw response:', result);
+                        alert('Error: ' + result);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                    console.error('Response:', xhr.responseText);
+                    alert('Error creating return: ' + error + '\nCheck console for details');
                 }
             });
-        }
-    });
-
-    $('#returntype').change(function () {
-        var type = $(this).val();
-
-        if (type == 1) {
-            $('#customerdiv').removeClass('d-none');
-            $('#customer').prop('required', true);
-
-            $('#supplierdiv').addClass('d-none');
-            $('#supplier').prop('required', false);
-            //  $('#reasondiv').addClass('d-none');
-            $('#remarks').prop('required', false);
-            $('#reasondiv').removeClass('d-none');
-        } else if (type == 2) {
-            $('#customerdiv').addClass('d-none');
-            $('#customer').prop('required', false);
-
-            $('#supplierdiv').removeClass('d-none');
-            $('#supplier').prop('required', true);
-            $('#reasondiv').addClass('d-none');
-            $('#remarks').prop('required', false);
         } else {
-            $('#customerdiv').removeClass('d-none');
-            $('#customer').prop('required', true);
-            $('#supplierdiv').addClass('d-none');
-            $('#supplier').prop('required', false);
-            $('#reasondiv').removeClass('d-none');
-            $('#remarks').prop('required', true);
-        }
-    });
-    $('#product').change(function () {
-        var productID = $(this).val();
-        var unitprice = $('option:selected', this).data("unitprice");
-        $('#unitprice').val(unitprice);
-    });
-
-    $('#customer').change(function () {
-        var customerId = $(this).val();
-        $.ajax({
-            type: "POST",
-            data: {
-                customerId: customerId,
-                type: 2,
-                invoiceId: '',
-            },
-            url: 'getprocess/getcustomerinvoiceproducts.php',
-            success: function (result) { //alert(result);
-                var objfirst = JSON.parse(result);
-                var html1 = '';
-                html1 += '<option value="">Select</option>';
-                $.each(objfirst, function (i, item) {
-                    html1 += '<option value="' + objfirst[i].invoiceid + '">';
-                    html1 += objfirst[i].name;
-                    html1 += '</option>';
-                });
-
-                $('#customerinvoice').empty().append(html1);
-            }
-        });
-    });
-    // $('#customerinvoice').change(function () {
-    //     var invoiceId = $(this).val();
-    //     $.ajax({
-    //         type: "POST",
-    //         data: {
-    //             customerId: '',
-    //             type: 1,
-    //             invoiceId: invoiceId,
-    //         },
-    //         url: 'getprocess/getcustomerinvoiceproducts.php',
-    //         success: function (result) { //alert(result);
-    //             var objfirst = JSON.parse(result);
-    //             var html1 = '';
-    //             html1 += '<option value="">Select</option>';
-    //             $.each(objfirst, function (i, item) {
-    //                 html1 += '<option value="' + objfirst[i].id + '" data-saleprice="' +
-    //                     objfirst[i].saleprice + '" data-unitprice="' + objfirst[i]
-    //                     .unitprice + '">';
-    //                 html1 += objfirst[i].name;
-    //                 html1 += '</option>';
-    //             });
-
-    //             $('#product').empty().append(html1);
-    //         }
-    //     });
-    // });
-
-    $("#formsubmit").click(function () {
-        $('#tablereturn > tbody').empty();
-        if (!$("#returnform")[0].checkValidity()) {
-            // If the form is invalid, submit it. The form won't actually submit;
-            // this will just cause the browser to display the native HTML5 error messages.
-            $("#submitBtn").click();
-        } else {
-
-            
-
-            $('#tablereturnamount tbody tr').each(function () {
-                // Get the text value of each of the first five columns individually
-                var invoiceId = $(this).find('td:eq(0)').text();
-                var productId = $(this).find('td:eq(1)').text();
-                var invoiceDetailId = $(this).find('td:eq(2)').text();
-                var productName = $(this).find('td:eq(3)').text();
-                var qty = $(this).find('td:eq(5)').text();
-
-                var inputValue = $(this).find('input[name="editqtyreturn"]').val();
-                var saleprice = $(this).find('input[name="editsalepricereturn"]').val();
-
-                var salepricenoformat = parseFloat(saleprice.replace(/,/g, ''));
-
-                var showtotalreturn = addCommas(parseFloat(inputValue * salepricenoformat).toFixed(2));
-
-                if (inputValue != 0) {
-                    $('#tablereturn > tbody:last').append('<tr class="pointer"><td class="d-none">' +
-                        productId +
-                        '</td><td>' + productName + '</td><td>' + saleprice + '</td><td>' +
-                        inputValue +
-                        '</td><td class = "">' +
-                        0 + '</td><td class = "total d-none">' + salepricenoformat * inputValue +
-                        '</td><td class = "text-right">' +
-                        showtotalreturn + '</td><td class = "discount d-none">' +
-                        0 + '</td><td class = "d-none">' +
-                        0 + '</td><td class = "d-none">' +
-                        invoiceDetailId + '</td><td class = "d-none">' +
-                        salepricenoformat + '</td></tr>');
-                }
-
-
-            });
-
-            $('#tablereturnamount tbody').empty();
-
-            $('#product').val('');
-
-            var sum = 0;
-            $(".total").each(function () {
-                sum += parseFloat($(this).text());
-            });
-            var showsum = addCommas(parseFloat(sum).toFixed(2));
-
-            var sumdis = 0;
-            $(".discount").each(function () {
-                sumdis += parseFloat($(this).text());
-            });
-            var showsumdis = addCommas(parseFloat(sumdis).toFixed(2));
-            var hidedis = parseFloat(sumdis);
-            var nettotal = sum - sumdis;
-            var nettotalshow = addCommas(nettotal.toFixed(2));
-
-            $('#discountedprice').html('Rs.' + showsumdis);
-            $('#divtotal').html('Rs.' + showsum);
-            $('#divtotalview').html(nettotalshow);
-
-            $('#hidetotalorder').val(sum);
-            $('#hidedis').val(hidedis);
-            $('#hidenetamount').val(nettotal);
-
+            alert('Please add products to return');
         }
     });
 
+    // Remove item from final table
     $('#tablereturn').on('click', 'tr', function () {
-        var r = confirm("Are you sure, You want to remove this ? ");
+        var r = confirm("Are you sure, You want to remove this?");
         if (r == true) {
             $(this).closest('tr').remove();
-
-            var sum = 0;
-            $(".total").each(function () {
-                sum += parseFloat($(this).text());
-            });
-            var showsum = addCommas(parseFloat(sum).toFixed(2));
-
-            var sumdis = 0;
-            $(".discount").each(function () {
-                sumdis += parseFloat($(this).text());
-            });
-            var showsumdis = addCommas(parseFloat(sumdis).toFixed(2));
-            var hidedis = parseFloat(sumdis);
-            var nettotal = sum - sumdis;
-            var nettotalshow = addCommas(nettotal.toFixed(2));
-            // $('#divtotal').html(showsum);
-            $('#discountedprice').html('Rs.' + showsumdis);
-            $('#divtotal').html('Rs.' + showsum);
-            $('#divtotalview').html(nettotalshow);
-
-            $('#hidetotalorder').val(sum);
-            $('#hidedis').val(hidedis);
-            $('#hidenetamount').val(nettotal);
+            calculateTotals();
         }
     });
 
-
-    function textremove(classname, row) {
-        $('#tableorderview tbody').on('keyup', classname, function (e) {
-            if (e.keyCode === 13) {
-                $this = $(this);
-                var val = $this.val();
-                var td = $this.closest('td');
-                td.empty().html(val).data('editing', false);
-
-                var rowID = row.closest("td").parent()[0].rowIndex;
-                var unitprice = parseFloat(row.closest("tr").find('td:eq(7)').text());
-                var newqty = parseFloat(row.closest("tr").find('td:eq(2)').text());
-                var totnew = newqty * unitprice;
-
-                var showtotnew = addCommas(parseFloat(totnew).toFixed(2));
-                // var total = parseFloat(totrefill+totnew).toFixed(2);
-                // var showtotal = addCommas(total);
-
-                $('#tablereturnamount').find('tr').eq(rowID).find('td:eq(6)').text(showtotnew);
-                // $('#tableorderview').find('tr').eq(rowID).find('td:eq(11)').text(showtotal);
-
-                tabletotal1();
-            }
+    // Helper function to calculate totals
+    function calculateTotals() {
+        var sum = 0;
+        $(".total").each(function () {
+            sum += parseFloat($(this).text());
         });
+        var showsum = addCommas(parseFloat(sum).toFixed(2));
+
+        var sumdis = 0;
+        $(".discount").each(function () {
+            sumdis += parseFloat($(this).text());
+        });
+        var showsumdis = addCommas(parseFloat(sumdis).toFixed(2));
+        var hidedis = parseFloat(sumdis);
+        var nettotal = sum - sumdis;
+        var nettotalshow = addCommas(nettotal.toFixed(2));
+
+        $('#discountedprice').html('Rs. ' + showsumdis);
+        $('#divtotal').html('Rs. ' + showsum);
+        $('#divtotalview').html('Rs. ' + nettotalshow);
+
+        $('#hidetotalorder').val(sum);
+        $('#hidedis').val(hidedis);
+        $('#hidenetamount').val(nettotal);
     }
 
+    // Helper function to reset totals
+    function resetTotals() {
+        $('#discountedprice').html('Rs. 0.00');
+        $('#divtotal').html('Rs. 0.00');
+        $('#divtotalview').html('Rs. 0.00');
+        $('#hidetotalorder').val(0);
+        $('#hidedis').val(0);
+        $('#hidenetamount').val(0);
+    }
+
+    // Helper function to add commas to numbers
     function addCommas(nStr) {
         nStr += '';
         x = nStr.split('.');
@@ -656,33 +732,34 @@ include "include/topnavbar.php";
         }
         return x1 + x2;
     }
+});
 
-    function accept_confirm() {
-        return confirm("Are you sure you want to Accept this?");
-    }
+function accept_confirm() {
+    return confirm("Are you sure you want to Accept this?");
+}
 
-    function deactive_confirm() {
-        return confirm("Are you sure you want to deactive this?");
-    }
+function deactive_confirm() {
+    return confirm("Are you sure you want to deactive this?");
+}
 
-    function active_confirm() {
-        return confirm("Are you sure you want to active this?");
-    }
+function active_confirm() {
+    return confirm("Are you sure you want to active this?");
+}
 
-    function delete_confirm() {
-        return confirm("Are you sure you want to remove this?");
-    }
+function delete_confirm() {
+    return confirm("Are you sure you want to remove this?");
+}
 
-    function company_confirm() {
-        return confirm("Are you sure this product send to company?");
-    }
+function company_confirm() {
+    return confirm("Are you sure this product send to company?");
+}
 
-    function warehouse_confirm() {
-        return confirm("Are you sure this product back to warehouse?");
-    }
+function warehouse_confirm() {
+    return confirm("Are you sure this product back to warehouse?");
+}
 
-    function customer_confirm() {
-        return confirm("Are you sure this product breturn back to customer?");
-    }
+function customer_confirm() {
+    return confirm("Are you sure this product return back to customer?");
+}
 </script>
 <?php include "include/footer.php"; ?>
