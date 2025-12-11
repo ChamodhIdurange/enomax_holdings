@@ -2,14 +2,16 @@
 session_start();
 require_once('../connection/db.php');
 
+// Get today's date
 $today = date("Y-m-d");
 
+// Initialize response array
 $response = [
     "sales_today"    => 0,
     "cash_today"     => 0,
     "purchases_month"=> 0,
     "profit_month"   => 0,
-    "profit_item"    => 0 
+    "profit_item"    => 0 // <-- New KPI for Profit Analysis Report (Item)
 ];
 
 /* ==========================
@@ -74,8 +76,7 @@ $sql_profit = "
     WHERE u.status IN (1, 2)
       AND u.delivered = '1'
       AND d.status = '1'
-      AND MONTH(u.date) = MONTH(CURDATE())
-      AND YEAR(u.date) = YEAR(CURDATE())
+      AND DATE(u.date) = CURDATE()
 ";
 $result = $conn->query($sql_profit);
 if ($result && $row = $result->fetch_assoc()) {
