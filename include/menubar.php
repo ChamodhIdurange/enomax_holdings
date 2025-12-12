@@ -351,6 +351,21 @@ else if ($lastElement == 'vatreport.php') {
     $editcheck   = checkprivilege($menuprivilegearray, 114, 2);
     $statuscheck = checkprivilege($menuprivilegearray, 114, 3);
     $deletecheck = checkprivilege($menuprivilegearray, 114, 4);
+}else if ($lastElement == 'poreport.php') {
+    $addcheck    = checkprivilege($menuprivilegearray, 115, 1);
+    $editcheck   = checkprivilege($menuprivilegearray, 115, 2);
+    $statuscheck = checkprivilege($menuprivilegearray, 115, 3);
+    $deletecheck = checkprivilege($menuprivilegearray, 115, 4);
+}else if ($lastElement == 'damagereport.php') {
+    $addcheck    = checkprivilege($menuprivilegearray, 116, 1);
+    $editcheck   = checkprivilege($menuprivilegearray, 116, 2);
+    $statuscheck = checkprivilege($menuprivilegearray, 116, 3);
+    $deletecheck = checkprivilege($menuprivilegearray, 116, 4);
+}else if ($lastElement == 'productfreeissue.php') {
+    $addcheck    = checkprivilege($menuprivilegearray, 117, 1);
+    $editcheck   = checkprivilege($menuprivilegearray, 117, 2);
+    $statuscheck = checkprivilege($menuprivilegearray, 117, 3);
+    $deletecheck = checkprivilege($menuprivilegearray, 117, 4);
 }
 
 
@@ -437,6 +452,9 @@ function checkprivilege($arraymenu, $menuID, $type)
                 <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
                     <?php if (menucheck($menuprivilegearray, 9) == 1) { ?>
                     <a class="nav-link p-0 px-3 py-1" href="product.php">Product</a>
+                    <?php }
+                        if (menucheck($menuprivilegearray, 117) == 1) { ?>
+                    <a class="nav-link p-0 px-3 py-1" href="productfreeissue.php">Free Issues</a>
                     <?php }
                         if (menucheck($menuprivilegearray, 10) == 1) { ?>
                     <a class="nav-link p-0 px-3 py-1" href="productcategory.php">Category</a>
@@ -705,6 +723,12 @@ function checkprivilege($arraymenu, $menuID, $type)
                     <?php }
                                     if (menucheck($menuprivilegearray, 107) == 1) { ?>
                     <a class="nav-link p-0 px-3 py-1" href="rptallpurchaseorders.php">All Purchase order Report</a>
+                    <?php }
+                                    if (menucheck($menuprivilegearray, 115) == 1) { ?>
+                    <a class="nav-link p-0 px-3 py-1" href="poreport.php">Customer Delivered Purchase Order Report</a>
+                    <?php }
+                                    if (menucheck($menuprivilegearray, 116) == 1) { ?>
+                    <a class="nav-link p-0 px-3 py-1" href="damagereport.php">Damage Report</a>
                     <?php }
                                     if (menucheck($menuprivilegearray, 114) == 1) { ?>
                     <a class="nav-link p-0 px-3 py-1" href="vatreport.php">VAT Report</a>

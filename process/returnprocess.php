@@ -12,9 +12,63 @@ $customerinvoice = $_POST['customerinvoice'];
 $total = $_POST['total'];
 $invoicestatus = $_POST['invoicestatus'];
 $repId = $_POST['repId'];
+$reason_type = $_POST['reasontype'];
 
-if ($returntype == 3 || $returntype == 1) {
-    // Customer return or Damage return
+if ($returntype == 1) {
+    // Customer return 
+    $customer = $_POST['customer'];
+    $remarks = $_POST['remarks'];
+
+    $query = "INSERT INTO `tbl_return`(
+        `returntype`, `has_invoice`, `returndate`, `status`, `updatedatetime`, 
+        `tbl_user_idtbl_user`, `acceptance_status`, `total`,`reason_type`, `damaged_reason`, 
+        `credit_note`, `credit_note_issue`, `tbl_invoice_idtbl_invoice`, 
+        `tbl_customer_idtbl_customer`, `tbl_employee_idtbl_employee`
+    ) VALUES (
+        '$returntype', '$invoicestatus', '$today', '1', '$updatedatetime',
+        '$userID', '0', '$total','$reason_type', '$remarks', '0', '0', '$customerinvoice', 
+        '$customer', '$repId'
+    )";
+
+    if ($conn->query($query) == true) {
+        $last_id = mysqli_insert_id($conn);
+
+        foreach ($tableData as $rowtabledata) {
+            $productID = $rowtabledata['col_1'];
+            $qty = $rowtabledata['col_4'];
+            $discount = $rowtabledata['col_5'];
+            $subtotal = $rowtabledata['col_6'];
+            $unitprice = $rowtabledata['col_11'];
+
+            $insertreturndetails = "INSERT INTO `tbl_return_details`(
+                `unitprice`, `qty`, `actualqty`, `discount`, `total`, 
+                `tbl_product_idtbl_product`, `updatedatetime`, `tbl_user_idtbl_user`, 
+                `tbl_return_idtbl_return`
+            ) VALUES (
+                '$unitprice', '$qty', '0', '$discount', '$subtotal', '$productID',
+                '$updatedatetime', '$userID', '$last_id'
+            )";
+            $conn->query($insertreturndetails);
+        }
+
+        $actionObj = new stdClass();
+        $actionObj->icon = 'fas fa-check-circle';
+        $actionObj->title = 'Success';
+        $actionObj->message = 'Return Added Successfully';
+        $actionObj->url = '';
+        $actionObj->target = '_blank';
+        $actionObj->type = 'success';
+        echo json_encode($actionObj);
+    } else {
+        $actionObj = new stdClass();
+        $actionObj->icon = 'fas fa-exclamation-circle';
+        $actionObj->title = 'Error';
+        $actionObj->message = 'Failed to insert return: ' . $conn->error;
+        $actionObj->type = 'error';
+        echo json_encode($actionObj);
+    }
+} else if ($returntype == 3) {
+    // Damage return
     $customer = $_POST['customer'];
     $remarks = $_POST['remarks'];
 
@@ -49,7 +103,7 @@ if ($returntype == 3 || $returntype == 1) {
             )";
             $conn->query($insertreturndetails);
         }
-        
+
         $actionObj = new stdClass();
         $actionObj->icon = 'fas fa-check-circle';
         $actionObj->title = 'Success';
@@ -66,7 +120,6 @@ if ($returntype == 3 || $returntype == 1) {
         $actionObj->type = 'error';
         echo json_encode($actionObj);
     }
-    
 } else if ($returntype == 2) {
     // Supplier return
     $supplier = $_POST['supplier'];
@@ -143,7 +196,7 @@ if ($returntype == 3 || $returntype == 1) {
                                           SET `qty` = `qty` + '$qty'
                                           WHERE `idtbl_stock` = '$stockId'";
                         $conn->query($rollbackStock);
-                        
+
                         $actionObj = new stdClass();
                         $actionObj->icon = 'fas fa-exclamation-circle';
                         $actionObj->title = 'Error';
@@ -181,4 +234,3 @@ if ($returntype == 3 || $returntype == 1) {
         echo json_encode($actionObj);
     }
 }
-?>

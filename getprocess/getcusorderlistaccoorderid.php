@@ -20,6 +20,7 @@ while($roworderdetail=$resultorderdetail->fetch_assoc()){
     $objdetail->productid=$roworderdetail['tbl_product_idtbl_product'];
     $objdetail->unitprice=$roworderdetail['saleprice'];
     $objdetail->orderqty=$roworderdetail['orderqty'];
+    $objdetail->freeqty=$roworderdetail['freeqty'];
     $objdetail->confirmqty=$roworderdetail['confirmqty'];
     $objdetail->dispatchqty=$roworderdetail['dispatchqty'];
     $objdetail->discount=$roworderdetail['discount'];

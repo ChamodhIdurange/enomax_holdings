@@ -2,36 +2,36 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css">
 </head>
-<?php 
-include "include/header.php";  
+<?php
+include "include/header.php";
 
-$sql="SELECT `idtbl_customer`, `name`, `nic`, `phone`, `status`, `type`, `tbl_area_idtbl_area` FROM `tbl_customer` WHERE `status` IN (1,2)";
-$result =$conn-> query($sql); 
+$sql = "SELECT `idtbl_customer`, `name`, `nic`, `phone`, `status`, `type`, `tbl_area_idtbl_area` FROM `tbl_customer` WHERE `status` IN (1,2)";
+$result = $conn->query($sql);
 
-$sqlemployee="SELECT `idtbl_employee`, `name` FROM `tbl_employee` WHERE `status` IN (1,2)";
-$resultemployee =$conn-> query($sqlemployee); 
+$sqlemployee = "SELECT `idtbl_employee`, `name` FROM `tbl_employee` WHERE `status` IN (1,2)";
+$resultemployee = $conn->query($sqlemployee);
 
-$productarray=array();
-$sqlproduct="SELECT `idtbl_product`, `product_name` FROM `tbl_product` WHERE `status`=1";
-$resultproduct =$conn-> query($sqlproduct); 
-while ($rowproduct = $resultproduct-> fetch_assoc()) {
-    $obj=new stdClass();
-    $obj->productID=$rowproduct['idtbl_product'];
-    $obj->product=$rowproduct['product_name'];
+$productarray = array();
+$sqlproduct = "SELECT `idtbl_product`, `product_name` FROM `tbl_product` WHERE `status`=1";
+$resultproduct = $conn->query($sqlproduct);
+while ($rowproduct = $resultproduct->fetch_assoc()) {
+    $obj = new stdClass();
+    $obj->productID = $rowproduct['idtbl_product'];
+    $obj->product = $rowproduct['product_name'];
 
     array_push($productarray, $obj);
 }
 
-$sqlarea="SELECT `idtbl_area`, `area` FROM `tbl_area` WHERE `status`=1";
-$resultarea =$conn-> query($sqlarea); 
+$sqlarea = "SELECT `idtbl_area`, `area` FROM `tbl_area` WHERE `status`=1";
+$resultarea = $conn->query($sqlarea);
 
-$sqlcustomer="SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `customer` ASC";
-$resultcustomer =$conn-> query($sqlcustomer); 
+$sqlcustomer = "SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `customer` ASC";
+$resultcustomer = $conn->query($sqlcustomer);
 
-$sqlproduct="SELECT `idtbl_product`, `product_name` FROM `tbl_product` WHERE `status`=1";
-$resultproduct =$conn-> query($sqlproduct); 
+$sqlproduct = "SELECT `idtbl_product`, `product_name` FROM `tbl_product` WHERE `status`=1";
+$resultproduct = $conn->query($sqlproduct);
 
-include "include/topnavbar.php"; 
+include "include/topnavbar.php";
 ?>
 <div id="layoutSidenav">
     <div id="layoutSidenav_nav">
@@ -54,7 +54,7 @@ include "include/topnavbar.php";
                     <div class="card-body p-0 p-2">
                         <div class="row">
                             <div class="col-4">
-                                <form action="process/customerprocess.php" method="post" autocomplete="off"  enctype="multipart/form-data">
+                                <form action="process/customerprocess.php" method="post" autocomplete="off" enctype="multipart/form-data">
                                     <div class="form-group mb-1">
                                         <label class="small font-weight-bold text-dark">Customer Name*</label>
                                         <input type="text" class="form-control form-control-sm" id="cusName"
@@ -83,10 +83,12 @@ include "include/topnavbar.php";
                                             <select name="cusArea" id="cusArea" class="form-control form-control-sm"
                                                 required>
                                                 <option value="">Select</option>
-                                                <?php if($resultarea->num_rows > 0) {while ($rowarea = $resultarea-> fetch_assoc()) { ?>
-                                                <option value="<?php echo $rowarea['idtbl_area'] ?>">
-                                                    <?php echo $rowarea['area'] ?></option>
-                                                <?php }} ?>
+                                                <?php if ($resultarea->num_rows > 0) {
+                                                    while ($rowarea = $resultarea->fetch_assoc()) { ?>
+                                                        <option value="<?php echo $rowarea['idtbl_area'] ?>">
+                                                            <?php echo $rowarea['area'] ?></option>
+                                                <?php }
+                                                } ?>
                                             </select>
                                         </div>
                                         <div class="col">
@@ -177,10 +179,12 @@ include "include/topnavbar.php";
                                         <label class="small font-weight-bold text-dark">Ref</label>
                                         <select name="ref" id="ref" class="form-control form-control-sm" required>
                                             <option value="">Select</option>
-                                            <?php if($resultemployee->num_rows > 0) {while ($rowarea = $resultemployee-> fetch_assoc()) { ?>
-                                            <option value="<?php echo $rowarea['idtbl_employee'] ?>">
-                                                <?php echo $rowarea['name'] ?></option>
-                                            <?php }} ?>
+                                            <?php if ($resultemployee->num_rows > 0) {
+                                                while ($rowarea = $resultemployee->fetch_assoc()) { ?>
+                                                    <option value="<?php echo $rowarea['idtbl_employee'] ?>">
+                                                        <?php echo $rowarea['name'] ?></option>
+                                            <?php }
+                                            } ?>
                                         </select>
                                     </div>
                                     <div class="form-group mb-1">
@@ -198,8 +202,7 @@ include "include/topnavbar.php";
                                         <div class="col">
                                             <label class="small font-weight-bold text-dark">Dealer Board</label>
                                             <input type="file" name="dealerboard" id="dealerboard"
-                                                class="form-control form-control-sm" style="padding-bottom:32px;"
-                                                >
+                                                class="form-control form-control-sm" style="padding-bottom:32px;">
                                             <small id="" class="form-text text-danger">Image size 452X452 Pixel</small>
                                         </div>
                                     </div>
@@ -213,8 +216,7 @@ include "include/topnavbar.php";
                                         <div class="col">
                                             <label class="small font-weight-bold text-dark">Product Image</label>
                                             <input type="file" name="productimage" id="productimage"
-                                                class="form-control form-control-sm" style="padding-bottom:32px;"
-                                                >
+                                                class="form-control form-control-sm" style="padding-bottom:32px;">
                                             <small id="" class="form-text text-danger">Image size 452X452 Pixel</small>
                                         </div>
                                     </div>
@@ -239,7 +241,9 @@ include "include/topnavbar.php";
                                     <div class="form-group mt-2">
                                         <button type="submit" id="submitBtn"
                                             class="btn btn-outline-primary btn-sm px-4 fa-pull-right"
-                                            <?php if($addcheck==0){echo 'disabled';} ?>><i
+                                            <?php if ($addcheck == 0) {
+                                                echo 'disabled';
+                                            } ?>><i
                                                 class="far fa-save"></i>&nbsp;Add</button>
                                     </div>
                                     <input type="hidden" name="recordOption" id="recordOption" value="1">
@@ -300,9 +304,9 @@ include "include/topnavbar.php";
                                     <select name="productlist" id="productlist" class="form-control form-control-sm"
                                         required>
                                         <option value="">Select</option>
-                                        <?php foreach($productarray as $rowprocutlist) { ?>
-                                        <option value="<?php echo $rowprocutlist->productID ?>">
-                                            <?php echo $rowprocutlist->product ?></option>
+                                        <?php foreach ($productarray as $rowprocutlist) { ?>
+                                            <option value="<?php echo $rowprocutlist->productID ?>">
+                                                <?php echo $rowprocutlist->product ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -315,7 +319,9 @@ include "include/topnavbar.php";
                             <div class="form-group mt-2">
                                 <button type="button" id="submitmodalBtn"
                                     class="btn btn-outline-primary btn-sm px-4 fa-pull-right"
-                                    <?php if($addcheck==0){echo 'disabled';} ?>><i
+                                    <?php if ($addcheck == 0) {
+                                        echo 'disabled';
+                                    } ?>><i
                                         class="far fa-save"></i>&nbsp;Add</button>
                                 <input type="submit" class="d-none" id="hidesubmit" value="">
                             </div>
@@ -353,9 +359,9 @@ include "include/topnavbar.php";
                                     <select name="productliststock" id="productliststock"
                                         class="form-control form-control-sm" required>
                                         <option value="">Select</option>
-                                        <?php foreach($productarray as $rowprocutlist) { ?>
-                                        <option value="<?php echo $rowprocutlist->productID ?>">
-                                            <?php echo $rowprocutlist->product ?></option>
+                                        <?php foreach ($productarray as $rowprocutlist) { ?>
+                                            <option value="<?php echo $rowprocutlist->productID ?>">
+                                                <?php echo $rowprocutlist->product ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -374,7 +380,9 @@ include "include/topnavbar.php";
                             <div class="form-group mt-2">
                                 <button type="button" id="submitstockmodalBtn"
                                     class="btn btn-outline-primary btn-sm px-4 fa-pull-right"
-                                    <?php if($addcheck==0){echo 'disabled';} ?>><i
+                                    <?php if ($addcheck == 0) {
+                                        echo 'disabled';
+                                    } ?>><i
                                         class="far fa-save"></i>&nbsp;Add</button>
                                 <input type="submit" class="d-none" id="hidestocksubmit" value="">
                             </div>
@@ -412,10 +420,12 @@ include "include/topnavbar.php";
                                     <select name="customerclose" id="customerclose" class="form-control form-control-sm"
                                         disabled>
                                         <option value="">Select</option>
-                                        <?php if($resultcustomer->num_rows > 0) {while ($rowcustomer = $resultcustomer-> fetch_assoc()) { ?>
-                                        <option value="<?php echo $rowcustomer['idtbl_customer'] ?>">
-                                            <?php echo $rowcustomer['customer'] ?></option>
-                                        <?php }} ?>
+                                        <?php if ($resultcustomer->num_rows > 0) {
+                                            while ($rowcustomer = $resultcustomer->fetch_assoc()) { ?>
+                                                <option value="<?php echo $rowcustomer['idtbl_customer'] ?>">
+                                                    <?php echo $rowcustomer['customer'] ?></option>
+                                        <?php }
+                                        } ?>
                                     </select>
                                     <input type="hidden" name="hidecustomerclose" id="hidecustomerclose" value="">
                                 </div>
@@ -426,10 +436,12 @@ include "include/topnavbar.php";
                                     <select name="productclose" id="productclose" class="form-control form-control-sm"
                                         required>
                                         <option value="">Select</option>
-                                        <?php if($resultproduct->num_rows > 0) {while ($rowproduct = $resultproduct-> fetch_assoc()) { ?>
-                                        <option value="<?php echo $rowproduct['idtbl_product'] ?>">
-                                            <?php echo $rowproduct['product_name'] ?></option>
-                                        <?php }} ?>
+                                        <?php if ($resultproduct->num_rows > 0) {
+                                            while ($rowproduct = $resultproduct->fetch_assoc()) { ?>
+                                                <option value="<?php echo $rowproduct['idtbl_product'] ?>">
+                                                    <?php echo $rowproduct['product_name'] ?></option>
+                                        <?php }
+                                        } ?>
                                     </select>
                                 </div>
                             </div>
@@ -450,7 +462,9 @@ include "include/topnavbar.php";
                             <div class="form-group mt-2">
                                 <button type="button" id="submitbtnclose"
                                     class="btn btn-outline-primary btn-sm px-4 fa-pull-right"
-                                    <?php if($addcheck==0){echo 'disabled';} ?>><i
+                                    <?php if ($addcheck == 0) {
+                                        echo 'disabled';
+                                    } ?>><i
                                         class="far fa-save"></i>&nbsp;Add</button>
                                 <input type="submit" class="d-none" id="hideclosesubmit" value="">
                             </div>
@@ -523,8 +537,8 @@ include "include/topnavbar.php";
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id = "assignmodalbody">
-                
+            <div class="modal-body" id="assignmodalbody">
+
             </div>
         </div>
     </div>
@@ -532,7 +546,7 @@ include "include/topnavbar.php";
 <?php include "include/footerscripts.php"; ?>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         var addcheck = '<?php echo $addcheck; ?>';
         var editcheck = '<?php echo $editcheck; ?>';
         var statuscheck = '<?php echo $statuscheck; ?>';
@@ -545,7 +559,7 @@ include "include/topnavbar.php";
         //     info: false,
         // })
 
-        $('#cuscredittype').change(function () {
+        $('#cuscredittype').change(function() {
             var type = $(this).val();
             if (type == 2) {
                 $('#cuscreditdays').prop('readonly', false);
@@ -574,8 +588,18 @@ include "include/topnavbar.php";
                     "data": "idtbl_customer"
                 },
                 {
-                    "data": "customer"
+                    "data": "customer",
+                    "render": function(data, type, full) {
+                        let label = "";
+
+                        if (full['status'] == 2) {
+                            label = ' <span class="badge bg-danger">Deactivated</span>';
+                        }
+
+                        return data + label;
+                    }
                 },
+
                 {
                     "data": "area"
                 },
@@ -586,7 +610,7 @@ include "include/topnavbar.php";
                     "targets": -1,
                     "className": 'text-center',
                     "data": null,
-                    "render": function (data, type, full) {
+                    "render": function(data, type, full) {
                         var html = '';
                         if (full['type'] == 1) {
                             html += 'Co-operate';
@@ -612,7 +636,7 @@ include "include/topnavbar.php";
                     "targets": -1,
                     "className": 'text-right',
                     "data": null,
-                    "render": function (data, type, full) {
+                    "render": function(data, type, full) {
                         var button = '';
                         button += '<a href="customerprofile.php?record=' + full[
                                 'idtbl_customer'] +
@@ -635,18 +659,18 @@ include "include/topnavbar.php";
                         //     button += '" id="' + full['idtbl_customer'] +
                         //         '"><i class="fas fa-shopping-cart"></i></button>';
                         // }
-                        if(editcheck=1){
-                            button+='<button type="button" class="btn btn-primary btn-sm btnEdit mr-1" id="'+full['idtbl_customer']+'"><i class="fas fa-pen"></i></button>';
+                        if (editcheck = 1) {
+                            button += '<button type="button" class="btn btn-primary btn-sm btnEdit mr-1" id="' + full['idtbl_customer'] + '"><i class="fas fa-pen"></i></button>';
                         }
-                        if(full['status']==1 && statuscheck==1){
-                            button+='<button type="button" data-url="process/statuscustomer.php?record='+full['idtbl_customer']+'&type=2" data-actiontype="2" class="btn btn-success btn-sm mr-1 btntableaction"><i class="fas fa-check"></i></button>';
+                        if (full['status'] == 1 && statuscheck == 1) {
+                            button += '<button type="button" data-url="process/statuscustomer.php?record=' + full['idtbl_customer'] + '&type=2" data-actiontype="2" class="btn btn-success btn-sm mr-1 btntableaction"><i class="fas fa-check"></i></button>';
                             // button+='<button type="button" class="btn btn-outline-pink btn-sm mr-1 btnclose ';if(deletecheck==0){button+='d-none';}button+='" id="'+full['idtbl_customer']+'"><i class="fas fa-times-circle"></i></button>';
                             // button+='<button data-url="process/statuscustomer.php?record='+full['idtbl_customer']+'&type=4"  data-actiontype="4" class="btn btn-outline-dark btn-sm mr-1 btntableaction"><i class="far fa-calendar-check"></i></button>';
-                        }else if(full['status']==2 && statuscheck==1){
-                            button+='<button type="button" data-url="process/statuscustomer.php?record='+full['idtbl_customer']+'&type=1" data-actiontype="1" class="btn btn-warning btn-sm mr-1 text-light btntableaction"><i class="fas fa-times"></i></button>';
+                        } else if (full['status'] == 2 && statuscheck == 1) {
+                            button += '<button type="button" data-url="process/statuscustomer.php?record=' + full['idtbl_customer'] + '&type=1" data-actiontype="1" class="btn btn-warning btn-sm mr-1 text-light btntableaction"><i class="fas fa-times"></i></button>';
                         }
-                        if(deletecheck==1){
-                            button+='<button type="button" data-url="process/statuscustomer.php?record='+full['idtbl_customer']+'&type=3" data-actiontype="3" class="btn btn-danger btn-sm text-light btntableaction"><i class="fas fa-trash-alt"></i></button>';
+                        if (deletecheck == 1) {
+                            button += '<button type="button" data-url="process/statuscustomer.php?record=' + full['idtbl_customer'] + '&type=3" data-actiontype="3" class="btn btn-danger btn-sm text-light btntableaction"><i class="fas fa-trash-alt"></i></button>';
                         }
 
                         return button;
@@ -654,7 +678,7 @@ include "include/topnavbar.php";
                 }
             ]
         });
-        $('#dataTable tbody').on('click', '.btnEdit', async function () {
+        $('#dataTable tbody').on('click', '.btnEdit', async function() {
             var r = await Otherconfirmation("You want to edit this ? ");
             if (r == true) {
                 var id = $(this).attr('id');
@@ -664,7 +688,7 @@ include "include/topnavbar.php";
                         recordID: id
                     },
                     url: 'getprocess/getcustomer.php',
-                    success: function (result) { //alert(result);
+                    success: function(result) { //alert(result);
                         var obj = JSON.parse(result);
                         $('#recordID').val(obj.id);
                         $('#cusName').val(obj.name);
@@ -698,7 +722,7 @@ include "include/topnavbar.php";
 
                         var dayslist = obj.dayslist;
                         var dayslistoption = [];
-                        $.each(dayslist, function (i, item) {
+                        $.each(dayslist, function(i, item) {
                             dayslistoption.push(dayslist[i].daysID);
                         });
 
@@ -715,13 +739,13 @@ include "include/topnavbar.php";
                 });
             }
         });
-        $('#dataTable tbody').on('click', '.btnAddProduct', function () {
+        $('#dataTable tbody').on('click', '.btnAddProduct', function() {
             var id = $(this).attr('id');
             loadproductpricelist(id);
             $('#hidecusid').val(id);
             $('#modaladdproductprice').modal('show');
         });
-        $('#submitmodalBtn').click(function () {
+        $('#submitmodalBtn').click(function() {
             if (!$("#addproductform")[0].checkValidity()) {
                 // If the form is invalid, submit it. The form won't actually submit;
                 // this will just cause the browser to display the native HTML5 error messages.
@@ -741,7 +765,7 @@ include "include/topnavbar.php";
                         hidecusid: hidecusid
                     },
                     url: 'process/customerproductpriceprocess.php',
-                    success: function (result) { //alert(result);
+                    success: function(result) { //alert(result);
                         action(result);
                         loadproductpricelist(hidecusid);
 
@@ -752,17 +776,17 @@ include "include/topnavbar.php";
                 });
             }
         });
-        $('#modaladdproductprice').on('hidden.bs.modal', function (e) {
+        $('#modaladdproductprice').on('hidden.bs.modal', function(e) {
             $('#viewenterlist').html('');
         });
 
-        $('#dataTable tbody').on('click', '.btnAddProductStock', function () {
+        $('#dataTable tbody').on('click', '.btnAddProductStock', function() {
             var id = $(this).attr('id');
             loadproductstocklist(id);
             $('#hidestockcusid').val(id);
             $('#modaladdproductstock').modal('show');
         });
-        $('#submitstockmodalBtn').click(function () {
+        $('#submitstockmodalBtn').click(function() {
             if (!$("#addproductstockform")[0].checkValidity()) {
                 // If the form is invalid, submit it. The form won't actually submit;
                 // this will just cause the browser to display the native HTML5 error messages.
@@ -782,7 +806,7 @@ include "include/topnavbar.php";
                         hidecusid: hidecusid
                     },
                     url: 'process/customerproductstockprocess.php',
-                    success: function (result) { //alert(result);
+                    success: function(result) { //alert(result);
                         action(result);
                         loadproductstocklist(hidecusid);
 
@@ -794,13 +818,13 @@ include "include/topnavbar.php";
             }
         });
         // Close shop
-        $('#dataTable tbody').on('click', '.btnclose', function () {
+        $('#dataTable tbody').on('click', '.btnclose', function() {
             var id = $(this).attr('id');
             $('#customerclose').val(id);
             $('#hidecustomerclose').val(id);
             $('#modalshopclose').modal('show');
         });
-        $('#productclose').change(function () {
+        $('#productclose').change(function() {
             var productID = $(this).val();
 
             $.ajax({
@@ -809,7 +833,7 @@ include "include/topnavbar.php";
                     productID: productID
                 },
                 url: 'getprocess/getclosepricesaccoproduct.php',
-                success: function (result) { //alert(result);
+                success: function(result) { //alert(result);
                     var obj = JSON.parse(result);
                     $('#hidenewprice').val(obj.newsaleprice);
                     $('#hideemptyprice').val(obj.emptyprice);
@@ -819,7 +843,7 @@ include "include/topnavbar.php";
                 }
             });
         });
-        $("#submitbtnclose").click(function () {
+        $("#submitbtnclose").click(function() {
             if (!$("#dealercloseform")[0].checkValidity()) {
                 // If the form is invalid, submit it. The form won't actually submit;
                 // this will just cause the browser to display the native HTML5 error messages.
@@ -852,7 +876,7 @@ include "include/topnavbar.php";
                 $('#emtyqtyclose').val('0');
 
                 var sum = 0;
-                $(".total").each(function () {
+                $(".total").each(function() {
                     sum += parseFloat($(this).text());
                 });
 
@@ -863,13 +887,13 @@ include "include/topnavbar.php";
                 $('#productclose').focus();
             }
         });
-        $('#tableclosecustomer').on('click', 'tr', function () {
+        $('#tableclosecustomer').on('click', 'tr', function() {
             var r = confirm("Are you sure, You want to remove this product ? ");
             if (r == true) {
                 $(this).closest('tr').remove();
 
                 var sum = 0;
-                $(".total").each(function () {
+                $(".total").each(function() {
                     sum += parseFloat($(this).text());
                 });
 
@@ -880,11 +904,11 @@ include "include/topnavbar.php";
                 $('#productclose').focus();
             }
         });
-        $('#btndealerclose').click(function () {
+        $('#btndealerclose').click(function() {
             jsonObj = [];
-            $("#tableclosecustomer tbody tr").each(function () {
+            $("#tableclosecustomer tbody tr").each(function() {
                 item = {}
-                $(this).find('td').each(function (col_idx) {
+                $(this).find('td').each(function(col_idx) {
                     item["col_" + (col_idx + 1)] = $(this).text();
                 });
                 jsonObj.push(item);
@@ -902,14 +926,14 @@ include "include/topnavbar.php";
                     total: total
                 },
                 url: 'process/customercloseprocess.php',
-                success: function (result) { //alert(result);
+                success: function(result) { //alert(result);
                     $('#modalshopclose').modal('hide');
                     action(result);
                     location.reload();
                 }
             });
         });
-        $('#dataTable tbody').on('click', '.btncloseview', function () {
+        $('#dataTable tbody').on('click', '.btncloseview', function() {
             var id = $(this).attr('id');
 
             $.ajax({
@@ -918,20 +942,20 @@ include "include/topnavbar.php";
                     customerID: id
                 },
                 url: 'getprocess/getclosedealerinformation.php',
-                success: function (result) { //alert(result);
+                success: function(result) { //alert(result);
                     $('#dealercloseviewinfo').html(result);
                     $('#modalshopcloseview').modal('show');
                 }
             });
         });
     });
-    
 
-    $('#btnassignref').click(function () {
+
+    $('#btnassignref').click(function() {
         $.ajax({
             type: "POST",
             url: 'getprocess/getassigncustomerdetails.php',
-            success: function (result) { //alert(result);
+            success: function(result) { //alert(result);
                 $('#assignmodalbody').html(result);
                 $('#modalassignref').modal('show')
 
@@ -948,7 +972,7 @@ include "include/topnavbar.php";
                 deletecheck: deletecheck
             },
             url: 'getprocess/getproductpriceaccocustomer.php',
-            success: function (result) { //alert(result);
+            success: function(result) { //alert(result);
                 $('#viewenterlist').html(result);
                 loadlistoption(cusID);
             }
@@ -956,7 +980,7 @@ include "include/topnavbar.php";
     }
 
     function loadlistoption(cusID) {
-        $('#tableproductlist tbody').on('click', '.btnremoveproduct', function () {
+        $('#tableproductlist tbody').on('click', '.btnremoveproduct', function() {
             var r = confirm("Are you sure, You want to Remove this ? ");
             if (r == true) {
                 var id = $(this).attr('id');
@@ -966,7 +990,7 @@ include "include/topnavbar.php";
                         cusproductID: id
                     },
                     url: 'process/statuscustomerproductprice.php',
-                    success: function (result) { //alert(result);
+                    success: function(result) { //alert(result);
                         action(result);
                         loadproductpricelist(cusID)
                     }
@@ -1034,7 +1058,7 @@ include "include/topnavbar.php";
                 deletecheck: deletecheck
             },
             url: 'getprocess/getproductstockaccocustomer.php',
-            success: function (result) { //alert(result);
+            success: function(result) { //alert(result);
                 $('#viewenterstocklist').html(result);
                 loadstocklistoption(cusID);
             }
@@ -1042,7 +1066,7 @@ include "include/topnavbar.php";
     }
 
     function loadstocklistoption(cusID) {
-        $('#tablestockproductlist tbody').on('click', '.btnremovestockproduct', function () {
+        $('#tablestockproductlist tbody').on('click', '.btnremovestockproduct', function() {
             var r = confirm("Are you sure, You want to Remove this ? ");
             if (r == true) {
                 var id = $(this).attr('id');
@@ -1052,7 +1076,7 @@ include "include/topnavbar.php";
                         cusproductID: id
                     },
                     url: 'process/statuscustomerproductstock.php',
-                    success: function (result) { //alert(result);
+                    success: function(result) { //alert(result);
                         action(result);
                         loadproductstocklist(cusID)
                     }
@@ -1090,4 +1114,3 @@ include "include/topnavbar.php";
     }
 </script>
 <?php include "include/footer.php"; ?>
-
