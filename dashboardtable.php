@@ -5,6 +5,8 @@ include "include/topnavbar.php";
 ?>
 
 <style>
+/* visual styling to match the financial dashboard look */
+/* KPI SECTION */
 .kpi-row {
     margin-top: 15px;
     margin-bottom: 10px;
@@ -28,6 +30,7 @@ include "include/topnavbar.php";
     width: 100%;
 }
 
+/* left side */
 .kpi-label {
     font-size: 13px;
     font-weight: 500;
@@ -50,6 +53,7 @@ include "include/topnavbar.php";
     margin-right: 4px;
 }
 
+/* right side (icon + sublabel) */
 .kpi-icon-wrap {
     text-align: right;
 }
@@ -64,6 +68,7 @@ include "include/topnavbar.php";
     margin-top: 6px;
 }
 
+/* individual accent borders (like cards in screenshot) */
 .kpi-border-blue {
     border-top: 3px solid #1f77b4;
 }
@@ -80,6 +85,7 @@ include "include/topnavbar.php";
     border-top: 3px solid #8b5cf6;
 }
 
+/* Responsive tweaks */
 @media (max-width: 991.98px) {
     .kpi-card {
         margin-bottom: 10px;
@@ -118,7 +124,7 @@ include "include/topnavbar.php";
                         <div class="card kpi-card kpi-border-blue flex-fill">
                             <div class="kpi-inner">
                                 <div>
-                                    <div class="kpi-label">Total Accounts Receivable</div>
+                                    <div class="kpi-label">Total Sales Today</div>
                                     <div class="kpi-value">
                                         <span class="kpi-unit">Rs.</span>
                                         <span id="kpi_receivable">0</span>
@@ -126,7 +132,7 @@ include "include/topnavbar.php";
                                 </div>
                                 <div class="kpi-icon-wrap">
                                     <i class="fas fa-file-invoice-dollar fa-2x" style="color:#1f77b4"></i>
-                                    <div class="kpi-sub">Outstanding</div>
+                                    <div class="kpi-sub">Invoices</div>
                                 </div>
                             </div>
                         </div>
@@ -136,7 +142,7 @@ include "include/topnavbar.php";
                         <div class="card kpi-card kpi-border-red flex-fill">
                             <div class="kpi-inner">
                                 <div>
-                                    <div class="kpi-label">Total Accounts Payable</div>
+                                    <div class="kpi-label">Daily Cash & Cheque </div>
                                     <div class="kpi-value">
                                         <span class="kpi-unit">Rs.</span>
                                         <span id="kpi_payable">0</span>
@@ -144,7 +150,7 @@ include "include/topnavbar.php";
                                 </div>
                                 <div class="kpi-icon-wrap">
                                     <i class="fas fa-hand-holding-usd fa-2x" style="color:#e74c3c"></i>
-                                    <div class="kpi-sub">Payables</div>
+                                    <div class="kpi-sub">Received</div>
                                 </div>
                             </div>
                         </div>
@@ -154,7 +160,7 @@ include "include/topnavbar.php";
                         <div class="card kpi-card kpi-border-green flex-fill">
                             <div class="kpi-inner">
                                 <div>
-                                    <div class="kpi-label">Equity</div>
+                                    <div class="kpi-label">Purchases This Month</div>
                                     <div class="kpi-value">
                                         <span class="kpi-unit">Rs.</span>
                                         <span id="kpi_equity">0</span>
@@ -162,7 +168,7 @@ include "include/topnavbar.php";
                                 </div>
                                 <div class="kpi-icon-wrap">
                                     <i class="fas fa-balance-scale fa-2x" style="color:#2ecc71"></i>
-                                    <div class="kpi-sub">Solvency</div>
+                                    <div class="kpi-sub">Orders</div>
                                 </div>
                             </div>
                         </div>
@@ -172,7 +178,7 @@ include "include/topnavbar.php";
                         <div class="card kpi-card kpi-border-purple flex-fill">
                             <div class="kpi-inner">
                                 <div>
-                                    <div class="kpi-label">Debt</div>
+                                    <div class="kpi-label">Daily Profit</div>
                                     <div class="kpi-value">
                                         <span class="kpi-unit">Rs.</span>
                                         <span id="kpi_debteq">0</span>
@@ -180,7 +186,7 @@ include "include/topnavbar.php";
                                 </div>
                                 <div class="kpi-icon-wrap">
                                     <i class="fas fa-file-contract fa-2x" style="color:#8e44ad"></i>
-                                    <div class="kpi-sub">Leverage</div>
+                                    <div class="kpi-sub">Earnings</div>
                                 </div>
                             </div>
                         </div>
@@ -269,8 +275,9 @@ function loadKPIData() {
         type: 'POST',
         dataType: 'json',
         success: function(data) {
+            // Map backend data to KPI cards
             $('#kpi_receivable').text('Rs. ' + Number(data.sales_today).toLocaleString());
-            $('#kpi_payable').text('Rs. ' + Number(data.profit_item).toLocaleString());
+            $('#kpi_payable').text('Rs. ' + Number(data.cash_today).toLocaleString());
             $('#kpi_equity').text('Rs. ' + Number(data.purchases_month).toLocaleString());
             $('#kpi_debteq').text('Rs. ' + Number(data.profit_month).toLocaleString());
         },
@@ -290,12 +297,14 @@ function loadRepList(callback) {
         const $repList = $("#repList");
         $repList.html(data);
 
+        // Initialize select2
         $repList.select2({
             placeholder: "Select up to 5 Sales Reps",
             maximumSelectionLength: 5,
             width: '200px'
         });
 
+        // Preselect top 3 reps (optional)
         const options = $repList.find("option");
         if (options.length > 0) {
             options.slice(0, 3).prop("selected", true);
@@ -492,6 +501,7 @@ $(document).ready(function() {
     let from3 = new Date(); from3.setMonth(from3.getMonth() - 2);
     $("#poFrom, #profitFrom").val(from3.toISOString().split('T')[0]);
 
+    // Initialize all charts
     loadKPIData();
     loadSalesChart();
     loadPurchaseOrderChart();
