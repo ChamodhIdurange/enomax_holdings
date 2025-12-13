@@ -506,7 +506,7 @@ include "include/topnavbar.php";
                                 <th class="d-none" style="position: sticky; top: 0; background: white; z-index: 1;">ProductID</th>
                                 <th class="d-none" style="position: sticky; top: 0; background: white; z-index: 1;">PoDetailID</th>
                                 <th class="text-center" style="position: sticky; top: 0; background: white; z-index: 1;">Qty</th>
-                                <!-- <th class="text-center" style="position: sticky; top: 0; background: white; z-index: 1;">Free Qty</th> -->
+                                <th class="text-center" style="position: sticky; top: 0; background: white; z-index: 1;">Free Qty</th>
                                 <th class="text-center" style="position: sticky; top: 0; background: white; z-index: 1;">Discount (%)</th>
                                 <th class="text-right" style="position: sticky; top: 0; background: white; z-index: 1;">Discount</th>
                                 <th class="text-right" style="position: sticky; top: 0; background: white; z-index: 1;">Total</th>
@@ -1176,6 +1176,7 @@ include "include/topnavbar.php";
                         var product = $("#modaleditproduct option:selected").text();
                         var saleprice = $('#modaleditsaleprice').val();
                         var qty = $('#modaleditqty').val();
+                        var freeqty = $('#modaleditfreeqty').val();
                         var productCode = $('#modaleditproductcode').val();
                         var discountAmount = $('#modaleditdiscountamount').val();
                         var discountPercentage = $('#modaleditdiscountpercentage').val();
@@ -1189,7 +1190,8 @@ include "include/topnavbar.php";
                             '</td><td class="d-none">' + productID +
                             '</td><td class="d-none">' + 0 +
                             '</td><td class="text-center editnewqty">' +
-                            qty +
+                            qty +'</td><td class="text-center editfreeqty">' +
+                            freeqty +
                             '</td><td class="text-center editlinediscountpernetage">' +
                             discountPercentage +
                             '</td><td class="text-center editlinediscount">' +
@@ -1392,6 +1394,7 @@ include "include/topnavbar.php";
                             <td class="d-none">${item.productid}</td>
                             <td class="d-none">${item.podetailid}</td>
                             <td class="text-center editnewqty">${item.orderqty}</td>
+                            <td class="text-center editfreeqty">${item.freeqty}</td>
                             <td class="text-center editlinediscountpernetage">${item.discountpresent}</td>
                             <td class="text-center editlinediscount">${item.discount}</td>
                             <td class="text-right total">${item.total}</td>

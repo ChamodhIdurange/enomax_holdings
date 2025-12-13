@@ -95,12 +95,13 @@ if ($conn->query($updatePoValues) == true) {
         $productID = $rowtabledata->col_3;
         $podetailId = $rowtabledata->col_4;
         $qty = $rowtabledata->col_5;
-        $linediscountprecentage = $rowtabledata->col_6;
-        $linediscountamount = $rowtabledata->col_7;
-        $saleprice = $rowtabledata->col_9;
-        $status = $rowtabledata->col_11;
-        $fullTotal = $rowtabledata->col_12;
-        $newstatus = $rowtabledata->col_13;
+        $freeqty = $rowtabledata->col_6;
+        $linediscountprecentage = $rowtabledata->col_7;
+        $linediscountamount = $rowtabledata->col_8;
+        $saleprice = $rowtabledata->col_10;
+        $status = $rowtabledata->col_12;
+        $fullTotal = $rowtabledata->col_13;
+        $newstatus = $rowtabledata->col_14;
 
         $netTotal = $fullTotal - $linediscountamount;
 
@@ -112,9 +113,9 @@ if ($conn->query($updatePoValues) == true) {
             if ($newstatus == 0) {
                 // This is to check whether poder status should be changed or now
                 if ($isChangeStatus == 1) {
-                    $updatePoDetail = "UPDATE  `tbl_customer_order_detail` SET `confirmqty`='$qty', `discountpresent`='$linediscountprecentage', `discount`='$linediscountamount', `total`='$netTotal', `status`='$status', `saleprice` = '$saleprice' WHERE `idtbl_customer_order_detail` = '$podetailId'";
+                    $updatePoDetail = "UPDATE  `tbl_customer_order_detail` SET `confirmqty`='$qty',`freeqty`='$freeqty', `discountpresent`='$linediscountprecentage', `discount`='$linediscountamount', `total`='$netTotal', `status`='$status', `saleprice` = '$saleprice' WHERE `idtbl_customer_order_detail` = '$podetailId'";
                 } else {
-                    $updatePoDetail = "UPDATE  `tbl_customer_order_detail` SET `orderqty`='$qty', `discountpresent`='$linediscountprecentage', `discount`='$linediscountamount', `total`='$netTotal', `status`='$status', `saleprice` = '$saleprice' WHERE `idtbl_customer_order_detail` = '$podetailId'";
+                    $updatePoDetail = "UPDATE  `tbl_customer_order_detail` SET `orderqty`='$qty', `freeqty`='$freeqty', `discountpresent`='$linediscountprecentage', `discount`='$linediscountamount', `total`='$netTotal', `status`='$status', `saleprice` = '$saleprice' WHERE `idtbl_customer_order_detail` = '$podetailId'";
                 }
 
 
@@ -128,7 +129,7 @@ if ($conn->query($updatePoValues) == true) {
 
                 $unitprice = $productdata['unitprice'];
 
-                $insertPoDetail = "INSERT INTO `tbl_customer_order_detail`(`orderqty`, `total`, `confirmqty`, `dispatchqty`, `qty`, `unitprice`, `saleprice`, `discountpresent`, `discount`, `status`, `insertdatetime`, `tbl_user_idtbl_user`, `tbl_customer_order_idtbl_customer_order`, `tbl_product_idtbl_product`) VALUES ('$qty', '$netTotal', '$qty', '$qty', '$qty', '$unitprice','$saleprice', '$linediscountprecentage', '$linediscountamount', '1','$updatedatetime','$userID','$poID','$productID')";
+                $insertPoDetail = "INSERT INTO `tbl_customer_order_detail`(`orderqty`, `total`, `confirmqty`, `dispatchqty`, `qty`,`freeqty`, `unitprice`, `saleprice`, `discountpresent`, `discount`, `status`, `insertdatetime`, `tbl_user_idtbl_user`, `tbl_customer_order_idtbl_customer_order`, `tbl_product_idtbl_product`) VALUES ('$qty', '$netTotal', '$qty', '$qty', '$qty', '$freeqty', '$unitprice','$saleprice', '$linediscountprecentage', '$linediscountamount', '1','$updatedatetime','$userID','$poID','$productID')";
                 $conn->query($insertPoDetail);
 
                 $updateHoldStock = "INSERT INTO `tbl_customer_order_hold_stock`(`qty`, `invoiceissue`, `status`, `insertdatetime`, `tbl_user_idtbl_user`, `tbl_product_idtbl_product`, `tbl_customer_order_idtbl_customer_order`) VALUES ('$qty', '0', '1', '$updatedatetime', '$userID', '$productID','$poID')";
@@ -136,9 +137,9 @@ if ($conn->query($updatePoValues) == true) {
         } else if ($acceptanceType == 2) {
             if ($newstatus == 0) {
                 if ($isChangeStatus == 1) {
-                    $updatePoDetail = "UPDATE  `tbl_customer_order_detail` SET `dispatchqty`='$qty', `discountpresent`='$linediscountprecentage', `discount`='$linediscountamount', `total`='$netTotal', `status`='$status', `saleprice` = '$saleprice'  WHERE `idtbl_customer_order_detail` = '$podetailId'";
+                    $updatePoDetail = "UPDATE  `tbl_customer_order_detail` SET `dispatchqty`='$qty',`freeqty`='$freeqty', `discountpresent`='$linediscountprecentage', `discount`='$linediscountamount', `total`='$netTotal', `status`='$status', `saleprice` = '$saleprice'  WHERE `idtbl_customer_order_detail` = '$podetailId'";
                 } else {
-                    $updatePoDetail = "UPDATE  `tbl_customer_order_detail` SET `confirmqty`='$qty', `discountpresent`='$linediscountprecentage', `discount`='$linediscountamount', `total`='$netTotal', `status`='$status', `saleprice` = '$saleprice'  WHERE `idtbl_customer_order_detail` = '$podetailId'";
+                    $updatePoDetail = "UPDATE  `tbl_customer_order_detail` SET `confirmqty`='$qty',`freeqty`='$freeqty', `discountpresent`='$linediscountprecentage', `discount`='$linediscountamount', `total`='$netTotal', `status`='$status', `saleprice` = '$saleprice'  WHERE `idtbl_customer_order_detail` = '$podetailId'";
                 }
 
                 $conn->query($updatePoDetail);
@@ -151,7 +152,7 @@ if ($conn->query($updatePoValues) == true) {
 
                 $unitprice = $productdata['unitprice'];
 
-                $insertPoDetail = "INSERT INTO `tbl_customer_order_detail`(`orderqty`, `total`, `confirmqty`, `dispatchqty`, `qty`, `unitprice`, `saleprice`, `discountpresent`, `discount`, `status`, `insertdatetime`, `tbl_user_idtbl_user`, `tbl_customer_order_idtbl_customer_order`, `tbl_product_idtbl_product`) VALUES ('$qty', '$netTotal', '$qty', '$qty', '$qty', '$unitprice','$saleprice', '$linediscountprecentage', '$linediscountamount', '1','$updatedatetime','$userID','$poID','$productID')";
+                $insertPoDetail = "INSERT INTO `tbl_customer_order_detail`(`orderqty`, `total`, `confirmqty`, `dispatchqty`, `qty`,`freeqty`, `unitprice`, `saleprice`, `discountpresent`, `discount`, `status`, `insertdatetime`, `tbl_user_idtbl_user`, `tbl_customer_order_idtbl_customer_order`, `tbl_product_idtbl_product`) VALUES ('$qty', '$netTotal', '$qty', '$qty', '$qty','$freeqty', '$unitprice','$saleprice', '$linediscountprecentage', '$linediscountamount', '1','$updatedatetime','$userID','$poID','$productID')";
                 $conn->query($insertPoDetail);
 
                 $updateHoldStock = "INSERT INTO `tbl_customer_order_hold_stock`(`qty`, `invoiceissue`, `status`, `insertdatetime`, `tbl_user_idtbl_user`, `tbl_product_idtbl_product`, `tbl_customer_order_idtbl_customer_order`) VALUES ('$qty', '0', '1', '$updatedatetime', '$userID', '$productID','$poID')";
@@ -160,11 +161,11 @@ if ($conn->query($updatePoValues) == true) {
             if ($newstatus == 0) {
                 if ($isChangeStatus == 1) {
 
-                    $updatePoDetail = "UPDATE  `tbl_customer_order_detail` SET `qty`='$qty', `discountpresent`='$linediscountprecentage', `discount`='$linediscountamount', `total`='$netTotal', `status`='$status', `saleprice` = '$saleprice'  WHERE `idtbl_customer_order_detail` = '$podetailId'";
+                    $updatePoDetail = "UPDATE  `tbl_customer_order_detail` SET `qty`='$qty',`freeqty`='$freeqty', `discountpresent`='$linediscountprecentage', `discount`='$linediscountamount', `total`='$netTotal', `status`='$status', `saleprice` = '$saleprice'  WHERE `idtbl_customer_order_detail` = '$podetailId'";
 
                     $updateHoldStock = "UPDATE  `tbl_customer_order_hold_stock` SET `qty`='$qty', `status`='3', `invoiceissue`='1' WHERE `tbl_product_idtbl_product` = '$productID' AND `tbl_customer_order_idtbl_customer_order` = '$poID'";
                 } else {
-                    $updatePoDetail = "UPDATE  `tbl_customer_order_detail` SET `dispatchqty`='$qty', `discountpresent`='$linediscountprecentage', `discount`='$linediscountamount', `total`='$netTotal', `status`='$status', `saleprice` = '$saleprice'  WHERE `idtbl_customer_order_detail` = '$podetailId'";
+                    $updatePoDetail = "UPDATE  `tbl_customer_order_detail` SET `dispatchqty`='$qty', `freeqty`='$freeqty', `discountpresent`='$linediscountprecentage', `discount`='$linediscountamount', `total`='$netTotal', `status`='$status', `saleprice` = '$saleprice'  WHERE `idtbl_customer_order_detail` = '$podetailId'";
 
                     $updateHoldStock = "UPDATE  `tbl_customer_order_hold_stock` SET `qty`='$qty', `status`='1', `invoiceissue`='0' WHERE `tbl_product_idtbl_product` = '$productID' AND `tbl_customer_order_idtbl_customer_order` = '$poID'";
                 }
@@ -177,7 +178,7 @@ if ($conn->query($updatePoValues) == true) {
 
                 $unitprice = $productdata['unitprice'];
 
-                $insertPoDetail = "INSERT INTO `tbl_customer_order_detail`(`orderqty`, `total`, `confirmqty`, `dispatchqty`, `qty`, `unitprice`, `saleprice`, `discountpresent`, `discount`, `status`, `insertdatetime`, `tbl_user_idtbl_user`, `tbl_customer_order_idtbl_customer_order`, `tbl_product_idtbl_product`) VALUES ('$qty', '$netTotal', '$qty', '$qty', '$qty', '$unitprice','$saleprice', '$linediscountprecentage', '$linediscountamount', '1','$updatedatetime','$userID','$poID','$productID')";
+                $insertPoDetail = "INSERT INTO `tbl_customer_order_detail`(`orderqty`, `total`, `confirmqty`, `dispatchqty`, `qty`,`freeqty`, `unitprice`, `saleprice`, `discountpresent`, `discount`, `status`, `insertdatetime`, `tbl_user_idtbl_user`, `tbl_customer_order_idtbl_customer_order`, `tbl_product_idtbl_product`) VALUES ('$qty', '$netTotal', '$qty', '$qty', '$qty', '$freeqty', '$unitprice','$saleprice', '$linediscountprecentage', '$linediscountamount', '1','$updatedatetime','$userID','$poID','$productID')";
                 $conn->query($insertPoDetail);
 
                 $updateHoldStock = "INSERT INTO `tbl_customer_order_hold_stock`(`qty`, `invoiceissue`, `status`, `insertdatetime`, `tbl_user_idtbl_user`, `tbl_product_idtbl_product`, `tbl_customer_order_idtbl_customer_order`) VALUES ('$qty', '0', '1', '$updatedatetime', '$userID', '$productID','$poID')";

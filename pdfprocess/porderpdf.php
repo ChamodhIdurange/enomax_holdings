@@ -75,7 +75,7 @@ if($confirm == 1 && ($dispatchissue == null || $dispatchissue == 0) && ($deliver
     $qtyflag = 3;
 }
 
-$sqlporderdetail = "SELECT `p`.`product_name`, `p`.`product_code`, `p`.`idtbl_product`, `d`.`orderqty`, `d`.`confirmqty`, `d`.`discount`, `d`.`dispatchqty`, `d`.`qty`, `d`.`saleprice` FROM `tbl_customer_order_detail` AS `d` LEFT JOIN `tbl_product` AS `p` ON `p`.`idtbl_product`=`d`.`tbl_product_idtbl_product` WHERE `d`.`tbl_customer_order_idtbl_customer_order`='$recordID' AND `d`.`status`=1";
+$sqlporderdetail = "SELECT `p`.`product_name`, `p`.`product_code`, `p`.`idtbl_product`, `d`.`orderqty`, `d`.`confirmqty`, `d`.`discount`, `d`.`dispatchqty`, `d`.`qty`,`d`.`freeqty`, `d`.`saleprice` FROM `tbl_customer_order_detail` AS `d` LEFT JOIN `tbl_product` AS `p` ON `p`.`idtbl_product`=`d`.`tbl_product_idtbl_product` WHERE `d`.`tbl_customer_order_idtbl_customer_order`='$recordID' AND `d`.`status`=1";
 $resultporderdetail = $conn->query($sqlporderdetail);
 
 $html = '
@@ -243,6 +243,7 @@ $html = '
                     <th id="detailth">Code</th>
                     <th id="detailth">Product Name</th>
                     <th id="detailth" align="right">Quantity</th>
+                    <th id="detailth" align="right">Free</th>
                     <th id="detailth" align="right">Sale Price</th>
                     <th id="detailth" align="right">Discount</th>
                     <th id="detailth" align="right">Total</th>
@@ -260,6 +261,8 @@ $html = '
                 $count = $count + 1;
                 $count1++;
                 $itemCount++;
+
+                $freeqty = $rowporderdetail['freeqty'];
 
                 $qtyValue = 0;
                 if ($qtyflag == 0) {
@@ -293,6 +296,7 @@ $html = '
                         <td id="detailtd">' . $rowporderdetail['product_code'] . '</td>
                         <td id="detailtd">' . $rowporderdetail['product_name'] . '</td>
                         <td id="detailtd" align="right">' . $qtyValue . '</td>
+                        <td id="detailtd" align="right">' . $freeqty . '</td>
                         <td id="detailtd" align="right">' . number_format($base_price, 2) . '</td>
                         <td id="detailtd" align="right">' . number_format($base_discount, 2) . '</td>
                         <td id="detailtd" align="right">' . number_format($line_total_base, 2) . '</td>

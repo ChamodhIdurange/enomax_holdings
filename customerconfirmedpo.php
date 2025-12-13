@@ -421,6 +421,13 @@ include "include/topnavbar.php";
                     </div>
                     <div class="col-3">
                         <div class="form-group mb-1">
+                            <label class="small font-weight-bold text-dark">Free Qty*</label>
+                            <input type="text" class="form-control form-control-sm" id="modaleditfreeqty" name="modaleditfreeqty"
+                                required>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group mb-1">
                             <label class="small font-weight-bold text-dark">Available Qty*</label>
                             <input type="text" class="form-control form-control-sm" id="modaleditholdqty" name="modaleditholdqty"
                                 readonly>
@@ -495,6 +502,7 @@ include "include/topnavbar.php";
                                 <th class="d-none" style="position: sticky; top: 0; background: white; z-index: 1;">ProductID</th>
                                 <th class="d-none" style="position: sticky; top: 0; background: white; z-index: 1;">PoDetailID</th>
                                 <th class="text-center" style="position: sticky; top: 0; background: white; z-index: 1;">Qty</th>
+                                <th class="text-center" style="position: sticky; top: 0; background: white; z-index: 1;">Free Qty</th>
                                 <th class="text-center" style="position: sticky; top: 0; background: white; z-index: 1;">Discount (%)</th>
                                 <th class="text-right" style="position: sticky; top: 0; background: white; z-index: 1;">Discount</th>
                                 <th class="text-right" style="position: sticky; top: 0; background: white; z-index: 1;">Total</th>
@@ -1076,9 +1084,32 @@ include "include/topnavbar.php";
                     $('#modaleditholdqty').val(obj.availableqty);
                     $('#modaleditavailableqty').val(obj.holdqty);
                     $('#modaleditqty').val(0);
+                    $('#modaleditfreeqty').val(0);
                 }
             });
         })
+
+        $('#modaleditqty').keyup(function() {
+            var qty = $(this).val();
+            var productID = $('#modaleditproduct').val();
+
+            if (productID && qty > 0) {
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        product_id: productID,
+                        qty: qty
+                    },
+                    url: 'getprocess/getfreeqty.php',
+                    success: function(result) {
+                        var obj = JSON.parse(result);
+                        $('#modaleditfreeqty').val(obj.freequantity);
+                    }
+                });
+            } else {
+                $('#modaleditfreeqty').val(0);
+            }
+        });
 
         $('#modaleditsaleprice, #modaleditqty').keyup(function(){
             calculateNewAddedProductTot();
@@ -1135,6 +1166,7 @@ include "include/topnavbar.php";
                         var product = $("#modaleditproduct option:selected").text();
                         var saleprice = $('#modaleditsaleprice').val();
                         var qty = $('#modaleditqty').val();
+                        var freeqty = $('#modaleditfreeqty').val();
                         var productCode = $('#modaleditproductcode').val();
                         var discountAmount = $('#modaleditdiscountamount').val();
                         var discountPercentage = $('#modaleditdiscountpercentage').val();
@@ -1148,7 +1180,8 @@ include "include/topnavbar.php";
                             '</td><td class="d-none">' + productID +
                             '</td><td class="d-none">' + 0 +
                             '</td><td class="text-center editnewqty">' +
-                            qty +
+                            qty +'</td><td class="text-center editfreeqty">' +
+                            freeqty +
                             '</td><td class="text-center editlinediscountpernetage">' +
                             discountPercentage +
                             '</td><td class="text-center editlinediscount">' +
@@ -1491,6 +1524,7 @@ include "include/topnavbar.php";
                             <td class="d-none">${item.productid}</td>
                             <td class="d-none">${item.podetailid}</td>
                             <td class="text-center editnewqty">${item.confirmqty}</td>
+                            <td class="text-center editfreeqty">${item.freeqty}</td>
                             <td class="text-center editlinediscountpernetage">${item.discountpresent}</td>
                             <td class="text-center editlinediscount">${item.discount}</td>
                             <td class="text-right total">${item.total}</td>
@@ -1684,6 +1718,28 @@ include "include/topnavbar.php";
                     $('#newqty').select();
                 }
             });
+        });
+
+        $('#newqty').keyup(function() {
+            var qty = $(this).val();
+            var productID = $('#product').val();
+
+            if (productID && qty > 0) {
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        product_id: productID,
+                        qty: qty
+                    },
+                    url: 'getprocess/getfreeqty.php',
+                    success: function(result) {
+                        var obj = JSON.parse(result);
+                        $('#freeqty').val(obj.freequantity);
+                    }
+                });
+            } else {
+                $('#freeqty').val(0);
+            }
         });
 
         $('#customer').change(function () {
