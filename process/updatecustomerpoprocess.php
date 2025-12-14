@@ -195,12 +195,12 @@ if ($conn->query($updatePoValues) == true) {
                 $discount = $row['discount'];
 
                 if ($isChangeStatus == 1) {
-                    $insertInvoideDetail = "INSERT INTO `tbl_invoice_detail`(`qty`, `unitprice`, `saleprice`, `discount`, `total`, `status`, `updatedatetime`, `tbl_user_idtbl_user`, `tbl_product_idtbl_product`, `tbl_invoice_idtbl_invoice`) VALUES('$qty', '$unitprice', '$saleprice', '$discount', '$lineTot', '1', '$updatedatetime', '$userID', '$productID', '$invoiceId')";
+                    $insertInvoideDetail = "INSERT INTO `tbl_invoice_detail`(`qty`,`freeqty`, `unitprice`, `saleprice`, `discount`, `total`, `status`, `updatedatetime`, `tbl_user_idtbl_user`, `tbl_product_idtbl_product`, `tbl_invoice_idtbl_invoice`) VALUES('$qty', '$freeqty', '$unitprice', '$saleprice', '$discount', '$lineTot', '1', '$updatedatetime', '$userID', '$productID', '$invoiceId')";
                     $conn->query($insertInvoideDetail);
 
                     // Stock Update
                     $productID = $row['tbl_product_idtbl_product'];
-                    $reducedqty = $qty;
+                    $reducedqty = $qty+$freeqty;
                     $freeproductid = 0;
                     $freeqty = 0;
 

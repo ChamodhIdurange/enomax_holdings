@@ -1074,31 +1074,31 @@ include "include/topnavbar.php";
 
         // Update free qty when product or qty changes in modal edit
         $('#modaleditproduct').change(function() {
-        var productID = $('#modaleditproduct').val();
-        var product = $("#modaleditproduct option:selected").text();
+            var productID = $('#modaleditproduct').val();
+            var product = $("#modaleditproduct option:selected").text();
 
-        $.ajax({
-            type: "POST",
-            data: {
-                recordID: productID
-            },
-            url: 'getprocess/getproduct.php',
-            success: function(result) {
-                var obj = JSON.parse(result);
+            $.ajax({
+                type: "POST",
+                data: {
+                    recordID: productID
+                },
+                url: 'getprocess/getproduct.php',
+                success: function(result) {
+                    var obj = JSON.parse(result);
 
-                $('#modaleditproductcode').val(obj.productcode);
-                $('#modaleditsaleprice').val(obj.saleprice);
-                $('#modaleditproductunitprice').val(obj.unitprice);
-                $('#modaleditholdqty').val(obj.availableqty);
-                $('#modaleditavailableqty').val(obj.holdqty);
-                $('#modaleditqty').val(0);
-                $('#modaleditfreeqty').val(0);
-                $('#modaleditdiscountpercentage').val(0);
-                $('#modaleditdiscountamount').val(0);
-                $('#modaleditnettotal').val(0);
-            }
-        });
-    })
+                    $('#modaleditproductcode').val(obj.productcode);
+                    $('#modaleditsaleprice').val(obj.saleprice);
+                    $('#modaleditproductunitprice').val(obj.unitprice);
+                    $('#modaleditholdqty').val(obj.availableqty);
+                    $('#modaleditavailableqty').val(obj.holdqty);
+                    $('#modaleditqty').val(0);
+                    $('#modaleditfreeqty').val(0);
+                    $('#modaleditdiscountpercentage').val(0);
+                    $('#modaleditdiscountamount').val(0);
+                    $('#modaleditnettotal').val(0);
+                }
+            });
+        })
 
         $('#modaleditqty').keyup(function() {
             var qty = $(this).val();
@@ -1190,7 +1190,7 @@ include "include/topnavbar.php";
                             '</td><td class="d-none">' + productID +
                             '</td><td class="d-none">' + 0 +
                             '</td><td class="text-center editnewqty">' +
-                            qty +'</td><td class="text-center editfreeqty">' +
+                            qty + '</td><td class="text-center editfreeqty">' +
                             freeqty +
                             '</td><td class="text-center editlinediscountpernetage">' +
                             discountPercentage +
@@ -2018,7 +2018,6 @@ include "include/topnavbar.php";
 
         function textremoveQtyandPrecentageAndSalePrice(classname, row) {
             $(classname).keyup(function(e) {
-
                 if (e.keyCode === 13) {
                     qtyChangeCheckStock('.optionnewqty', row).then((donotproceed) => {
                         if (donotproceed) {
@@ -2031,24 +2030,25 @@ include "include/topnavbar.php";
                         td.empty().html(val).data('editing', false);
 
                         var rowID = row.closest("td").parent()[0].rowIndex;
-                        var unitprice = parseFloat(row.closest("tr").find('td:eq(8)').text());
+                        var unitprice = parseFloat(row.closest("tr").find('td:eq(9)').text());
                         var newqty = parseFloat(row.closest("tr").find('td:eq(4)').text());
-                        var discountprecent = parseFloat(row.closest("tr").find('td:eq(5)').text());
-                        var discountamount = parseFloat(row.closest("tr").find('td:eq(6)').text());
+                        var discountprecent = parseFloat(row.closest("tr").find('td:eq(6)').text());
+
+                        // Handle NaN or empty values
+                        if (isNaN(discountprecent)) {
+                            discountprecent = 0;
+                        }
 
                         var totwithoutdiscount = newqty * unitprice;
-                        var totnew = totwithoutdiscount;
-                        var newdiscount = (totnew * discountprecent) / 100;
-
-                        totnew = totnew - newdiscount;
+                        var newdiscount = (totwithoutdiscount * discountprecent) / 100;
+                        var totnew = totwithoutdiscount - newdiscount;
 
                         var showtotnew = addCommas(parseFloat(totnew).toFixed(2));
+                        var shownewdiscount = parseFloat(newdiscount).toFixed(2);
 
-                        $('#tableorderview').find('tr').eq(rowID).find('td:eq(7)').text(showtotnew);
-                        $('#tableorderview').find('tr').eq(rowID).find('td:eq(6)').text(newdiscount);
-                        $('#tableorderview').find('tr').eq(rowID).find('td:eq(11)').text(
-                            totwithoutdiscount
-                        );
+                        $('#tableorderview').find('tr').eq(rowID).find('td:eq(8)').text(showtotnew);
+                        $('#tableorderview').find('tr').eq(rowID).find('td:eq(7)').text(shownewdiscount);
+                        $('#tableorderview').find('tr').eq(rowID).find('td:eq(12)').text(totwithoutdiscount);
 
                         tabletotal1();
                     }).catch(error => {
@@ -2057,7 +2057,6 @@ include "include/topnavbar.php";
                 }
             });
         }
-
 
         $('#tableorderview tbody').on('click', '.colunitprice', function(e) {
             var row = $(this);

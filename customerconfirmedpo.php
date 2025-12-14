@@ -154,8 +154,8 @@ include "include/topnavbar.php";
                                         <option value="">Select</option>
                                         <?php if ($resultmanagerlist->num_rows > 0) {
                                             while ($rowsalesmanager = $resultmanagerlist->fetch_assoc()) { ?>
-                                        <option value="<?php echo $rowsalesmanager['idtbl_sales_manager'] ?>">
-                                            <?php echo $rowsalesmanager['salesmanagername'] ?></option>
+                                                <option value="<?php echo $rowsalesmanager['idtbl_sales_manager'] ?>">
+                                                    <?php echo $rowsalesmanager['salesmanagername'] ?></option>
                                         <?php }
                                         } ?>
                                     </select>
@@ -166,8 +166,8 @@ include "include/topnavbar.php";
                                         <option value="">Select</option>
                                         <?php if ($resulthelperlist->num_rows > 0) {
                                             while ($rowemplist = $resulthelperlist->fetch_assoc()) { ?>
-                                        <option value="<?php echo $rowemplist['idtbl_employee'] ?>">
-                                            <?php echo $rowemplist['name'] ?></option>
+                                                <option value="<?php echo $rowemplist['idtbl_employee'] ?>">
+                                                    <?php echo $rowemplist['name'] ?></option>
                                         <?php }
                                         } ?>
                                     </select>
@@ -178,8 +178,8 @@ include "include/topnavbar.php";
                                         <option value="">Select</option>
                                         <?php if ($resultlocationlist->num_rows > 0) {
                                             while ($rowloclist = $resultlocationlist->fetch_assoc()) { ?>
-                                        <option value="<?php echo $rowloclist['idtbl_locations'] ?>">
-                                            <?php echo $rowloclist['locationname'] ?></option>
+                                                <option value="<?php echo $rowloclist['idtbl_locations'] ?>">
+                                                    <?php echo $rowloclist['locationname'] ?></option>
                                         <?php }
                                         } ?>
                                     </select>
@@ -245,7 +245,7 @@ include "include/topnavbar.php";
                                         class="form-control form-control-sm" value="" readonly>
                                 </div>
                                 <div class="form-row mb-1 col-4">
-                                <div class="col">
+                                    <div class="col">
                                         <label class="small font-weight-bold text-dark">Hold Qty*</label>
                                         <input type="text" id="holdqty" name="holdqty"
                                             class="form-control form-control-sm" value="0" readonly>
@@ -283,7 +283,9 @@ include "include/topnavbar.php";
                                 </div>
                                 <div class="form-group mt-4 col-3">
                                     <button type="button" id="formsubmit" class="btn btn-outline-primary btn-sm"
-                                        <?php if ($addcheck == 0) {echo 'disabled';} ?>><i
+                                        <?php if ($addcheck == 0) {
+                                            echo 'disabled';
+                                        } ?>><i
                                             class="fas fa-plus"></i>&nbsp;Add
                                         Product</button>
                                     <input name="submitBtn" type="submit" value="Save" id="submitBtn" class="d-none">
@@ -363,7 +365,9 @@ include "include/topnavbar.php";
 
                     <div class="form-group mt-2">
                         <button type="button" id="btncreateorder" class="btn btn-outline-primary btn-sm fa-pull-right"
-                            <?php if ($addcheck == 0) {echo 'disabled';} ?>><i class="fas fa-save"></i>&nbsp;Create
+                            <?php if ($addcheck == 0) {
+                                echo 'disabled';
+                            } ?>><i class="fas fa-save"></i>&nbsp;Create
                             Order</button>
                     </div>
                     <div class="form-group mt-3 text-danger small">
@@ -416,7 +420,7 @@ include "include/topnavbar.php";
                             <label class="small font-weight-bold text-dark">Qty*</label>
                             <input type="text" class="form-control form-control-sm" id="modaleditqty" name="modaleditqty"
                                 required>
-                               
+
                         </div>
                     </div>
                     <div class="col-3">
@@ -431,7 +435,7 @@ include "include/topnavbar.php";
                             <label class="small font-weight-bold text-dark">Available Qty*</label>
                             <input type="text" class="form-control form-control-sm" id="modaleditholdqty" name="modaleditholdqty"
                                 readonly>
-                               
+
                         </div>
                     </div>
                     <div class="col-3">
@@ -439,7 +443,7 @@ include "include/topnavbar.php";
                             <label class="small font-weight-bold text-dark">Hold Qty*</label>
                             <input type="text" class="form-control form-control-sm" id="modaleditavailableqty" name="modaleditavailableqty"
                                 readonly>
-                               
+
                         </div>
                     </div>
                 </div>
@@ -455,14 +459,14 @@ include "include/topnavbar.php";
                         <div class="form-group mb-1">
                             <label class="small font-weight-bold text-dark">Discount (%)*</label>
                             <input type="text" class="form-control form-control-sm" id="modaleditdiscountpercentage" name="modaleditdiscountpercentage"
-                                value = "0" required>
+                                value="0" required>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group mb-1">
                             <label class="small font-weight-bold text-dark">Discount*</label>
                             <input type="text" class="form-control form-control-sm" id="modaleditdiscountamount" name="modaleditdiscountamount"
-                                value = "0" required>
+                                value="0" required>
                         </div>
                     </div>
                     <div class="col">
@@ -470,7 +474,7 @@ include "include/topnavbar.php";
                             <label class="small font-weight-bold text-dark">Total*</label>
                             <input type="text" class="form-control form-control-sm" id="modaleditnettotal" name="modaleditnettotal"
                                 required>
-                               
+
                         </div>
                     </div>
                     <input type="hidden" id="modaleditproductcode" id="modaleditproductcode">
@@ -479,7 +483,7 @@ include "include/topnavbar.php";
                 <div class="row mt-3">
                     <div class="col">
                         <button class="btn btn-secondary btn-sm fa-pull-right" id="btnAddNewProduct"><i
-                        class="fa fa-save"></i>&nbsp;Add New Product</button>
+                                class="fa fa-save"></i>&nbsp;Add New Product</button>
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -607,10 +611,11 @@ include "include/topnavbar.php";
                             <select class="form-control form-control-sm" name="editsalesrep" id="editsalesrep" required>
                                 <option value="">Select</option>
                                 <?php if ($resultreplist->num_rows > 0) {
-                                     while ($rowreplist = $resultreplist->fetch_assoc()) { ?>
-                                <option value="<?php echo $rowreplist['idtbl_employee'] ?>">
-                                    <?php echo $rowreplist['name'] ?></option>
-                                <?php } } ?>
+                                    while ($rowreplist = $resultreplist->fetch_assoc()) { ?>
+                                        <option value="<?php echo $rowreplist['idtbl_employee'] ?>">
+                                            <?php echo $rowreplist['name'] ?></option>
+                                <?php }
+                                } ?>
                             </select>
                         </div>
                     </div>
@@ -662,7 +667,9 @@ include "include/topnavbar.php";
                     </div>
                     <div class="form-group mt-3">
                         <button type="submit" id="submitBtn" class="btn btn-outline-danger btn-sm px-4 fa-pull-right"
-                            <?php if ($addcheck == 0) {echo 'disabled';} ?>><i class="far fa-save"></i>&nbsp;Cancel
+                            <?php if ($addcheck == 0) {
+                                echo 'disabled';
+                            } ?>><i class="far fa-save"></i>&nbsp;Cancel
                             Order</button>
                     </div>
                     <input type="hidden" name="recordID" id="recordID" value="">
@@ -745,7 +752,7 @@ include "include/topnavbar.php";
 <?php include "include/footerscripts.php"; ?>
 <script>
     var prodCount = 0;
-    $(document).ready(function () {
+    $(document).ready(function() {
 
         $("#productcommonname").select2({
             ajax: {
@@ -754,12 +761,12 @@ include "include/topnavbar.php";
                 type: "post",
                 dataType: 'json',
                 delay: 250,
-                data: function (params) {
+                data: function(params) {
                     return {
                         searchTerm: params.term, // search term
                     };
                 },
-                processResults: function (response) { //console.log(response)
+                processResults: function(response) { //console.log(response)
                     return {
                         results: response
                     };
@@ -776,12 +783,12 @@ include "include/topnavbar.php";
                 type: "post",
                 dataType: 'json',
                 delay: 250,
-                data: function (params) {
+                data: function(params) {
                     return {
-                        searchTerm: params.term, 
+                        searchTerm: params.term,
                     };
                 },
-                processResults: function (response) { //console.log(response)
+                processResults: function(response) { //console.log(response)
                     return {
                         results: response
                     };
@@ -796,12 +803,12 @@ include "include/topnavbar.php";
                 type: "post",
                 dataType: 'json',
                 delay: 250,
-                data: function (params) {
+                data: function(params) {
                     return {
                         searchTerm: params.term
                     };
                 },
-                processResults: function (response) { // console.log(response)
+                processResults: function(response) { // console.log(response)
                     return {
                         results: response
                     };
@@ -815,7 +822,7 @@ include "include/topnavbar.php";
         $('body').tooltip({
             selector: '[data-toggle="tooltip"]'
         });
-        
+
 
         $('[data-toggle="tooltip"]').tooltip({
             trigger: 'hover'
@@ -852,11 +859,11 @@ include "include/topnavbar.php";
                 },
                 {
                     "data": "remark",
-                    "render": function (data, type, full) {
+                    "render": function(data, type, full) {
                         if (data.length > 30) {
-                            return data.substring(0, 30) + "..."; 
+                            return data.substring(0, 30) + "...";
                         }
-                        return data; 
+                        return data;
                     }
                 },
                 {
@@ -866,7 +873,7 @@ include "include/topnavbar.php";
                     "targets": -1,
                     "className": 'text-right',
                     "data": null,
-                    "render": function (data, type, full) {
+                    "render": function(data, type, full) {
                         return parseFloat(full['total']).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     }
                 },
@@ -877,7 +884,7 @@ include "include/topnavbar.php";
                     "targets": -1,
                     "className": 'text-right',
                     "data": null,
-                    "render": function (data, type, full) {
+                    "render": function(data, type, full) {
                         return parseFloat(full['discount']).toFixed(2);
                     }
                 },
@@ -885,7 +892,7 @@ include "include/topnavbar.php";
                     "targets": -1,
                     "className": 'text-right',
                     "data": null,
-                    "render": function (data, type, full) {
+                    "render": function(data, type, full) {
                         return parseFloat(full['nettotal']).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     }
                 },
@@ -893,7 +900,7 @@ include "include/topnavbar.php";
                     "targets": -1,
                     "className": 'text-center',
                     "data": null,
-                    "render": function (data, type, full) {
+                    "render": function(data, type, full) {
                         var html = '';
                         if (full['confirm'] == 1) {
                             html += '<i class="fas fa-check text-success"></i>&nbsp;Confirm';
@@ -910,7 +917,7 @@ include "include/topnavbar.php";
                     "targets": -1,
                     "className": 'text-center',
                     "data": null,
-                    "render": function (data, type, full) {
+                    "render": function(data, type, full) {
                         var html = '';
                         if (full['dispatchissue'] == 1) {
                             html += '<i class="fas fa-check text-success"></i>&nbsp;Dispatched';
@@ -925,7 +932,7 @@ include "include/topnavbar.php";
                     "targets": -1,
                     "className": 'text-center',
                     "data": null,
-                    "render": function (data, type, full) {
+                    "render": function(data, type, full) {
                         var html = '';
                         if (full['delivered'] == 1) {
                             html += '<i class="fas fa-check text-success"></i>&nbsp;Delivered';
@@ -940,7 +947,7 @@ include "include/topnavbar.php";
                     "targets": -1,
                     "className": 'text-right',
                     "data": null,
-                    "render": function (data, type, full) {
+                    "render": function(data, type, full) {
                         var button = '';
 
                         button +=
@@ -953,7 +960,7 @@ include "include/topnavbar.php";
                             full['idtbl_customer_order'] + '" name="' + full['confirm'] +
                             '"  data-podate="' + full['date'] +
                             '" data-customerid="' + full['tbl_customer_idtbl_customer'] +
-                            '" data-customername="' + full['cusname'] + ' - ' +  full['cusaddress']  +
+                            '" data-customername="' + full['cusname'] + ' - ' + full['cusaddress'] +
                             '" data-repid="' + full['tbl_employee_idtbl_employee'] +
                             '"><i class="fas fa-pen"></i></button>';
                         button +=
@@ -1065,7 +1072,7 @@ include "include/topnavbar.php";
             ]
         });
 
-        $('#modaleditproduct').change(function(){
+        $('#modaleditproduct').change(function() {
             var productID = $('#modaleditproduct').val();
             var product = $("#modaleditproduct option:selected").text();
 
@@ -1075,7 +1082,7 @@ include "include/topnavbar.php";
                     recordID: productID
                 },
                 url: 'getprocess/getproduct.php',
-                success: function (result) { //console.log(result);
+                success: function(result) { //console.log(result);
                     var obj = JSON.parse(result);
 
                     $('#modaleditproductcode').val(obj.productcode);
@@ -1111,31 +1118,31 @@ include "include/topnavbar.php";
             }
         });
 
-        $('#modaleditsaleprice, #modaleditqty').keyup(function(){
+        $('#modaleditsaleprice, #modaleditqty').keyup(function() {
             calculateNewAddedProductTot();
         })
-        $('#modaleditdiscountamount').keyup(function(){
+        $('#modaleditdiscountamount').keyup(function() {
             var saleprice = $('#modaleditsaleprice').val();
             var qty = $('#modaleditqty').val();
             var discountAmount = $(this).val();
 
-            var discountPrecentage = (discountAmount * 100)/ (saleprice * qty);
+            var discountPrecentage = (discountAmount * 100) / (saleprice * qty);
             $('#modaleditdiscountpercentage').val(parseFloat(discountPrecentage).toFixed(2));
 
             calculateNewAddedProductTot();
         })
-        $('#modaleditdiscountpercentage').keyup(function(){
+        $('#modaleditdiscountpercentage').keyup(function() {
             var saleprice = $('#modaleditsaleprice').val();
             var qty = $('#modaleditqty').val();
             var discountPrecentage = $(this).val();
 
-            var discountAmount = (saleprice * qty * discountPrecentage)/100;
+            var discountAmount = (saleprice * qty * discountPrecentage) / 100;
             $('#modaleditdiscountamount').val(parseFloat(discountAmount).toFixed(2));
 
             calculateNewAddedProductTot();
         })
-        
-        $('#btnAddNewProduct').click(function () {
+
+        $('#btnAddNewProduct').click(function() {
             addNewCheckStock();
         })
 
@@ -1150,7 +1157,7 @@ include "include/topnavbar.php";
                     usingqty: newqty
                 },
                 url: 'getprocess/checkavailablestock.php',
-                success: function (result) { //alert(result)
+                success: function(result) { //alert(result)
                     var obj = JSON.parse(result);
                     if (obj.availableqty < newqty) {
                         var productname = $("#product option:selected").text();
@@ -1160,7 +1167,7 @@ include "include/topnavbar.php";
                         )
                         $('#errormessageaddnew').html(
                             "There is not enough stock available for product '" + productname)
-                    }else{
+                    } else {
 
                         var productID = $('#modaleditproduct').val();
                         var product = $("#modaleditproduct option:selected").text();
@@ -1180,7 +1187,7 @@ include "include/topnavbar.php";
                             '</td><td class="d-none">' + productID +
                             '</td><td class="d-none">' + 0 +
                             '</td><td class="text-center editnewqty">' +
-                            qty +'</td><td class="text-center editfreeqty">' +
+                            qty + '</td><td class="text-center editfreeqty">' +
                             freeqty +
                             '</td><td class="text-center editlinediscountpernetage">' +
                             discountPercentage +
@@ -1205,13 +1212,13 @@ include "include/topnavbar.php";
                         $('#modaleditdiscountamount').val(0)
                         $('#modaleditdiscountpercentage').val(0)
                         $('#modaleditnettotal').val(0)
-                        
+
                         tabletotal1();
                     }
                 }
             });
         }
-        $('#dataTable tbody').on('click', '.btnInvoicePrint', function () {
+        $('#dataTable tbody').on('click', '.btnInvoicePrint', function() {
             var id = $(this).attr('id');
             // alert(id);
             $('#frame').html('');
@@ -1229,7 +1236,7 @@ include "include/topnavbar.php";
 
             var allowfullscreen = $(this).attr(
                 'data-video-fullscreen'
-                ); // impostiamo sul bottone l'attributo allowfullscreen se è un video per permettere di passare alla modalità tutto schermo
+            ); // impostiamo sul bottone l'attributo allowfullscreen se è un video per permettere di passare alla modalità tutto schermo
 
             // stampiamo i nostri dati nell'iframe
             $("#printreportInvoice iframe").attr({
@@ -1244,7 +1251,7 @@ include "include/topnavbar.php";
             });
         });
 
-        $('#dataTable tbody').on('click', '.btnOriginal', function () {
+        $('#dataTable tbody').on('click', '.btnOriginal', function() {
             var id = $(this).attr('id');
             // alert(id);
             $('#frame').html('');
@@ -1262,7 +1269,7 @@ include "include/topnavbar.php";
 
             var allowfullscreen = $(this).attr(
                 'data-video-fullscreen'
-                ); // impostiamo sul bottone l'attributo allowfullscreen se è un video per permettere di passare alla modalità tutto schermo
+            ); // impostiamo sul bottone l'attributo allowfullscreen se è un video per permettere di passare alla modalità tutto schermo
 
             // stampiamo i nostri dati nell'iframe
             $("#printreportInvoiceoriginal iframe").attr({
@@ -1277,7 +1284,7 @@ include "include/topnavbar.php";
             });
         });
 
-        $('#dataTable tbody').on('click', '.btnPrint', function () {
+        $('#dataTable tbody').on('click', '.btnPrint', function() {
             var id = $(this).attr('id');
             $('#frame').html('');
             $('#frame').html('<iframe class="embed-responsive-item" frameborder="0"></iframe>');
@@ -1291,7 +1298,7 @@ include "include/topnavbar.php";
 
             var allowfullscreen = $(this).attr(
                 'data-video-fullscreen'
-                ); // set allowfullscreen attribute if it's a video to allow fullscreen mode
+            ); // set allowfullscreen attribute if it's a video to allow fullscreen mode
 
             // Set iframe attributes
             $("#printreport iframe").attr({
@@ -1308,14 +1315,14 @@ include "include/topnavbar.php";
             });
 
             // Refresh DataTable after the modal is closed
-            $('#printreport').on('hidden.bs.modal', function () {
+            $('#printreport').on('hidden.bs.modal', function() {
                 $('#dataTable').DataTable().ajax.reload();
             });
         });
 
 
 
-        $('#dataTable tbody').on('click', '.btnEdit', function () {
+        $('#dataTable tbody').on('click', '.btnEdit', function() {
             var id = $(this).attr('id');
             var customerid = $(this).data('customerid');
             var customername = $(this).data('customername');
@@ -1334,7 +1341,7 @@ include "include/topnavbar.php";
         });
 
 
-        $('#dataTable tbody').on('click', '.btnConfirm', function () {
+        $('#dataTable tbody').on('click', '.btnConfirm', function() {
             var id = $(this).attr('id');
             var confirmstatus = $(this).attr('name');
 
@@ -1345,7 +1352,7 @@ include "include/topnavbar.php";
                     orderID: id
                 },
                 url: 'getprocess/getcusorderlistaccoorderid.php',
-                success: function (result) { //console.log(result);
+                success: function(result) { //console.log(result);
                     var obj = JSON.parse(result);
                     $('#tableorderview > tbody').empty();
 
@@ -1358,9 +1365,9 @@ include "include/topnavbar.php";
                     $('#dcuscontact').html(obj.cuscontact);
                     $('#viewmodaltitle').html('Order No: PO-' + id);
                     $('#editpodiscount').val(obj.podiscountpercentage);
-                    
+
                     var objfirst = obj.tablelist;
-                    $.each(objfirst, function (i, item) {
+                    $.each(objfirst, function(i, item) {
                         $('#tableorderview > tbody:last').append('<tr><td>' +
                             objfirst[i].productname +
                             '</td><td>' +
@@ -1409,7 +1416,7 @@ include "include/topnavbar.php";
                 }
             });
         });
-        $('#dataTable tbody').on('click', '.btnDeliver', function () {
+        $('#dataTable tbody').on('click', '.btnDeliver', function() {
             var id = $(this).attr('id');
 
             var confirmstatus = $(this).attr('name');
@@ -1421,7 +1428,7 @@ include "include/topnavbar.php";
                     orderID: id
                 },
                 url: 'getprocess/getcusorderlistaccoorderid.php',
-                success: function (result) { //console.log(result);
+                success: function(result) { //console.log(result);
                     var obj = JSON.parse(result);
                     $('#tableorderview > tbody').empty();
 
@@ -1436,7 +1443,7 @@ include "include/topnavbar.php";
                     $('#editpodiscount').val(obj.podiscountpercentage);
 
                     var objfirst = obj.tablelist;
-                    $.each(objfirst, function (i, item) {
+                    $.each(objfirst, function(i, item) {
                         //alert(objfirst[i].id);
                         $('#tableorderview > tbody:last').append('<tr><td>' +
                             objfirst[i].productname +
@@ -1476,7 +1483,7 @@ include "include/topnavbar.php";
 
                         }
                     });
-                    
+
                     $('#btnUpdate').html('<i class="far fa-save"></i>&nbsp;Deliver');
                     $('#btnUpdate').prop('disabled', false);
                     $('#acceptanceType').val(3)
@@ -1486,7 +1493,7 @@ include "include/topnavbar.php";
                 }
             });
         });
-        $('#dataTable tbody').on('click', '.btnDispatch', function () {
+        $('#dataTable tbody').on('click', '.btnDispatch', function() {
             let $this = $(this);
             let id = $this.attr('id');
             let $hiddenPoId = $('#hiddenpoid').val(id);
@@ -1496,8 +1503,10 @@ include "include/topnavbar.php";
             $.ajax({
                 type: "POST",
                 url: 'getprocess/getcusorderlistaccoorderid.php',
-                data: { orderID: id },
-                success: function (result) {
+                data: {
+                    orderID: id
+                },
+                success: function(result) {
                     let obj = $.parseJSON(result);
 
                     // Update HTML Elements Efficiently
@@ -1551,7 +1560,7 @@ include "include/topnavbar.php";
         });
 
 
-        $('#dataTable tbody').on('click', '.btncancel', function () {
+        $('#dataTable tbody').on('click', '.btncancel', function() {
             var r = confirm("Are you sure, Cancel this order ? ");
             if (r == true) {
                 var id = $(this).attr('id');
@@ -1576,7 +1585,7 @@ include "include/topnavbar.php";
         });
 
         // Customer part
-        $('#salesmanager').change(function () {
+        $('#salesmanager').change(function() {
             var salesmanagerid = $(this).val();
 
             $.ajax({
@@ -1585,11 +1594,11 @@ include "include/topnavbar.php";
                     salesmanagerid: salesmanagerid
                 },
                 url: 'getprocess/getemployeesaccosalesmanager.php',
-                success: function (result) { //alert(result);
+                success: function(result) { //alert(result);
                     var objfirst = JSON.parse(result);
                     var html1 = '';
                     html1 += '<option value="">Select</option>';
-                    $.each(objfirst, function (i, item) {
+                    $.each(objfirst, function(i, item) {
                         // alert(objfirst[i].id);
                         html1 += '<option value="' + objfirst[i].id + '">';
                         html1 += objfirst[i].name;
@@ -1603,7 +1612,7 @@ include "include/topnavbar.php";
             });
 
         })
-        $('#productcommonname').change(function () {
+        $('#productcommonname').change(function() {
             var productcommonname = $('#productcommonname option:selected').val();
             var value = '';
 
@@ -1613,11 +1622,11 @@ include "include/topnavbar.php";
                     productcommonname: productcommonname
                 },
                 url: 'getprocess/getproductsaccocommonname.php',
-                success: function (result) { // alert(result);
+                success: function(result) { // alert(result);
                     var objfirst = JSON.parse(result);
                     var html1 = '';
                     html1 += '<option value="">Select</option>';
-                    $.each(objfirst, function (i, item) {
+                    $.each(objfirst, function(i, item) {
                         // alert(objfirst[i].id);
                         html1 += '<option value="' + objfirst[i].id + '">';
                         html1 += objfirst[i].name;
@@ -1660,13 +1669,13 @@ include "include/topnavbar.php";
         //     });
         // });
 
-        $('#area').change(function () {
+        $('#area').change(function() {
             var repId = $('#repname').val();
             var areaID = $(this).val();
 
             selectcustomer(repId, areaID, '');
         })
-        $('#repname').change(function () {
+        $('#repname').change(function() {
             var areaID = $('#area').val();
             var repId = $(this).val();
 
@@ -1693,7 +1702,7 @@ include "include/topnavbar.php";
             category(repId, '');
         })
         // Prodcut part
-        $('#product').change(function () {
+        $('#product').change(function() {
             var productID = $(this).val();
             var customerID = $('#customer').val();
             var customerType = $('#hiddencustomertype').val();
@@ -1705,7 +1714,7 @@ include "include/topnavbar.php";
                     customerType: customerType
                 },
                 url: 'getprocess/getsalpriceaccoproductcustomer.php',
-                success: function (result) { //alert(result);
+                success: function(result) { //alert(result);
                     var obj = JSON.parse(result);
                     $('#unitprice').val(obj.unitprice);
                     $('#saleprice').val(obj.saleprice);
@@ -1742,7 +1751,7 @@ include "include/topnavbar.php";
             }
         });
 
-        $('#customer').change(function () {
+        $('#customer').change(function() {
             var customerID = $(this).val();
 
             $.ajax({
@@ -1751,7 +1760,7 @@ include "include/topnavbar.php";
                     customerID: customerID
                 },
                 url: 'getprocess/getcustomerlocationdetails.php',
-                success: function (result) { //alert(result);
+                success: function(result) { //alert(result);
                     var obj = JSON.parse(result);
                     $('#customercontact').val(obj.phone);
                     $('#customeraddress').val(obj.address);
@@ -1781,7 +1790,7 @@ include "include/topnavbar.php";
         // });
 
         // Order view part
-        $('#dataTable tbody').on('click', '.btnview', function () {
+        $('#dataTable tbody').on('click', '.btnview', function() {
             var id = $(this).attr('id');
             var confirmstatus = $(this).attr('name');
             $('#hiddenpoid').val(id);
@@ -1791,9 +1800,9 @@ include "include/topnavbar.php";
                     orderID: id
                 },
                 url: 'getprocess/getcusorderlistaccoorderid.php',
-                success: function (result) { //console.log(result);
+                success: function(result) { //console.log(result);
                     var obj = JSON.parse(result);
-                    var count=0;
+                    var count = 0;
                     $('#tableorderview > tbody').empty();
 
                     $('#divsubtotalview').html(obj.subtotal);
@@ -1811,7 +1820,7 @@ include "include/topnavbar.php";
                     var deliverstatus = obj.delivered;
 
                     var objfirst = obj.tablelist;
-                    $.each(objfirst, function (i, item) {
+                    $.each(objfirst, function(i, item) {
 
                         var showqty = 0;
                         if (confirmstatus == null) {
@@ -1860,7 +1869,7 @@ include "include/topnavbar.php";
                             newRow.css('background-color', '#ffcccc');
                             newRow.find('.btnDeleteOrderProduct').removeClass()
                                 .addClass('btn btn-outline-success btn-sm');
-                        }else{
+                        } else {
                             count++;
                         }
                     });
@@ -1872,7 +1881,7 @@ include "include/topnavbar.php";
             });
         });
 
-        $('#editpodiscount').keyup(function () {
+        $('#editpodiscount').keyup(function() {
             var discountprecentage = $(this).val();
 
             if (discountprecentage == null) {
@@ -1900,7 +1909,7 @@ include "include/topnavbar.php";
 
 
         })
-        $('#editpodiscountamount').keyup(function () {
+        $('#editpodiscountamount').keyup(function() {
             var discountAmount = $(this).val();
 
             if (discountAmount == null) {
@@ -1928,7 +1937,7 @@ include "include/topnavbar.php";
             $('#divtotalview').html(shownet);
         })
 
-        $('#tableorderview tbody').on('click', '.editnewqty, .editlinediscountpernetage', function (e) {
+        $('#tableorderview tbody').on('click', '.editnewqty, .editlinediscountpernetage', function(e) {
             var row = $(this);
             // var rowid = row.closest("tr").find('td:eq(0)').text();
             // var selectvalueone = $('.optionpiorityone' + rowid).val();
@@ -1963,7 +1972,7 @@ include "include/topnavbar.php";
                         customerOrderId: customerOrderId
                     },
                     url: 'getprocess/checkavailablestockinlineedit.php',
-                    success: function (result) {// alert(result)
+                    success: function(result) { // alert(result)
                         var obj = JSON.parse(result);
 
                         if (obj.availableqty < newqty) {
@@ -1979,12 +1988,12 @@ include "include/topnavbar.php";
                                 "There is not enough stock available for this Product"
                             );
 
-                            resolve(true); 
+                            resolve(true);
                         } else {
-                            resolve(false); 
+                            resolve(false);
                         }
                     },
-                    error: function (xhr, status, error) {
+                    error: function(xhr, status, error) {
                         reject(error);
                     }
                 });
@@ -1992,11 +2001,11 @@ include "include/topnavbar.php";
         }
 
         function textremoveQtyandPrecentageAndSalePrice(classname, row) {
-            $(classname).keyup(function (e) {
+            $(classname).keyup(function(e) {
                 if (e.keyCode === 13) {
                     qtyChangeCheckStock('.optionnewqty', row).then((donotproceed) => {
                         if (donotproceed) {
-                            return; 
+                            return;
                         }
 
                         $this = $(this);
@@ -2005,24 +2014,25 @@ include "include/topnavbar.php";
                         td.empty().html(val).data('editing', false);
 
                         var rowID = row.closest("td").parent()[0].rowIndex;
-                        var unitprice = parseFloat(row.closest("tr").find('td:eq(8)').text());
+                        var unitprice = parseFloat(row.closest("tr").find('td:eq(9)').text());
                         var newqty = parseFloat(row.closest("tr").find('td:eq(4)').text());
-                        var discountprecent = parseFloat(row.closest("tr").find('td:eq(5)').text());
-                        var discountamount = parseFloat(row.closest("tr").find('td:eq(6)').text());
+                        var discountprecent = parseFloat(row.closest("tr").find('td:eq(6)').text());
+
+                        // Handle NaN or empty values
+                        if (isNaN(discountprecent)) {
+                            discountprecent = 0;
+                        }
 
                         var totwithoutdiscount = newqty * unitprice;
-                        var totnew = totwithoutdiscount;
-                        var newdiscount = (totnew * discountprecent) / 100;
-
-                        totnew = totnew - newdiscount;
+                        var newdiscount = (totwithoutdiscount * discountprecent) / 100;
+                        var totnew = totwithoutdiscount - newdiscount;
 
                         var showtotnew = addCommas(parseFloat(totnew).toFixed(2));
+                        var shownewdiscount = parseFloat(newdiscount).toFixed(2);
 
-                        $('#tableorderview').find('tr').eq(rowID).find('td:eq(7)').text(showtotnew);
-                        $('#tableorderview').find('tr').eq(rowID).find('td:eq(6)').text(newdiscount);
-                        $('#tableorderview').find('tr').eq(rowID).find('td:eq(11)').text(
-                            totwithoutdiscount
-                        );
+                        $('#tableorderview').find('tr').eq(rowID).find('td:eq(8)').text(showtotnew);
+                        $('#tableorderview').find('tr').eq(rowID).find('td:eq(7)').text(shownewdiscount);
+                        $('#tableorderview').find('tr').eq(rowID).find('td:eq(12)').text(totwithoutdiscount);
 
                         tabletotal1();
                     }).catch(error => {
@@ -2033,7 +2043,7 @@ include "include/topnavbar.php";
         }
 
 
-        $('#tableorderview tbody').on('click', '.colunitprice', function (e) {
+        $('#tableorderview tbody').on('click', '.colunitprice', function(e) {
             var row = $(this);
             // var rowid = row.closest("tr").find('td:eq(0)').text();
             // var selectvalueone = $('.optionpiorityone' + rowid).val();
@@ -2052,12 +2062,12 @@ include "include/topnavbar.php";
 
             $('<input type="Text" class="form-control form-control-sm optionsaleprice">').val(val)
                 .appendTo($this);
-                textremoveQtyandPrecentageAndSalePrice('.optionsaleprice', row);
+            textremoveQtyandPrecentageAndSalePrice('.optionsaleprice', row);
         });
 
-        
 
-        $('#tableorderview tbody').on('click', '.editlinediscount', function (e) {
+
+        $('#tableorderview tbody').on('click', '.editlinediscount', function(e) {
             var row = $(this);
 
             e.preventDefault();
@@ -2079,7 +2089,7 @@ include "include/topnavbar.php";
 
         function textremoveDiscountAmount(classname, row) {
             // $('#tableorderview tbody').on('keyup', classname, function (e) {
-            $(classname).keyup(function (e) {
+            $(classname).keyup(function(e) {
                 if (e.keyCode === 13) {
                     $this = $(this);
                     var val = $this.val();
@@ -2143,14 +2153,14 @@ include "include/topnavbar.php";
         // }
 
 
-        $('#tableorderview tbody').on('click', '.btnDeleteOrderProduct', function (e) {
+        $('#tableorderview tbody').on('click', '.btnDeleteOrderProduct', function(e) {
             var row = $(this).closest('tr');
             row.css('background-color', '#ffcccc');
 
             row.find('td:nth-child(11)').text('3');
             tabletotal1();
         });
-        $('#tableorderview tbody').on('click', '.btnDeleteNewProduct', function (e) {
+        $('#tableorderview tbody').on('click', '.btnDeleteNewProduct', function(e) {
             var row = $(this).closest('tr');
             row.remove();
             tabletotal1();
@@ -2158,7 +2168,9 @@ include "include/topnavbar.php";
 
 
         function tabletotal1() {
-            let sum = 0, totallinediscount = 0, count = 0;
+            let sum = 0,
+                totallinediscount = 0,
+                count = 0;
             let podiscountPercent = parseFloat($('#editpodiscount').val()) || 0;
 
             let totRows = document.querySelectorAll(".totwithoutdiscount");
@@ -2198,13 +2210,13 @@ include "include/topnavbar.php";
             Object.keys(updates).forEach(id => document.querySelector(id).textContent = updates[id]);
         }
 
-        $("#createorderform").keypress(function (e) {
+        $("#createorderform").keypress(function(e) {
             if (e.keyCode == 13) {
                 e.preventDefault();
                 return false;
             }
         })
-        $("#freeqty").keyup(function (event) {
+        $("#freeqty").keyup(function(event) {
             if (event.keyCode === 13) {
                 $("#formsubmit").click();
             }
@@ -2215,7 +2227,7 @@ include "include/topnavbar.php";
         //     $('#tableorderview > tbody').html('');
         // });
         // Order print part
-        $('#dataTable tbody').on('click', '.btnprint', function () {
+        $('#dataTable tbody').on('click', '.btnprint', function() {
             var id = $(this).attr('id');
             $.ajax({
                 type: "POST",
@@ -2223,7 +2235,7 @@ include "include/topnavbar.php";
                     orderID: id
                 },
                 url: 'getprocess/getcusorderprint.php',
-                success: function (result) {
+                success: function(result) {
                     $('#viewdispatchprint').html(result);
                     $('#modalorderprint').modal('show');
                 }
@@ -2232,13 +2244,13 @@ include "include/topnavbar.php";
         document.getElementById('btnorderprint').addEventListener("click", print);
 
         // Create order part
-        $('#btnordercreate').click(function () {
+        $('#btnordercreate').click(function() {
             $('#modalcreateorder').modal('show');
-            $('#modalcreateorder').on('shown.bs.modal', function () {
+            $('#modalcreateorder').on('shown.bs.modal', function() {
                 $('#orderdate').trigger('focus');
             })
         });
-        $('#modalcreateorder').on('hidden.bs.modal', function () {
+        $('#modalcreateorder').on('hidden.bs.modal', function() {
             $('#orderdate').val('');
             $('#product').val('');
             $('#repname').val('');
@@ -2256,11 +2268,11 @@ include "include/topnavbar.php";
             $('#tableorder > tbody').html('');
         })
 
-        $('#orderdate').change(function () {
+        $('#orderdate').change(function() {
             $('#repname').focus();
         });
 
-        $("#formsubmit").click(function () {
+        $("#formsubmit").click(function() {
             if (!$("#createorderform")[0].checkValidity()) {
                 // If the form is invalid, submit it. The form won't actually submit;
                 // this will just cause the browser to display the native HTML5 error messages.
@@ -2269,7 +2281,7 @@ include "include/topnavbar.php";
                 checkCommon()
             }
         });
-        $("#btncuspoupdate").click(function () {
+        $("#btncuspoupdate").click(function() {
             if (!$("#editcusporderform")[0].checkValidity()) {
                 $("#hiddeneditsubmit").click();
             } else {
@@ -2287,10 +2299,10 @@ include "include/topnavbar.php";
                         porderId: porderId
                     },
                     url: 'process/updatecustomerporder.php',
-                    success: function (result) { // alert(result)
+                    success: function(result) { // alert(result)
                         var obj = JSON.parse(result);
                         action(obj);
-                        setTimeout(function () {
+                        setTimeout(function() {
                             window.location.reload();
                         }, 1500);
                     }
@@ -2298,12 +2310,12 @@ include "include/topnavbar.php";
             }
         });
 
-        
+
         function checkCommon() {
             var productID = $('#product').val();
             var existsflag = 0;
 
-            $(".productIds").each(function () {
+            $(".productIds").each(function() {
                 var id = $(this).text()
                 if (productID == id) {
                     existsflag = 1;
@@ -2333,7 +2345,7 @@ include "include/topnavbar.php";
                     usingqty: newqty
                 },
                 url: 'getprocess/checkavailablestock.php',
-                success: function (result) { //alert(result)
+                success: function(result) { //alert(result)
                     var obj = JSON.parse(result);
                     if (obj.availableqty >= newqty) {
                         checkTarget()
@@ -2408,7 +2420,7 @@ include "include/topnavbar.php";
             // $('#discountpo').val('0');
 
             var sum = 0;
-            $(".total").each(function () {
+            $(".total").each(function() {
                 sum += parseFloat($(this).text());
             });
 
@@ -2435,14 +2447,14 @@ include "include/topnavbar.php";
             $('#product').focus();
         }
 
-        $('#btncreateorder').click(function () { //alert('IN');
+        $('#btncreateorder').click(function() { //alert('IN');
             var tbody = $("#tableorder tbody");
 
             if (tbody.children().length > 0) {
                 jsonObj = [];
-                $("#tableorder tbody tr").each(function () {
+                $("#tableorder tbody tr").each(function() {
                     item = {}
-                    $(this).find('td').each(function (col_idx) {
+                    $(this).find('td').each(function(col_idx) {
                         item["col_" + (col_idx + 1)] = $(this).text();
                     });
                     jsonObj.push(item);
@@ -2492,10 +2504,10 @@ include "include/topnavbar.php";
                         recordID: recordID
                     },
                     url: 'process/customerporderprocess.php',
-                    success: function (result) { //console.log(result);
+                    success: function(result) { //console.log(result);
                         $('#modalcreateorder').modal('hide');
                         action(result);
-                        setTimeout(function () {
+                        setTimeout(function() {
                             window.location.reload();
 
                         }, 1500);
@@ -2504,13 +2516,13 @@ include "include/topnavbar.php";
             }
         });
 
-        $('#btnUpdate').click(function () {
+        $('#btnUpdate').click(function() {
             jsonObj = [];
             $('#btnUpdate').prop('disabled', true);
-            
-            $("#tableorderview tbody tr").each(function () {
+
+            $("#tableorderview tbody tr").each(function() {
                 item = {}
-                $(this).find('td').each(function (col_idx) {
+                $(this).find('td').each(function(col_idx) {
                     item["col_" + (col_idx + 1)] = $(this).text();
                 });
                 jsonObj.push(item);
@@ -2551,7 +2563,8 @@ include "include/topnavbar.php";
                     isChangeStatus: statusValue
                 },
                 url: 'process/updatecustomerpoprocess.php',
-                success: function (result) { console.log(result);
+                success: function(result) {
+                    console.log(result);
                     action(result);
                     $('#modalorderview').modal('hide');
 
@@ -2562,7 +2575,7 @@ include "include/topnavbar.php";
 
         });
 
-        $('#tableorder').on('click', '.btndlt', function () {
+        $('#tableorder').on('click', '.btndlt', function() {
 
             var r = confirm("Are you sure, You want to remove this product ? ");
             if (r == true) {
@@ -2592,7 +2605,7 @@ include "include/topnavbar.php";
         //     }
         // });
 
-        $("#discountpo").keyup(function () {
+        $("#discountpo").keyup(function() {
             if ($(this).val() != '') {
                 var discount = parseFloat($(this).val());
             } else {
@@ -2602,10 +2615,10 @@ include "include/topnavbar.php";
 
             var sum = 0;
             var disvalue = 0;
-            $(".total").each(function () {
+            $(".total").each(function() {
                 sum += parseFloat($(this).text());
             });
-            $(".linediscount").each(function () {
+            $(".linediscount").each(function() {
                 disvalue += parseFloat($(this).text());
             });
 
@@ -2687,12 +2700,12 @@ include "include/topnavbar.php";
                 repId: repId
             },
             url: 'getprocess/getareasaccoemployee.php',
-            success: function (result) { //alert(result);
+            success: function(result) { //alert(result);
                 var objfirst = JSON.parse(result);
 
                 var html = '';
                 html += '<option value="">Select</option>';
-                $.each(objfirst, function (i, item) {
+                $.each(objfirst, function(i, item) {
                     //alert(objfirst[i].id);
                     html += '<option value="' + objfirst[i].id + '">';
                     html += objfirst[i].name;
@@ -2719,12 +2732,12 @@ include "include/topnavbar.php";
                 repId: repId
             },
             url: 'getprocess/getcustomerlistaccoarea.php',
-            success: function (result) { //alert(result);
+            success: function(result) { //alert(result);
                 var objfirst = JSON.parse(result);
 
                 var html = '';
                 html += '<option value="">Select</option>';
-                $.each(objfirst, function (i, item) {
+                $.each(objfirst, function(i, item) {
                     //alert(objfirst[i].id);
                     html += '<option value="' + objfirst[i].id + '">';
                     html += objfirst[i].name + ' (' + objfirst[i].address + ')';
@@ -2762,7 +2775,7 @@ include "include/topnavbar.php";
 
     function tabletotal() {
         var sum = 0;
-        $(".totaldispatch").each(function () {
+        $(".totaldispatch").each(function() {
             sum += parseFloat($(this).text());
         });
 
@@ -2789,10 +2802,10 @@ include "include/topnavbar.php";
     function calculateTotals(row) {
         var sum = 0;
         var disvalue = 0;
-        $(".total").each(function () {
+        $(".total").each(function() {
             sum += parseFloat($(this).text());
         });
-        $(".linediscount").each(function () {
+        $(".linediscount").each(function() {
             disvalue += parseFloat($(this).text());
         });
 
@@ -2837,7 +2850,3 @@ include "include/topnavbar.php";
     }
 </script>
 <?php include "include/footer.php"; ?>
-
-
-
-

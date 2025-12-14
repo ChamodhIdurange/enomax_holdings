@@ -61,7 +61,7 @@ $isTaxCustomer = !empty($vat_num);
 $actualvat = $rowinvoiceinfo['vat'];
 
 $sqlinvoicedetail = "SELECT `tbl_product`.`product_name`, `tbl_product`.`product_code`, 
-`tbl_invoice_detail`.`qty`, `tbl_invoice_detail`.`saleprice`, `tbl_invoice_detail`.`discount` 
+`tbl_invoice_detail`.`qty`,`tbl_invoice_detail`.`freeqty`, `tbl_invoice_detail`.`saleprice`, `tbl_invoice_detail`.`discount` 
 FROM `tbl_invoice_detail` 
 LEFT JOIN `tbl_product` ON `tbl_product`.`idtbl_product`=`tbl_invoice_detail`.`tbl_product_idtbl_product`
 WHERE `tbl_invoice_detail`.`tbl_invoice_idtbl_invoice`='$recordID' AND `tbl_invoice_detail`.`status`=1";
@@ -272,6 +272,7 @@ $html .= '
     <th style="width:17%;">CODE</th>
     <th style="width:35%;">DESCRIPTION</th>
     <th style="width:8%;">QTY</th>
+    <th style="width:8%;">FREE QTY</th>
     <th style="width:13%;">UNIT PRICE</th>
     <th style="width:10%;">DIS.</th>
     <th style="width:17%;">AMOUNT</th>
@@ -283,6 +284,7 @@ $count = 0;
 while ($rowinvoicedetail = $resultinvoicedetail->fetch_assoc()) {
     $count++;
     $qty = (float)$rowinvoicedetail['qty'];
+    $freeqty = (float)$rowinvoicedetail['freeqty'];
     $saleprice = (float)$rowinvoicedetail['saleprice'];
     $linediscount = (float)$rowinvoicedetail['discount'];
     
@@ -305,6 +307,7 @@ while ($rowinvoicedetail = $resultinvoicedetail->fetch_assoc()) {
         <td>' . $count . ' ' . htmlspecialchars($rowinvoicedetail['product_code']) . '</td>
         <td>' . htmlspecialchars($rowinvoicedetail['product_name']) . '</td>
         <td align="center">' . $qty . '</td>
+        <td align="center">' . $freeqty . '</td>
         <td align="right">' . number_format($base_price, 2) . '</td>
         <td align="right">' . number_format($base_discount, 2) . '</td>
         <td align="right">' . number_format($line_total_base, 2) . '</td>
