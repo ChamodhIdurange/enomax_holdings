@@ -124,7 +124,7 @@ include "include/topnavbar.php";
                         <div class="card kpi-card kpi-border-blue flex-fill">
                             <div class="kpi-inner">
                                 <div>
-                                    <div class="kpi-label">Total Sales Today</div>
+                                    <div class="kpi-label">Total Sales</div>
                                     <div class="kpi-value">
                                         <span class="kpi-unit">Rs.</span>
                                         <span id="kpi_receivable">0</span>
@@ -142,7 +142,7 @@ include "include/topnavbar.php";
                         <div class="card kpi-card kpi-border-red flex-fill">
                             <div class="kpi-inner">
                                 <div>
-                                    <div class="kpi-label">Daily Cash & Cheque </div>
+                                    <div class="kpi-label">Cash & Cheque </div>
                                     <div class="kpi-value">
                                         <span class="kpi-unit">Rs.</span>
                                         <span id="kpi_payable">0</span>
@@ -160,7 +160,7 @@ include "include/topnavbar.php";
                         <div class="card kpi-card kpi-border-green flex-fill">
                             <div class="kpi-inner">
                                 <div>
-                                    <div class="kpi-label">Purchases This Month</div>
+                                    <div class="kpi-label">Monthly Purchases</div>
                                     <div class="kpi-value">
                                         <span class="kpi-unit">Rs.</span>
                                         <span id="kpi_equity">0</span>
@@ -178,7 +178,7 @@ include "include/topnavbar.php";
                         <div class="card kpi-card kpi-border-purple flex-fill">
                             <div class="kpi-inner">
                                 <div>
-                                    <div class="kpi-label">Daily Profit</div>
+                                    <div class="kpi-label">Monthly Profit</div>
                                     <div class="kpi-value">
                                         <span class="kpi-unit">Rs.</span>
                                         <span id="kpi_debteq">0</span>
@@ -276,8 +276,8 @@ function loadKPIData() {
         dataType: 'json',
         success: function(data) {
             // Map backend data to KPI cards
-            $('#kpi_receivable').text('Rs. ' + Number(data.sales_today).toLocaleString());
-            $('#kpi_payable').text('Rs. ' + Number(data.cash_today).toLocaleString());
+            $('#kpi_receivable').text('Rs. ' + Number(data.sales_month).toLocaleString());
+            $('#kpi_payable').text('Rs. ' + Number(data.cash_month).toLocaleString());
             $('#kpi_equity').text('Rs. ' + Number(data.purchases_month).toLocaleString());
             $('#kpi_debteq').text('Rs. ' + Number(data.profit_month).toLocaleString());
         },
@@ -408,6 +408,9 @@ function loadRepSalesChart() {
 }
 
 function loadPurchaseOrderChart() {
+    const canvas = document.getElementById("purchaseOrderChart");
+    if (!canvas) return; // Skip if canvas does not exist
+
     let from = $("#poFrom").val();
     let to   = $("#poTo").val();
 
@@ -420,7 +423,7 @@ function loadPurchaseOrderChart() {
 
         if (purchaseOrderChart) purchaseOrderChart.destroy();
 
-        purchaseOrderChart = new Chart(document.getElementById("purchaseOrderChart"), {
+        purchaseOrderChart = new Chart(canvas, {
             type: 'bar',
             data: {
                 labels: suppliers,
@@ -447,6 +450,7 @@ function loadPurchaseOrderChart() {
     }, "json");
 }
 
+
 function loadProfitChart() {
     let fromdate = $("#profitFrom").val();
     let todate   = $("#profitTo").val();
@@ -456,6 +460,10 @@ function loadProfitChart() {
         todate: todate
     }, function(res) {
         if (profitChart) profitChart.destroy();
+        if (!res || !res.length) return; 
+
+        // ✅ Sort dates chronologically
+        res.sort((a, b) => new Date(a.date) - new Date(b.date));
 
         let labels = res.map(r => r.date);
         let totalSales = res.map(r => r.sale);
@@ -501,21 +509,28 @@ $(document).ready(function() {
     let from3 = new Date(); from3.setMonth(from3.getMonth() - 2);
     $("#poFrom, #profitFrom").val(from3.toISOString().split('T')[0]);
 
-    // Initialize all charts
     loadKPIData();
     loadSalesChart();
-    loadPurchaseOrderChart();
     loadProfitChart();
+    // loadPurchaseOrderChart();
 
-    // Bind changes
     $("#validfrom, #validto, #periodType").on("change input", loadSalesChart);
-    $("#repFrom, #repTo, #repList").on("change input", loadRepSalesChart);
-    $("#poFrom, #poTo").on("change input", loadPurchaseOrderChart);
+    // $("#repFrom, #repTo, #repList").on("change input", loadRepSalesChart);
+    $("#poFrom, #poTo").on("change input", loadPurchaseOrderChart); 
     $("#profitFrom, #profitTo").on("change input", loadProfitChart);
 
-    // Load reps once, then draw rep chart
+    // When the date range changes, reload the rep list and then load the chart
+    $("#repFrom, #repTo").on("change input", function() {
+        loadRepList(() => loadRepSalesChart());
+    });
+
+    // When the selected reps change, just update the chart
+    $("#repList").on("change", loadRepSalesChart);
+
+
     loadRepList(() => loadRepSalesChart());
 });
+
 
 
 </script>

@@ -7,33 +7,38 @@ $type      = $_POST['type'];
 
 switch ($type) {
     case "week":
-        $selectPeriod = "DATE_FORMAT(DATE_SUB(u.date, INTERVAL WEEKDAY(u.date) DAY), '%b %d') AS period";
+        $selectPeriod = "DATE_FORMAT(DATE_SUB(u.date, INTERVAL WEEKDAY(u.date) DAY), '%b %d %Y')";
+        $groupBy = "DATE_SUB(u.date, INTERVAL WEEKDAY(u.date) DAY)";
         break;
+
     case "month":
-        $selectPeriod = "DATE_FORMAT(u.date, '%b %Y') AS period"; 
+        $selectPeriod = "DATE_FORMAT(u.date, '%b %Y')";
+        $groupBy = "YEAR(u.date), MONTH(u.date)";
         break;
+
     case "monthperiod":
-        $selectPeriod = "CONCAT(MONTHNAME(u.date), ' ', YEAR(u.date)) AS period";
+        $selectPeriod = "CONCAT(MONTHNAME(u.date), ' ', YEAR(u.date))";
+        $groupBy = "YEAR(u.date), MONTH(u.date)";
         break;
+
     default:
-        $selectPeriod = "DATE(u.date) AS period";
+        $selectPeriod = "DATE(u.date)";
+        $groupBy = "DATE(u.date)";
 }
 
 
 $sql = "SELECT 
-            $selectPeriod,
+            $selectPeriod AS period,
             SUM(u.total) AS total_sales
         FROM tbl_invoice u
         LEFT JOIN tbl_customer_order uf 
             ON u.tbl_customer_order_idtbl_customer_order = uf.idtbl_customer_order
-        LEFT JOIN tbl_invoice_detail ud 
-            ON u.idtbl_invoice = ud.tbl_invoice_idtbl_invoice
         WHERE u.date BETWEEN '$validfrom' AND '$validto'
           AND u.status = 1
-          AND ud.status = 1
           AND uf.delivered = 1
-        GROUP BY period
+        GROUP BY $groupBy
         ORDER BY MIN(u.date)";
+
 
 $result = $conn->query($sql);
 

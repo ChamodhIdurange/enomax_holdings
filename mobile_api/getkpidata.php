@@ -7,8 +7,8 @@ $today = date("Y-m-d");
 
 // Initialize response array
 $response = [
-    "sales_today"    => 0,
-    "cash_today"     => 0,
+    "sales_month"    => 0,
+    "cash_month"     => 0,
     "purchases_month"=> 0,
     "profit_month"   => 0,
     "profit_item"    => 0 // <-- New KPI for Profit Analysis Report (Item)
@@ -20,12 +20,14 @@ $response = [
 $sql_sales = "
     SELECT COALESCE(SUM(nettotal), 0) AS total_sales
     FROM tbl_invoice
-    WHERE DATE(date) = CURDATE()
-      AND status != 0
+    WHERE status != 0
+        AND MONTH(date) = MONTH(CURDATE())
+        AND YEAR(date)  = YEAR(CURDATE())
+
 ";
 $result = $conn->query($sql_sales);
 if ($result && $row = $result->fetch_assoc()) {
-    $response["sales_today"] = (float)$row["total_sales"];
+    $response["sales_month"] = (float)$row["total_sales"];
 }
 
 /* ==========================
@@ -38,11 +40,13 @@ $sql_cash = "
         ON ip.idtbl_invoice_payment = ipd.tbl_invoice_payment_idtbl_invoice_payment
     WHERE ipd.status = 1
       AND ipd.method IN (1, 2) 
-      AND DATE(ip.date) = CURDATE()
+      AND MONTH(ip.date) = MONTH(CURDATE())
+      AND YEAR(ip.date)  = YEAR(CURDATE())
+
 ";
 $result = $conn->query($sql_cash);
 if ($result && $row = $result->fetch_assoc()) {
-    $response["cash_today"] = (float)$row["total_payment"];
+    $response["cash_month"] = (float)$row["total_payment"];
 }
 
 /* ==========================
@@ -76,7 +80,9 @@ $sql_profit = "
     WHERE u.status IN (1, 2)
       AND u.delivered = '1'
       AND d.status = '1'
-      AND DATE(u.date) = CURDATE()
+      AND MONTH(u.date) = MONTH(CURDATE())
+      AND YEAR(u.date)  = YEAR(CURDATE())
+
 ";
 $result = $conn->query($sql_profit);
 if ($result && $row = $result->fetch_assoc()) {
