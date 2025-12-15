@@ -45,7 +45,7 @@ $sql = "SELECT
             ON u.tbl_customer_order_idtbl_customer_order = uf.idtbl_customer_order
         WHERE u.status IN (1,2)
         AND uf.delivered='1'
-        AND u.date BETWEEN '2025-10-01' AND '2025-10-31'
+        AND u.date BETWEEN '$validfrom' AND '$validto'
         GROUP BY u.date
         ORDER BY u.date";
 
