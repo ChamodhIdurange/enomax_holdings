@@ -216,7 +216,8 @@ include "include/topnavbar.php";
                     "data": null,
                     "className": "text-center",
                     "render": function(data, type, row) {
-                        return '<button class="btn btn-info btn-xs btnEdit" data-id="' + row.tbl_product_free_issue_id + '"><i class="fas fa-edit"></i></button> ';
+                        return '<button class="btn btn-info btn-xs btnEdit" data-id="' + row.tbl_product_free_issue_id + '"><i class="fas fa-edit"></i></button> ' +
+                            '<button class="btn btn-danger btn-xs btnDelete" data-id="' + row.tbl_product_free_issue_id + '"><i class="fas fa-trash-alt"></i></button>';
                     }
                 }
             ],
@@ -228,11 +229,11 @@ include "include/topnavbar.php";
         function populateDays(monthSelect, daySelect) {
             var month = $(monthSelect).val();
             var currentDay = $(daySelect).val();
-            
+
             $(daySelect).empty().append('<option value="">Day</option>');
-            
+
             if (month) {
-                var daysInMonth = new Date(2024, month, 0).getDate(); 
+                var daysInMonth = new Date(2024, month, 0).getDate();
                 for (var i = 1; i <= daysInMonth; i++) {
                     var day = i < 10 ? '0' + i : i;
                     $(daySelect).append('<option value="' + day + '">' + i + '</option>');
@@ -247,7 +248,7 @@ include "include/topnavbar.php";
         function updateHiddenDate(monthSelect, daySelect, hiddenField) {
             var month = $(monthSelect).val();
             var day = $(daySelect).val();
-            
+
             if (month && day) {
                 $(hiddenField).val(month + '-' + day);
             } else {
@@ -362,23 +363,29 @@ include "include/topnavbar.php";
             });
         });
 
+
         $('#dataTable').on('click', '.btnDelete', function() {
             var id = $(this).data('id');
-            if (confirm('Are you sure you want to inactive this free issue?')) {
+
+            if (confirm('Are you sure you want to delete this free issue?')) {
                 $.ajax({
                     url: 'process/delete_free_issue.php',
                     type: 'POST',
                     data: {
-                        free_issue_id: id
+                        free_issue_id: id,
+                        action: 'delete'
                     },
                     dataType: 'json',
                     success: function(response) {
                         if (response.success) {
-                            alert('Inactive successfully');
+                            alert(response.message);
                             table.ajax.reload();
                         } else {
                             alert('Error: ' + response.message);
                         }
+                    },
+                    error: function(xhr, status, err) {
+                        alert('Request error: ' + err);
                     }
                 });
             }

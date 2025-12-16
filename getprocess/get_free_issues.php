@@ -12,6 +12,7 @@ $sql = "SELECT
         fi.status
         FROM tbl_product_free_issue fi
         INNER JOIN tbl_product p ON fi.product_id = p.idtbl_product
+        WHERE fi.status = 1 OR fi.status = 0
         ORDER BY fi.start_date DESC";
 
 $result = $conn->query($sql);

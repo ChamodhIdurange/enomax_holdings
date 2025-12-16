@@ -38,7 +38,7 @@ $sql_cash = "
         ON ip.idtbl_invoice_payment = ipd.tbl_invoice_payment_idtbl_invoice_payment
     WHERE ipd.status = 1
       AND ipd.method IN (1, 2) 
-      AND DATE(ip.date) = CURDATE()
+      AND DATE(ip.date) = CURDATE() //
 ";
 $result = $conn->query($sql_cash);
 if ($result && $row = $result->fetch_assoc()) {
