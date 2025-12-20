@@ -99,7 +99,7 @@ if ($conn->query($updatePoValues) == true) {
         $linediscountprecentage = $rowtabledata->col_7;
         $linediscountamount = $rowtabledata->col_8;
         $saleprice = $rowtabledata->col_10;
-        $status = $rowtabledata->col_12;
+        $status = $rowtabledata->col_11;
         $fullTotal = $rowtabledata->col_13;
         $newstatus = $rowtabledata->col_14;
 
