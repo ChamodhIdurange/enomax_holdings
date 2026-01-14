@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$databse = "erav_inomax";
+$databse = "erav_inomax_lv";
 
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $databse);

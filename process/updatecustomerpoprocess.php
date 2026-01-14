@@ -68,7 +68,7 @@ if($acceptanceType == 1){
     $conn->query($insertDispatchInfo);
 }else if($acceptanceType == 3){
     // DELIVERED
-    $updatePoValues="UPDATE  `tbl_customer_order` SET `podiscount`='$podiscountAmount', `podiscountpercentage`='$podiscountPrecentage',  `ship`='1', `discount`='$discount',`nettotal`='$nettotal', `total`='$total', `delivereduser`='$userID', `shipuser`='$userID', `remark`='$remarkVal'  WHERE `idtbl_customer_order`='$poID'";
+    $updatePoValues="UPDATE  `tbl_customer_order` SET `podiscount`='$podiscountAmount', `podiscountpercentage`='$podiscountPrecentage',  `ship`='1', `discount`='$discount',`nettotal`='$nettotal', `total`='$total', `delivereduser`='$userID', `shipuser`='$userID', `remark`='$remarkVal', `delivereddatetime` = NOW() WHERE `idtbl_customer_order`='$poID'";
 
     $updatePoStatus = "UPDATE  `tbl_customer_order` SET `delivered`='1' WHERE `idtbl_customer_order`='$poID'";
 

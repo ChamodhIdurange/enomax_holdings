@@ -29,7 +29,7 @@ $resultpayment=$conn->query($sqlpayment);
 $rowpayment=$resultpayment->fetch_assoc();
 $paymentmade = $rowpayment['paymentmade'];
 
-$sqlpaymentbank="SELECT `id`.`method`, `id`.`amount`, `id`.`receiptno`, `id`.`chequeno` FROM `tbl_invoice_payment_detail` AS `id` LEFT JOIN `tbl_invoice_payment_has_tbl_invoice` AS `ih` ON (`id`.`tbl_invoice_payment_idtbl_invoice_payment` = `ih`.`tbl_invoice_payment_idtbl_invoice_payment`) WHERE `tbl_invoice_idtbl_invoice`='$invoiceId'";
+$sqlpaymentbank="SELECT `id`.`method`, `id`.`amount`, `id`.`receiptno`, `id`.`chequeno`, `id`.`chequedate`, `b`.`bankname` FROM `tbl_invoice_payment_detail` AS `id` LEFT JOIN `tbl_bank` AS `b` ON `id`.`tbl_bank_idtbl_bank` = `b`.`idtbl_bank` LEFT JOIN `tbl_invoice_payment_has_tbl_invoice` AS `ih` ON (`id`.`tbl_invoice_payment_idtbl_invoice_payment` = `ih`.`tbl_invoice_payment_idtbl_invoice_payment`) WHERE `tbl_invoice_idtbl_invoice`='$invoiceId'";
 $resultpaymentbank=$conn->query($sqlpaymentbank);
 // echo $sqlpaymentbank;
 $html = '
@@ -140,6 +140,8 @@ $html = '
                                 <th>Method</th>
                                 <th>Receipt</th>
                                 <th>Cheque No</th>
+                                <th>Cheque Date</th>
+                                <th>Bank</th>
                                 <th style="text-align: right">Payment</th>
                             </tr>
                         </thead>
@@ -157,6 +159,8 @@ $html = '
                             $html.='</td>
                                 <td>'.$rowpaymentbank['receiptno'].'</td>
                                 <td>'.$rowpaymentbank['chequeno'].'</td>
+                                <td>'.$rowpaymentbank['chequedate'].'</td>
+                                <td>'.$rowpaymentbank['bankname'].'</td>
                                 <td style="text-align: right">'.number_format($rowpaymentbank['amount'], 2).'</td>
                             </tr>';
                         }
