@@ -364,7 +364,6 @@
 }
 
 #style-2::-webkit-scrollbar {
-  width: 5px;
   height: 10px;
   padding-top: 40px;
   /*    width: 12px;*/
@@ -725,3 +724,4 @@
 .text-theme {
   color: #052c66 !important;
 }
+
