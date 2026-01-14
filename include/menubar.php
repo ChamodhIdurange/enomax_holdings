@@ -328,6 +328,35 @@ else if ($lastElement == 'rptitemviseprofitreport.php') {
     $statuscheck = checkprivilege($menuprivilegearray, 65, 3);
     $deletecheck = checkprivilege($menuprivilegearray, 65, 4);
 }
+else if ($lastElement == 'chequepayments.php') {
+    $addcheck    = checkprivilege($menuprivilegearray, 68, 1);
+    $editcheck   = checkprivilege($menuprivilegearray, 68, 2);
+    $statuscheck = checkprivilege($menuprivilegearray, 68, 3);
+    $deletecheck = checkprivilege($menuprivilegearray, 68, 4);
+} else if ($lastElement == 'rejectedcheques.php') {
+    $addcheck    = checkprivilege($menuprivilegearray, 67, 1);
+    $editcheck   = checkprivilege($menuprivilegearray, 67, 2);
+    $statuscheck = checkprivilege($menuprivilegearray, 67, 3);
+    $deletecheck = checkprivilege($menuprivilegearray, 67, 4);
+}
+else if ($lastElement == 'distributors.php') {
+    $addcheck    = checkprivilege($menuprivilegearray, 69, 1);
+    $editcheck   = checkprivilege($menuprivilegearray, 69, 2);
+    $statuscheck = checkprivilege($menuprivilegearray, 69, 3);
+    $deletecheck = checkprivilege($menuprivilegearray, 69, 4);
+}
+//  else if ($lastElement == 'distributororders.php') {
+//     $addcheck    = checkprivilege($menuprivilegearray, 70, 1);
+//     $editcheck   = checkprivilege($menuprivilegearray, 70, 2);
+//     $statuscheck = checkprivilege($menuprivilegearray, 70, 3);
+//     $deletecheck = checkprivilege($menuprivilegearray, 70, 4);
+// } 
+else if ($lastElement == 'vehicleloading.php') {
+    $addcheck    = checkprivilege($menuprivilegearray, 71, 1);
+    $editcheck   = checkprivilege($menuprivilegearray, 71, 2);
+    $statuscheck = checkprivilege($menuprivilegearray, 71, 3);
+    $deletecheck = checkprivilege($menuprivilegearray, 71, 4);
+}
 else if ($lastElement == 'rptinvoicepaymentmethod.php') {
     $addcheck    = checkprivilege($menuprivilegearray, 105, 1);
     $editcheck   = checkprivilege($menuprivilegearray, 105, 2);
@@ -544,6 +573,48 @@ function checkprivilege($arraymenu, $menuID, $type)
                     <?php } ?>
                 </nav>
             </div>
+
+            <?php }
+                if (menucheck($menuprivilegearray, 68) == 1 || menucheck($menuprivilegearray, 67) == 1) { ?>
+            <a class="nav-link p-0 px-3 py-2 collapsed" href="javascript:void(0);" data-toggle="collapse"
+                data-target="#collapsechecks" aria-expanded="false" aria-controls="collapsechecks">
+                <div class="nav-link-icon"><i data-feather="check-circle"></i></div>
+                Cheques
+                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+            </a>
+            <div class="collapse <?php if ($lastElement == "chequepayments.php" || $lastElement == "rejectedcheques.php") {echo 'show';} ?>"
+                id="collapsechecks" data-parent="#accordionSidenav">
+                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                    <?php if (menucheck($menuprivilegearray, 68) == 1) { ?>
+                    <a class="nav-link p-0 px-3 py-1" href="chequepayments.php">Cheque List</a>
+                    <?php }
+                        if (menucheck($menuprivilegearray, 67) == 1) { ?>
+                    <a class="nav-link p-0 px-3 py-1" href="rejectedcheques.php">Rejected Cheques</a>
+                    <?php } ?>
+                </nav>
+            </div>
+
+            <?php }
+                if (menucheck($menuprivilegearray, 71) == 1 || menucheck($menuprivilegearray, 72) == 1) { ?>
+            <a class="nav-link p-0 px-3 py-2 collapsed" href="javascript:void(0);" data-toggle="collapse"
+                data-target="#collapsevehicleloading" aria-expanded="false" aria-controls="collapsevehicleloading">
+                <div class="nav-link-icon"><i data-feather="check-circle"></i></div>
+                Vehicle Loading
+                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+            </a>
+            <div class="collapse <?php if ($lastElement == "vehicleloading.php" || $lastElement == "vehicleunloading.php") {echo 'show';} ?>"
+                id="collapsevehicleloading" data-parent="#accordionSidenav">
+                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                    <?php if (menucheck($menuprivilegearray, 71) == 1) { ?>
+                    <a class="nav-link p-0 px-3 py-1" href="vehicleloading.php">Vehicle Loading</a>
+                    <?php }
+                        if (menucheck($menuprivilegearray, 72) == 1) { ?>
+                    <a class="nav-link p-0 px-3 py-1" href="vehicleunloading.php">Vehicle Unloading</a>
+                    <?php } ?>
+                </nav>
+            </div>
+
+
             <?php }
                 if (menucheck($menuprivilegearray, 23) == 1 | menucheck($menuprivilegearray, 24) == 1 | menucheck($menuprivilegearray, 25) == 1 | menucheck($menuprivilegearray, 26) == 1) { ?>
             <a class="nav-link p-0 px-3 py-2 collapsed" href="javascript:void(0);" data-toggle="collapse"
