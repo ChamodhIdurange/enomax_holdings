@@ -3,6 +3,7 @@ require_once('../connection/db.php');
 
 $validfrom = $_POST['validfrom'];
 $validto = $_POST['validto'];
+$delivereddatetime = $_POST['delivereddatetime'] ?? '';
 $customerID = $_POST['customer'];
 $repID = $_POST['rep'];
 $searchType = $_POST['searchType'];
@@ -43,8 +44,12 @@ if ($searchType == '3' && $customerID > 0) {
     $params[] = $repID;
     $types .= "i";
 }
+if (!empty($delivereddatetime)) {
+    $sql .= " AND ud.delivereddatetime IS NOT NULL
+              AND ud.delivereddatetime >= '$delivereddatetime 00:00:00'
+              AND ud.delivereddatetime <= '$delivereddatetime 23:59:59'";
+}
 
-$sql .= " GROUP BY `u`.`idtbl_invoice`";
 $sql .= " ORDER BY `uc`.`customer` ASC";
 
 $stmt = $conn->prepare($sql);
