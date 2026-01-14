@@ -3,6 +3,7 @@ require_once('../connection/db.php');
 
 $validfrom = $_POST['validfrom'];
 $validto = $_POST['validto'];
+$delivereddatetime = $_POST['delivereddatetime'] ?? '';
 $customerID = $_POST['customer'];
 $repID = $_POST['rep'];
 $searchType = $_POST['searchType'];
@@ -38,6 +39,12 @@ if ($searchType == '1') {
 } elseif ($searchType == '4') {
     
 }
+if (!empty($delivereddatetime)) {
+    $sql .= " AND ud.delivereddatetime IS NOT NULL
+              AND ud.delivereddatetime >= '$delivereddatetime 00:00:00'
+              AND ud.delivereddatetime <= '$delivereddatetime 23:59:59'";
+}
+
 $sql .= " ORDER BY `uc`.`customer` ASC";
 
 
