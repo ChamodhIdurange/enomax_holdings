@@ -81,7 +81,7 @@ include "include/topnavbar.php";
                                             <input type="date" class="form-control form-control-sm" name="todate"
                                                 id="todate" >
                                         </div>
-                                        <div class="col-1"style="display: none" id="aginreportshow">
+                                        <div class="col-2"style="display: none" id="aginreportshow">
                                             <label class="small font-weight-bold text-dark">Agin Report*</label>
                                             <div class="input-group input-group-sm">
                                                 <select class="form-control form-control-sm" name="aginvalue"
@@ -94,14 +94,6 @@ include "include/topnavbar.php";
                                             </div>
                                         </div>
 
-                                        <div class="col-2 search-dependent" style="display:none" id="selectDeliveredDate">
-                                            <label class="small font-weight-bold text-dark">Delivery Date*</label>
-                                            <input type="date"
-                                                class="form-control form-control-sm"
-                                                name="delivereddatetime"
-                                                id="delivereddatetime">
-                                        </div>
-
 
                                         <div class="col-1 search-dependent" style="display: none;" id="hidesumbit">
                                             &nbsp;<br>
@@ -110,6 +102,24 @@ include "include/topnavbar.php";
                                                 id="submitBtn">
                                                 <i class="fas fa-file-pdf"></i>&nbsp;View
                                             </button>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-2 search-dependent" style="display:none" id="selectDeliveryFrom">
+                                            <label class="small font-weight-bold text-dark">Delivery From*</label>
+                                            <input type="date"
+                                                class="form-control form-control-sm"
+                                                name="deliveryfrom"
+                                                id="deliveryfrom">
+                                        </div>
+
+                                        <div class="col-2 search-dependent" style="display:none" id="selectDeliveryTo">
+                                            <label class="small font-weight-bold text-dark">Delivery To*</label>
+                                            <input type="date"
+                                                class="form-control form-control-sm"
+                                                name="deliveryto"
+                                                id="deliveryto">
                                         </div>
                                     </div>
                                     <input type="hidden" name="recordID" id="recordID" value="">
@@ -191,11 +201,11 @@ $(document).ready(function() {
         var searchType = $(this).val();
         resetFields();
         if (searchType == 1) {
-            $('#selectDateFrom, #selectDateTo, #selectDeliveredDate, #hidesumbit, #aginreportshow').show();
+            $('#selectDateFrom, #selectDateTo, #selectDeliveryFrom, #selectDeliveryTo, #hidesumbit, #aginreportshow').show();
         } else if (searchType == 2) {
-            $('#selectSaleRepDiv, #selectDateFrom, #selectDateTo, #selectDeliveredDate, #hidesumbit, #aginreportshow').show();
+            $('#selectSaleRepDiv, #selectDateFrom, #selectDateTo, #selectDeliveryFrom, #selectDeliveryTo, #hidesumbit, #aginreportshow').show();
         } else if (searchType == 3) {
-            $('#selectCustomerDiv, #selectDateFrom, #selectDateTo, #selectDeliveredDate, #hidesumbit, #aginreportshow').show();
+            $('#selectCustomerDiv, #selectDateFrom, #selectDateTo, #selectDeliveryFrom, #selectDeliveryTo, #hidesumbit, #aginreportshow').show();
         } 
     });
 
@@ -205,7 +215,8 @@ $(document).ready(function() {
         var searchType = $('#searchType').val();
         var validfrom = $('#fromdate').val();
         var validto = $('#todate').val();
-        var delivereddatetime = $('#delivereddatetime').val();
+        var deliveryfrom = $('#deliveryfrom').val();
+        var deliveryto   = $('#deliveryto').val();
         var customer = $('#selectCustomer').val();
         var rep = $('#selectSaleRep').val();
         var aginvalue = $('#aginvalue').val();
@@ -216,7 +227,8 @@ $(document).ready(function() {
                 searchType: searchType,
                 validfrom: validfrom,
                 validto: validto,
-                delivereddatetime: delivereddatetime,
+                deliveryfrom: deliveryfrom,
+                deliveryto: deliveryto,
                 customer: customer,
                 rep: rep,
                 aginvalue: aginvalue
