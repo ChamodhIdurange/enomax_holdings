@@ -30,7 +30,7 @@ $resultarealist = $conn->query($sqlarealist);
 $sqlhelperlist = "SELECT `idtbl_employee`, `name` FROM `tbl_employee` WHERE `tbl_user_type_idtbl_user_type`=7 AND `status`=1";
 $resulthelperlist = $conn->query($sqlhelperlist);
 
-$sqlcustomer = "SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `name` ASC";
+$sqlcustomer = "SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `customer` ASC";
 $resultcustomer = $conn->query($sqlcustomer);
 
 include "include/topnavbar.php";

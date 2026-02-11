@@ -6,25 +6,21 @@ $validto = $_POST['validto'];
 $customerID = $_POST['customer'];
 $totalAmount = 0;
 
-$sql = "SELECT `u`.`idtbl_invoice`,`u`.`invoiceno`, `u`.`total`, `ub`.`area`, `uc`.`customer` AS `cusname`, `ue`.`name` AS `repname`
-        FROM `tbl_invoice` AS `u`
-        LEFT JOIN `tbl_customer` AS `uc` ON `u`.`tbl_customer_idtbl_customer` = `uc`.`idtbl_customer`
-        LEFT JOIN `tbl_customer_order` AS `uf` ON `u`.`tbl_customer_order_idtbl_customer_order` = `uf`.`idtbl_customer_order`
-        LEFT JOIN `tbl_employee` AS `ue` ON `uf`.`tbl_employee_idtbl_employee` = `ue`.`idtbl_employee`
+$sql = "SELECT `u`.`idtbl_customer_order`,`u`.`cuspono`, `u`.`nettotal`, `ub`.`area`, `uf`.`customer` AS `cusname`, `ue`.`name` AS `repname`
+        FROM `tbl_customer_order` AS `u`
+        LEFT JOIN `tbl_customer` AS `uf` ON `u`.`tbl_customer_idtbl_customer` = `uf`.`idtbl_customer`
+        LEFT JOIN `tbl_employee` AS `ue` ON `u`.`tbl_employee_idtbl_employee` = `ue`.`idtbl_employee`
         LEFT JOIN `tbl_area` AS `ub` ON `u`.`tbl_area_idtbl_area` = `ub`.`idtbl_area`
-        LEFT JOIN `tbl_invoice_detail` AS `ud` ON `u`.`idtbl_invoice` = `ud`.`tbl_invoice_idtbl_invoice`
         WHERE `u`.`date` BETWEEN '$validfrom' AND '$validto'
-        AND    `u`.`status` = 1
-        AND    `ud`.`status` = 1
-        AND    `uf`.`delivered` = 1";
+        AND    `u`.`status` = 1";
 
-// $sql = "SELECT `u`.`idtbl_invoice`,`u`.`invoiceno`, `u`.`total`, `ua`.`product_name`, `ub`.`area`, `uc`.`customer` AS `cusname`, `ue`.`name` AS `repname`
+// $sql = "SELECT `u`.`idtbl_customer_order`,`u`.`cuspono`, `u`.`nettotal`, `ua`.`product_name`, `ub`.`area`, `uc`.`customer` AS `cusname`, `ue`.`name` AS `repname`
 //         FROM `tbl_invoice` AS `u`
 //         LEFT JOIN `tbl_customer` AS `uc` ON `u`.`tbl_customer_idtbl_customer` = `uc`.`idtbl_customer`
 //         LEFT JOIN `tbl_customer_order` AS `uf` ON `u`.`tbl_customer_order_idtbl_customer_order` = `uf`.`idtbl_customer_order`
 //         LEFT JOIN `tbl_employee` AS `ue` ON `uf`.`tbl_employee_idtbl_employee` = `ue`.`idtbl_employee`
 //         LEFT JOIN `tbl_area` AS `ub` ON `u`.`tbl_area_idtbl_area` = `ub`.`idtbl_area`
-//         LEFT JOIN `tbl_invoice_detail` AS `ud` ON `u`.`idtbl_invoice` = `ud`.`tbl_invoice_idtbl_invoice`
+//         LEFT JOIN `tbl_invoice_detail` AS `ud` ON `u`.`idtbl_customer_order` = `ud`.`tbl_invoice_idtbl_invoice`
 //         LEFT JOIN `tbl_product` AS `ua` ON `ud`.`tbl_product_idtbl_product` = `ua`.`idtbl_product`
 //         WHERE `u`.`date` BETWEEN '$validfrom' AND '$validto'";
 
@@ -32,7 +28,7 @@ if ($customerID > 0) {
     $sql .= " AND `u`.`tbl_customer_idtbl_customer` = '$customerID'";
 }
 
-$sql .= " GROUP BY `u`.`idtbl_invoice`";
+$sql .= " GROUP BY `u`.`idtbl_customer_order`";
 $result = $conn->query($sql);
 
 
@@ -57,13 +53,13 @@ $totalAmount = 0;
 
 while($row = $result->fetch_assoc()) {
     $html .= '<tr>
-        <td>' . $row['invoiceno'] . '</td>
+        <td>' . $row['cuspono'] . '</td>
         <td class="text-center">' . $row['cusname'] . '</td>
         <td class="text-center">' . $row['repname'] . '</td>
         <td class="text-center">' . $row['area'] . '</td>
-        <td class="text-center">' . number_format($row['total'], 2) . '</td>
+        <td class="text-center">' . number_format($row['nettotal'], 2) . '</td>
     </tr>';
-    $totalAmount += $row['total'];
+    $totalAmount += $row['nettotal'];
 }
 
 $html .= '</tbody>

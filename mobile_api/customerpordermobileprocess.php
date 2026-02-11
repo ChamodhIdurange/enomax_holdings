@@ -1,22 +1,29 @@
 <?php 
 session_start();
 require_once('../connection/db.php');//die('bc');
-$userID=$_POST['userID'];
+// Get JSON input instead of $_POST
+$json = file_get_contents('php://input');
+$data = json_decode($json, true);
 
-$orderdate=$_POST['orderdate'];
-$remark=$_POST['remark'];
-$discountpresentage=$_POST['discountpresentage'];
-$total=$_POST['total'];
-$discount=$_POST['discount'];
-$nettotal=$_POST['nettotal'];
-$repname=$_POST['repname'];
-$area=$_POST['area'];
-$customer=$_POST['customer'];
-$location=$_POST['locationID'];
-$podiscount=$_POST['podiscount'];
-$paymentoption=1;
-$tableData=$_POST['tableData'];
-$tableData = json_decode($tableData);
+// Check if JSON is valid
+if ($data === null) {
+    echo json_encode(['code' => '400', 'message' => 'Invalid JSON']);
+    exit;
+}
+$userID = $data['userID'];
+$orderdate = $data['orderdate'];
+$remark = $data['remark'];
+$discountpresentage = $data['discountpresentage'];
+$total = $data['total'];
+$discount = $data['discount'];
+$nettotal = $data['nettotal'];
+$repname = $data['repname'];
+$area = $data['area'];
+$customer = $data['customer'];
+$location = $data['locationID'];
+$podiscount = $data['podiscount'];
+$paymentoption = 1;
+$tableData = $data['tableData'];
 
 $updatedatetime=date('Y-m-d h:i:s');
 
@@ -46,14 +53,14 @@ $insretorder = "INSERT INTO `tbl_customer_order`(`cuspono`, `date`, `total`, `di
         $originalOrderID = $conn->insert_id;
 
         foreach ($tableData as $item) {
-            $productID=$item->productID;
-            $product=0;
-            $unitprice=$item->unitprice;;
-            $saleprice=$item->saleprice;
-            $newqty=$item->newqty;
-            $total=$item->nettotal;
-            $freeprodcutid=0;
-            $freeqty=0;
+            $productID = $item['productID'];
+        $product = 0;
+        $unitprice = $item['unitprice'];
+        $saleprice = $item['saleprice'];
+        $newqty = $item['newqty'];
+        $total = $item['nettotal'];
+        $freeprodcutid = 0;
+        $freeqty = 0;
 
             $insertorderdetail = "INSERT INTO `tbl_customer_order_detail`(`orderqty`, `total`, `confirmqty`, `dispatchqty`, `qty`, `unitprice`, `saleprice`, `discountpresent`, `discount`, `status`, `insertdatetime`, `tbl_user_idtbl_user`, `tbl_customer_order_idtbl_customer_order`, `tbl_product_idtbl_product`) VALUES ('$newqty', '$total', '$newqty', '$newqty', '$newqty', '$unitprice','$saleprice', '0', '0', '1','$updatedatetime','$userID','$orderID','$productID')";
             $conn->query($insertorderdetail);
