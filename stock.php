@@ -25,7 +25,7 @@ include "include/topnavbar.php";
                         <div class="row">
                             <div class="col-12">
                                 <form id="searchform">
-                                    <div class="form-row">
+                                    <div class="form-row align-items-end">
                                         <div class="col-3">
                                             <label class="small font-weight-bold text-dark">Date*</label>
                                             <div class="input-group input-group-sm mb-3">
@@ -37,9 +37,25 @@ include "include/topnavbar.php";
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-3">
+                                            <label class="small font-weight-bold text-dark">Category</label>
+                                            <div class="input-group input-group-sm mb-3">
+                                                <select class="form-control rounded-0" id="categoryfilter" name="categoryfilter">
+                                                    <option value="">-- All Categories --</option>
+                                                    <?php
+                                                    include "connection/db.php";
+                                                    $sqlcat = "SELECT `idtbl_product_category`, `category` FROM `tbl_product_category` WHERE `status`=1 ORDER BY `category` ASC";
+                                                    $resultcat = $conn->query($sqlcat);
+                                                    while ($rowcat = $resultcat->fetch_assoc()) {
+                                                        echo '<option value="' . $rowcat['idtbl_product_category'] . '">' . htmlspecialchars($rowcat['category']) . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
                                         <div class="col">
                                             <label class="small font-weight-bold text-dark">&nbsp;</label><br>
-                                            <button class="btn btn-outline-dark btn-sm rounded-0 px-4" type="button"
+                                            <button class="btn btn-outline-dark btn-sm rounded-0 px-4 mb-3" type="button"
                                                 id="formSearchBtn"><i class="fas fa-search"></i>&nbsp;Search</button>
                                         </div>
                                     </div>
@@ -127,6 +143,7 @@ $(document).ready(function() {
             $("#hidesubmit").click();
         } else {
             var fromdate = $('#fromdate').val();
+            var categoryfilter = $('#categoryfilter').val();
 
             $('#targetviewdetail').html(
                 '<div class="card border-0 shadow-none bg-transparent"><div class="card-body text-center"><img src="images/spinner.gif" alt="" srcset=""></div></div>'
@@ -135,7 +152,8 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 data: {
-                    fromdate: fromdate
+                    fromdate: fromdate,
+                    categoryfilter: categoryfilter
                 },
                 url: 'getprocess/getselectedstock.php',
                 success: function(result) {
@@ -165,10 +183,10 @@ $(document).ready(function() {
                                 title: 'Enomax Holdings (Stock Report)',
                                 text: '<i class="fas fa-print mr-2"></i> Print',
                                 footer: true,
-                                autoPrint: true, // Optional: If you want print dialog to open immediately
+                                autoPrint: true,
                                 customize: function (win) {
                                     $(win.document.body)
-                                        .css('font-size', '10px') // smaller font size to fit more
+                                        .css('font-size', '10px')
                                         .prepend(
                                             '<h3 style="text-align:center;">Stock Report</h3>'
                                         );
@@ -176,7 +194,7 @@ $(document).ready(function() {
                                     $(win.document.body).find('table')
                                         .addClass('compact')
                                         .css('font-size', 'inherit')
-                                        .css('width', '100%'); // force table to full width
+                                        .css('width', '100%');
                                 }
                             }
                         ],
@@ -193,6 +211,7 @@ $(document).ready(function() {
     $('#printBtnStock').click(function() {
 
         var fromdate = encodeURIComponent($('#fromdate').val());
+        var categoryfilter = encodeURIComponent($('#categoryfilter').val());
 
         $('#frame').html('');
         $('#frame').html('<iframe class="embed-responsive-item" frameborder="0"></iframe>');
@@ -200,7 +219,7 @@ $(document).ready(function() {
             "<img src='images/spinner.gif' class='img-fluid' style='margin-top:200px;margin-left:500px;' />"
         );
 
-        var src = 'pdfprocess/stockreportpdf.php?fromdate=' + fromdate;
+        var src = 'pdfprocess/stockreportpdf.php?fromdate=' + fromdate + '&categoryfilter=' + categoryfilter;
 
         var width = $(this).attr('data-width') || 640;
         var height = $(this).attr('data-height') || 360;

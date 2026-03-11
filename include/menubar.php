@@ -375,6 +375,12 @@ else if ($lastElement == 'rptallpurchaseorders.php') {
     $statuscheck = checkprivilege($menuprivilegearray, 107, 3);
     $deletecheck = checkprivilege($menuprivilegearray, 107, 4);
 }
+else if ($lastElement == 'rptcustomerwiseoutstanding.php') {
+    $addcheck    = checkprivilege($menuprivilegearray, 130, 1);
+    $editcheck   = checkprivilege($menuprivilegearray, 130, 2);
+    $statuscheck = checkprivilege($menuprivilegearray, 130, 3);
+    $deletecheck = checkprivilege($menuprivilegearray, 130, 4);
+}
 
 
 function checkprivilege($arraymenu, $menuID, $type)
@@ -746,6 +752,9 @@ function checkprivilege($arraymenu, $menuID, $type)
                     <?php }
                                     if (menucheck($menuprivilegearray, 59) == 1) { ?>
                     <a class="nav-link p-0 px-3 py-1" href="rptcustomeroutstanding.php">Customer Outstanding</a>
+                    <?php }
+                                    if (menucheck($menuprivilegearray, 130) == 1) { ?>
+                    <a class="nav-link p-0 px-3 py-1" href="rptcustomeroutstanding.php">Outstanding Customer Wise</a>
                     <?php }
                                     if (menucheck($menuprivilegearray, 61) == 1) { ?>
                     <a class="nav-link p-0 px-3 py-1" href="rptsalerepcollections.php">Collection Report</a>

@@ -2,9 +2,6 @@
 include "include/header.php";  
 include "include/topnavbar.php"; 
 
-$sqlcustomer="SELECT `idtbl_customer`, `customer` FROM `tbl_customer` WHERE `status`=1 ORDER BY `customer` ASC";
-$resultcustomer =$conn-> query($sqlcustomer);
-
 $sqlproduct="SELECT `idtbl_product`, `product_name` FROM `tbl_product` WHERE `status`=1 ORDER BY `product_name` ASC";
 $resultproduct =$conn-> query($sqlproduct);
 
@@ -13,8 +10,6 @@ $resultarea =$conn-> query($sqlarea);
 
 $sqlrep="SELECT `idtbl_employee`, `name` FROM `tbl_employee` WHERE `status`=1 ORDER BY `name` ASC";
 $resultrep =$conn-> query($sqlrep);
-
-include "include/topnavbar.php"; 
 ?>
 <div id="layoutSidenav">
     <div id="layoutSidenav_nav">
@@ -32,9 +27,6 @@ include "include/topnavbar.php";
                     </div>
                 </div>
             </div>
-            <?php 
-            
-            ?>
             <div class="container-fluid mt-2 p-0 p-2">
                 <div class="card">
                     <div class="card-body p-0 p-2">
@@ -51,7 +43,7 @@ include "include/topnavbar.php";
                                                     <!-- <option value="1">All</option> -->
                                                     <option value="2">Rep Vise</option>
                                                     <!-- <option value="3">Product Vise</option> -->
-                                                    <!-- <option value="4">Customer Vise</option> -->
+                                                    <option value="4">Customer Vise</option>
                                                     <!-- <option value="5">Area Vise</option> -->
                                                 </select>
                                             </div>
@@ -83,19 +75,16 @@ include "include/topnavbar.php";
                                                 <?php } ?>
                                             </select>
                                         </div>
-                                        <div class="col-2 search-dependent" style="display: none"
-                                            id="selectCustomerDiv">
+
+                                        <!-- Customer Dropdown — Select2 AJAX server-side search -->
+                                        <div class="col-2 search-dependent" style="display: none" id="selectCustomerDiv">
                                             <label class="small font-weight-bold text-dark">Customer*</label>
                                             <select class="form-control form-control-sm" style="width: 100%;"
                                                 name="selectCustomer" id="selectCustomer">
                                                 <option value="0">All</option>
-                                                <?php while ($rowcustomerlist = $resultcustomer->fetch_assoc()) { ?>
-                                                <option value="<?php echo $rowcustomerlist['idtbl_customer']; ?>">
-                                                    <?php echo $rowcustomerlist['customer']; ?>
-                                                </option>
-                                                <?php } ?>
                                             </select>
                                         </div>
+
                                         <div class="col-2 search-dependent" style="display: none" id="selectAreaDiv">
                                             <label class="small font-weight-bold text-dark">Area*</label>
                                             <select class="form-control form-control-sm" style="width: 100%;"
@@ -158,6 +147,7 @@ include "include/topnavbar.php";
         <?php include "include/footerbar.php"; ?>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade" id="printreport" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
     aria-hidden="true">
@@ -175,16 +165,79 @@ include "include/topnavbar.php";
                         <div class="embed-responsive embed-responsive-16by9" id="frame">
                             <iframe class="embed-responsive-item" frameborder="0"></iframe>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <?php include "include/footerscripts.php"; ?>
+
+<!-- Select2 CSS & JS — add AFTER Bootstrap/jQuery if not already included globally -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<style>
+    /* Make Select2 match Bootstrap sm form controls */
+    .select2-container .select2-selection--single {
+        height: calc(1.5em + .5rem + 2px) !important;
+        font-size: .875rem;
+        border: 1px solid #ced4da;
+        border-radius: .2rem;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: calc(1.5em + .5rem + 2px) !important;
+        color: #495057;
+        padding-left: 8px;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: calc(1.5em + .5rem + 2px) !important;
+    }
+    .select2-dropdown {
+        font-size: .875rem;
+    }
+    /* Ensure Select2 fills the col width */
+    #selectCustomerDiv .select2-container {
+        width: 100% !important;
+    }
+</style>
+
 <script>
 $(document).ready(function() {
+
+    /* ── Select2 AJAX — Customer dropdown (server-side search) ── */
+    $('#selectCustomer').select2({
+        placeholder: 'All / Search Customer...',
+        allowClear: true,
+        minimumInputLength: 0,   // show list immediately on open
+        ajax: {
+            url: 'getprocess/get_customers_ajax.php',
+            dataType: 'json',
+            delay: 300,           // debounce ms
+            data: function(params) {
+                return {
+                    q:    params.term || '',
+                    page: params.page || 1
+                };
+            },
+            processResults: function(data, params) {
+                params.page = params.page || 1;
+                // Prepend "All" option only on first page
+                var results = data.results;
+                if (params.page === 1) {
+                    results = [{ id: '0', text: 'All' }].concat(results);
+                }
+                return {
+                    results:    results,
+                    pagination: data.pagination
+                };
+            },
+            cache: true
+        }
+    });
+
+    /* ── Search Type toggle ── */
     $('#searchType').change(function() {
         var searchType = $(this).val();
         resetFields();
@@ -201,27 +254,28 @@ $(document).ready(function() {
         }
     });
 
+    /* ── Form submit ── */
     $('#saleInformationForm').submit(function(event) {
         event.preventDefault();
 
         var searchType = $('#searchType').val();
-        var validfrom = $('#fromdate').val();
-        var validto = $('#todate').val();
-        var customer = getElementValue('#selectCustomer');
-        var product = getElementValue('#selectProduct');
-        var rep = getElementValue('#selectSaleRep');
-        var area = getElementValue('#selectArea');
+        var validfrom  = $('#fromdate').val();
+        var validto    = $('#todate').val();
+        var customer   = getElementValue('#selectCustomer');
+        var product    = getElementValue('#selectProduct');
+        var rep        = getElementValue('#selectSaleRep');
+        var area       = getElementValue('#selectArea');
 
         $.ajax({
             type: "POST",
             data: {
                 searchType: searchType,
-                validfrom: validfrom,
-                validto: validto,
-                customer: customer,
-                rep: rep,
-                product: product,
-                area: area,
+                validfrom:  validfrom,
+                validto:    validto,
+                customer:   customer,
+                rep:        rep,
+                product:    product,
+                area:       area,
             },
             url: 'getprocess/getcustomersalereportaccoperiod.php',
             success: function(result) {
@@ -234,9 +288,10 @@ $(document).ready(function() {
 
                 $('#reportTable').DataTable({
                     "dom": "<'row'<'col-sm-5'B><'col-sm-2'l><'col-sm-5'f>>" +
-                        "<'row'<'col-sm-12'tr>>" +
-                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                    "buttons": [{
+                           "<'row'<'col-sm-12'tr>>" +
+                           "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                    "buttons": [
+                        {
                             extend: 'csv',
                             className: 'btn btn-success btn-sm',
                             title: 'Everest Sale Report Information',
@@ -256,21 +311,19 @@ $(document).ready(function() {
                         }
                     ]
                 });
-
             }
         });
     });
 
+    /* ── Print button ── */
     $('#printBtn').click(function() {
-        
-
         var searchType = encodeURIComponent($('#searchType').val());
-        var validfrom = encodeURIComponent($('#fromdate').val());
-        var validto = encodeURIComponent($('#todate').val());
-        var customer = encodeURIComponent(getElementValue('#selectCustomer'));
-        var product = encodeURIComponent(getElementValue('#selectProduct'));
-        var rep = encodeURIComponent(getElementValue('#selectSaleRep'));
-        var area = encodeURIComponent(getElementValue('#selectArea'));
+        var validfrom  = encodeURIComponent($('#fromdate').val());
+        var validto    = encodeURIComponent($('#todate').val());
+        var customer   = encodeURIComponent(getElementValue('#selectCustomer'));
+        var product    = encodeURIComponent(getElementValue('#selectProduct'));
+        var rep        = encodeURIComponent(getElementValue('#selectSaleRep'));
+        var area       = encodeURIComponent(getElementValue('#selectArea'));
 
         $('#frame').html('');
         $('#frame').html('<iframe class="embed-responsive-item" frameborder="0"></iframe>');
@@ -278,16 +331,16 @@ $(document).ready(function() {
             "<img src='images/spinner.gif' class='img-fluid' style='margin-top:200px;margin-left:500px;' />"
         );
 
-        var params =`?validfrom=${validfrom}&validto=${validto}&searchType=${searchType}&customer=${customer}&rep=${rep}&area=${area}&product=${product}`;
-        var src = 'pdfprocess/salereportpdf.php' + params;
+        var params = `?validfrom=${validfrom}&validto=${validto}&searchType=${searchType}&customer=${customer}&rep=${rep}&area=${area}&product=${product}`;
+        var src    = 'pdfprocess/salereportpdf.php' + params;
 
-        var width = $(this).attr('data-width') || 640;
+        var width  = $(this).attr('data-width')  || 640;
         var height = $(this).attr('data-height') || 360;
 
         $("#printreport iframe").attr({
-            'src': src,
-            'height': height,
-            'width': width,
+            'src':            src,
+            'height':         height,
+            'width':          width,
             'allowfullscreen': ''
         });
 
@@ -297,13 +350,10 @@ $(document).ready(function() {
         });
     });
 
-
-
+    /* ── Helpers ── */
     function getElementValue(id) {
         var element = $(id);
-        if (element.length === 0) {
-            return null;
-        }
+        if (element.length === 0) { return null; }
         return element.val();
     }
 
@@ -315,7 +365,7 @@ $(document).ready(function() {
         $('#saleInformationForm')[0].reset();
         resetFields();
         $('#searchType').val(0);
+        $('#selectCustomer').val(null).trigger('change'); // clear Select2
     }
 });
 </script>
-
